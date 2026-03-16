@@ -1,0 +1,8 @@
+{
+  "name": "Omniverse Builder",
+  "description": "A powerful 3D world editor where users can upload GLB, images, and text to create immersive environments with first-person navigation and Gemini-powered voice chat.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
