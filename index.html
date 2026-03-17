@@ -6,2224 +6,1005 @@
 <title>GmedranoTIC's Omniverse Builder</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@200;400;600;800&display=swap');
-
   :root {
-    --bg-deep: #050810;
-    --bg-panel: rgba(8,14,30,0.92);
-    --bg-glass: rgba(16,26,52,0.7);
-    --accent: #00d4ff;
-    --accent2: #7b2fff;
-    --accent3: #ff3b6b;
-    --gold: #ffd700;
-    --text: #c8deff;
-    --text-dim: #5a7aaa;
-    --border: rgba(0,212,255,0.2);
-    --border-bright: rgba(0,212,255,0.6);
-    --success: #00ff88;
-    --warn: #ffaa00;
-    --panel-w: 280px;
-    --header-h: 52px;
+    --bg: #050810; --panel: rgba(8,14,30,0.95); --glass: rgba(16,26,52,0.7);
+    --a: #00d4ff; --a2: #7b2fff; --a3: #ff3b6b;
+    --text: #c8deff; --dim: #5a7aaa;
+    --border: rgba(0,212,255,0.18); --brite: rgba(0,212,255,0.55);
+    --ok: #00ff88; --warn: #ffaa00;
+    --pw: 270px; --hh: 52px;
   }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Exo 2',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;width:100vw;user-select:none}
 
-  * { margin:0; padding:0; box-sizing:border-box; }
+  /* LOADING */
+  #loading{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+  .ld-logo{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:var(--a);letter-spacing:2px}
+  .ld-bar{width:220px;height:2px;background:rgba(0,212,255,0.1);border-radius:2px;overflow:hidden}
+  .ld-fill{height:100%;background:var(--a);animation:ldanim 1.6s ease forwards}
+  @keyframes ldanim{from{width:0}to{width:100%}}
 
-  body {
-    font-family: 'Exo 2', sans-serif;
-    background: var(--bg-deep);
-    color: var(--text);
-    overflow: hidden;
-    height: 100vh; width: 100vw;
-    user-select: none;
-  }
+  /* HEADER */
+  #hdr{position:fixed;top:0;left:0;right:0;height:var(--hh);background:rgba(5,8,16,0.97);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;padding:0 12px;z-index:1000;backdrop-filter:blur(20px)}
+  .logo{display:flex;align-items:center;gap:9px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;white-space:nowrap}
+  .logo-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--a),var(--a2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 0 14px rgba(0,212,255,0.35);flex-shrink:0}
+  .logo-text{color:var(--a)}
+  .logo-sub{color:var(--dim);font-size:10px;font-weight:400}
+  .hsep{flex:1}
+  .hinfo{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);display:flex;align-items:center;gap:12px}
+  .sdot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);animation:pulse 2s infinite;flex-shrink:0}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .btn{background:var(--glass);border:1px solid var(--border);color:var(--text);padding:5px 11px;border-radius:6px;cursor:pointer;font-family:'Exo 2',sans-serif;font-size:11px;font-weight:600;transition:all .18s;display:flex;align-items:center;gap:5px;white-space:nowrap}
+  .btn:hover{border-color:var(--a);color:var(--a);background:rgba(0,212,255,0.08)}
+  .btn.on{border-color:var(--a);color:var(--a);background:rgba(0,212,255,0.12)}
+  .btn.danger{border-color:var(--a3);color:var(--a3)}
+  .btn.danger:hover{background:rgba(255,59,107,.1)}
+  .btn.pri{background:linear-gradient(135deg,var(--a2),var(--a));border-color:transparent;color:#fff}
+  .btn.pri:hover{opacity:.85}
+  .btn.ok{border-color:var(--ok);color:var(--ok)}
 
-  /* ─── HEADER ─────────────────────────────── */
-  #header {
-    position: fixed; top:0; left:0; right:0; height: var(--header-h);
-    background: rgba(5,8,16,0.95);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap:12px;
-    padding: 0 16px; z-index: 1000;
-    backdrop-filter: blur(20px);
-  }
+  /* PANELS */
+  #lp,#rp{position:fixed;top:var(--hh);width:var(--pw);bottom:0;background:var(--panel);z-index:100;backdrop-filter:blur(20px);display:flex;flex-direction:column;overflow:hidden}
+  #lp{left:0;border-right:1px solid var(--border)}
+  #rp{right:0;border-left:1px solid var(--border)}
+  #canvas-wrap{position:fixed;top:var(--hh);left:var(--pw);right:var(--pw);bottom:0;background:#08090f}
+  #c{width:100%;height:100%;display:block;cursor:crosshair}
+  .psec{padding:10px;border-bottom:1px solid rgba(0,212,255,0.07);flex-shrink:0}
+  .ptitle{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+  .ptitle::before{content:'';width:3px;height:10px;background:var(--a);border-radius:2px;flex-shrink:0}
+  .abtn{display:flex;align-items:center;gap:7px;width:100%;background:transparent;border:1px solid rgba(0,212,255,0.1);border-radius:5px;color:var(--text);padding:6px 8px;cursor:pointer;font-family:'Exo 2',sans-serif;font-size:11px;font-weight:500;transition:all .18s;margin-bottom:3px;text-align:left}
+  .abtn:hover{border-color:var(--a);color:var(--a);background:rgba(0,212,255,0.05)}
+  #objlist{flex:1;overflow-y:auto;padding:6px}
+  #objlist::-webkit-scrollbar{width:3px}
+  #objlist::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+  .oitem{display:flex;align-items:center;gap:6px;padding:5px 7px;border-radius:5px;cursor:pointer;border:1px solid transparent;margin-bottom:2px;transition:all .14s;font-size:11px}
+  .oitem:hover{background:rgba(0,212,255,0.05);border-color:rgba(0,212,255,0.13)}
+  .oitem.sel{background:rgba(0,212,255,0.1);border-color:var(--a)}
+  .odel{background:none;border:none;cursor:pointer;color:var(--dim);font-size:12px;padding:2px;transition:color .14s;flex-shrink:0;margin-left:auto}
+  .odel:hover{color:var(--a3)}
+  #propscont{padding:10px;flex:1;overflow-y:auto}
+  #propscont::-webkit-scrollbar{width:3px}
+  #propscont::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+  .pgrp{margin-bottom:10px}
+  .plbl{font-size:10px;color:var(--dim);margin-bottom:4px;font-family:'Share Tech Mono',monospace}
+  .v3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px}
+  .v3 label{font-size:9px;color:var(--dim);display:block;text-align:center;margin-bottom:2px}
+  input[type=number],input[type=text],input[type=password],select,textarea{width:100%;background:rgba(0,0,0,.45);border:1px solid rgba(0,212,255,.18);border-radius:4px;color:var(--text);padding:4px 7px;font-family:'Share Tech Mono',monospace;font-size:11px;outline:none;transition:border-color .18s}
+  input:focus,select:focus,textarea:focus{border-color:var(--a)}
+  input[type=range]{width:100%;accent-color:var(--a)}
+  input[type=color]{width:32px;height:24px;border:1px solid var(--border);border-radius:4px;cursor:pointer;background:none;padding:2px}
+  select option{background:#0a1020}
+  textarea{resize:vertical;min-height:60px}
+  .row{display:flex;align-items:center;gap:6px}
+  .row label{font-size:11px;color:var(--dim);white-space:nowrap}
+  .egrid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+  .ebtn{background:transparent;border:1px solid rgba(0,212,255,.1);border-radius:4px;color:var(--dim);padding:5px 3px;cursor:pointer;font-size:10px;font-weight:600;text-align:center;transition:all .14s;font-family:'Exo 2',sans-serif}
+  .ebtn:hover,.ebtn.on{border-color:var(--a);color:var(--a);background:rgba(0,212,255,.07)}
+  .hr{border:none;border-top:1px solid rgba(0,212,255,.07);margin:6px 0}
+  .wsett{border-top:1px solid rgba(0,212,255,.07);padding:10px;flex-shrink:0}
 
-  .logo {
-    display: flex; align-items: center; gap:10px;
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 700; font-size: 18px;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-  }
-  .logo-icon {
-    width: 32px; height: 32px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    box-shadow: 0 0 16px rgba(0,212,255,0.4);
-    flex-shrink: 0;
-  }
-  .logo-text { color: var(--accent); }
-  .logo-sub { color: var(--text-dim); font-size: 11px; font-weight: 400; }
+  /* OVERLAYS */
+  #crosshair{position:fixed;top:50%;left:50%;pointer-events:none;z-index:150;display:none}
+  #crosshair.on{display:block}
+  .ch{position:absolute;background:rgba(255,255,255,.75)}
+  .chh{width:12px;height:1px;top:0;left:-6px}
+  .chv{width:1px;height:12px;top:-6px;left:0}
+  .mbadge{position:fixed;top:calc(var(--hh)+8px);left:calc(var(--pw)+8px);background:rgba(5,8,16,.87);border:1px solid var(--border);border-radius:5px;padding:3px 10px;font-size:10px;font-family:'Share Tech Mono',monospace;z-index:200;pointer-events:none;display:flex;align-items:center;gap:5px}
+  #hud{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:200;pointer-events:none}
+  .hpill{background:rgba(5,8,16,.87);border:1px solid var(--border);border-radius:16px;padding:5px 12px;font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--dim);display:flex;align-items:center;gap:5px;backdrop-filter:blur(10px)}
+  .hkey{background:var(--glass);border:1px solid var(--border);border-radius:3px;padding:1px 4px;font-size:9px;color:var(--a)}
+  #gizmohint{position:fixed;bottom:55px;left:calc(var(--pw)+10px);background:rgba(5,8,16,.87);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--dim);z-index:200;pointer-events:none;line-height:1.8;display:none}
+  #playover{position:fixed;top:var(--hh);left:var(--pw);right:var(--pw);bottom:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(5,8,20,.55)}
+  #playover.on{display:flex}
+  #plkmsg{background:rgba(5,8,16,.96);border:1px solid var(--a);border-radius:11px;padding:22px 32px;text-align:center;backdrop-filter:blur(18px)}
+  #plkmsg h3{color:var(--a);margin-bottom:7px;font-family:'Rajdhani',sans-serif;font-size:18px}
+  #plkmsg p{font-size:11px;color:var(--dim);margin-bottom:13px}
 
-  .header-sep { flex:1; }
+  /* MODALS */
+  .mover{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(7px)}
+  .mover.on{display:flex}
+  .modal{background:var(--panel);border:1px solid var(--brite);border-radius:11px;padding:20px;min-width:360px;max-width:490px;width:90%;position:relative;max-height:80vh;overflow-y:auto}
+  .modal::-webkit-scrollbar{width:3px}
+  .modal::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+  .mtitle{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--a);margin-bottom:16px}
+  .mclose{position:absolute;top:13px;right:13px;background:none;border:none;color:var(--dim);font-size:17px;cursor:pointer;transition:color .14s}
+  .mclose:hover{color:var(--a3)}
+  .fg{margin-bottom:12px}
+  .fl{font-size:10px;color:var(--dim);margin-bottom:4px;display:block;letter-spacing:1px;text-transform:uppercase}
+  .slink{display:flex;gap:5px;margin-top:4px}
+  .slink input{flex:1;font-size:10px}
+  .mact{display:flex;gap:7px;justify-content:flex-end;margin-top:16px}
+  .infobox{background:rgba(0,212,255,.04);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:11px;color:var(--dim);margin-top:6px}
+  .warnbox{background:rgba(255,170,0,.07);border:1px solid var(--warn);border-radius:5px;padding:8px;font-size:11px;color:var(--warn);margin-bottom:10px}
 
-  .header-info {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 11px; color: var(--text-dim);
-    display: flex; align-items: center; gap:16px;
-  }
-  .status-dot {
-    width:6px; height:6px; border-radius:50%;
-    background: var(--success);
-    box-shadow: 0 0 8px var(--success);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  /* VOICE / USERS */
+  #voicepanel,#userspanel{position:fixed;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:9px 12px;z-index:200;display:none;backdrop-filter:blur(15px)}
+  #voicepanel.on,#userspanel.on{display:block}
+  #voicepanel{bottom:55px;right:calc(var(--pw)+10px);min-width:165px}
+  #userspanel{top:calc(var(--hh)+6px);right:calc(var(--pw)+6px);min-width:150px}
+  .vtitle{font-size:10px;color:var(--dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+  .vuser{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:11px}
+  .vav{width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0}
+  .vbar{height:3px;background:var(--border);border-radius:2px;flex:1;overflow:hidden}
+  .vfill{height:100%;background:var(--ok);border-radius:2px;width:0%;transition:width .1s}
 
-  .btn {
-    background: var(--bg-glass);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: 'Exo 2', sans-serif;
-    font-size: 12px; font-weight: 600;
-    transition: all 0.2s;
-    display: flex; align-items: center; gap:6px;
-    white-space: nowrap;
-  }
-  .btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.08); }
-  .btn.active { border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.12); }
-  .btn.danger { border-color: var(--accent3); color: var(--accent3); }
-  .btn.danger:hover { background: rgba(255,59,107,0.1); }
-  .btn.primary { background: linear-gradient(135deg, var(--accent2), var(--accent)); border-color: transparent; color: #fff; }
-  .btn.primary:hover { opacity: 0.85; }
-  .btn.success-btn { border-color: var(--success); color: var(--success); }
-
-  /* ─── CANVAS AREA ──────────────────────── */
-  #canvas-container {
-    position: fixed;
-    top: var(--header-h);
-    left: var(--panel-w);
-    right: var(--panel-w);
-    bottom: 0;
-    background: #080c18;
-    overflow: hidden;
-  }
-
-  #three-canvas {
-    width: 100%; height: 100%;
-    display: block;
-    cursor: crosshair;
-  }
-
-  /* ─── LEFT PANEL ───────────────────────── */
-  #left-panel {
-    position: fixed;
-    top: var(--header-h); left: 0;
-    width: var(--panel-w); bottom: 0;
-    background: var(--bg-panel);
-    border-right: 1px solid var(--border);
-    display: flex; flex-direction: column;
-    z-index: 100;
-    backdrop-filter: blur(20px);
-  }
-
-  /* ─── RIGHT PANEL ──────────────────────── */
-  #right-panel {
-    position: fixed;
-    top: var(--header-h); right: 0;
-    width: var(--panel-w); bottom: 0;
-    background: var(--bg-panel);
-    border-left: 1px solid var(--border);
-    display: flex; flex-direction: column;
-    z-index: 100;
-    backdrop-filter: blur(20px);
-  }
-
-  .panel-section {
-    padding: 12px;
-    border-bottom: 1px solid rgba(0,212,255,0.08);
-  }
-  .panel-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 11px; font-weight: 600;
-    letter-spacing: 2px; text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 10px;
-    display: flex; align-items: center; gap:6px;
-  }
-  .panel-title::before {
-    content: '';
-    width: 3px; height: 12px;
-    background: var(--accent);
-    border-radius: 2px;
-    flex-shrink: 0;
-  }
-
-  /* Add Object buttons */
-  .add-btn {
-    display: flex; align-items: center; gap:8px;
-    width: 100%;
-    background: transparent;
-    border: 1px solid rgba(0,212,255,0.12);
-    border-radius: 6px;
-    color: var(--text);
-    padding: 8px 10px;
-    cursor: pointer;
-    font-family: 'Exo 2', sans-serif;
-    font-size: 12px; font-weight: 500;
-    transition: all 0.2s;
-    margin-bottom: 4px;
-    text-align: left;
-  }
-  .add-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.06); }
-  .add-btn .icon { font-size: 16px; width: 20px; text-align: center; }
-
-  /* Object list */
-  #object-list {
-    flex: 1; overflow-y: auto;
-    padding: 8px;
-  }
-  #object-list::-webkit-scrollbar { width: 4px; }
-  #object-list::-webkit-scrollbar-track { background: transparent; }
-  #object-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  .obj-item {
-    display: flex; align-items: center; gap:8px;
-    padding: 7px 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    border: 1px solid transparent;
-    margin-bottom: 2px;
-    transition: all 0.15s;
-    font-size: 12px;
-  }
-  .obj-item:hover { background: rgba(0,212,255,0.06); border-color: rgba(0,212,255,0.15); }
-  .obj-item.selected { background: rgba(0,212,255,0.1); border-color: var(--accent); }
-  .obj-item .obj-icon { font-size: 14px; flex-shrink: 0; }
-  .obj-item .obj-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .obj-item .obj-del {
-    background: none; border: none; cursor: pointer;
-    color: var(--text-dim); font-size: 14px; padding: 2px;
-    transition: color 0.15s;
-    flex-shrink: 0;
-  }
-  .obj-item .obj-del:hover { color: var(--accent3); }
-
-  /* Properties panel */
-  .prop-group { margin-bottom: 12px; }
-  .prop-label { font-size: 11px; color: var(--text-dim); margin-bottom: 6px; font-family: 'Share Tech Mono', monospace; }
-  .vec3-inputs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
-  .vec3-inputs label { font-size: 9px; color: var(--text-dim); display: block; text-align: center; margin-bottom: 2px; }
-
-  input[type=number], input[type=text], input[type=password], select, textarea {
-    width: 100%;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(0,212,255,0.2);
-    border-radius: 4px;
-    color: var(--text);
-    padding: 5px 8px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  input[type=number]:focus, input[type=text]:focus, input[type=password]:focus, select:focus, textarea:focus {
-    border-color: var(--accent);
-  }
-  input[type=range] { width: 100%; accent-color: var(--accent); }
-  select option { background: #0a1020; }
-
-  textarea { resize: vertical; min-height: 60px; }
-
-  .small-input { padding: 4px 6px; font-size: 10px; }
-
-  /* ─── ENVIRONMENT SECTION ─────────────── */
-  .env-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 4px;
-  }
-  .env-btn {
-    background: transparent;
-    border: 1px solid rgba(0,212,255,0.12);
-    border-radius: 5px;
-    color: var(--text-dim);
-    padding: 6px 4px;
-    cursor: pointer;
-    font-size: 10px; font-weight: 600;
-    text-align: center;
-    transition: all 0.15s;
-    font-family: 'Exo 2', sans-serif;
-  }
-  .env-btn:hover, .env-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.08); }
-
-  /* ─── HUD ──────────────────────────────── */
-  #hud {
-    position: fixed;
-    bottom: 20px; left: 50%;
-    transform: translateX(-50%);
-    display: flex; gap: 8px;
-    z-index: 200;
-    pointer-events: none;
-  }
-  .hud-pill {
-    background: rgba(5,8,16,0.85);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 11px;
-    font-family: 'Share Tech Mono', monospace;
-    color: var(--text-dim);
-    display: flex; align-items: center; gap:6px;
-    backdrop-filter: blur(12px);
-  }
-  .hud-key {
-    background: var(--bg-glass);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 1px 5px;
-    font-size: 10px;
-    color: var(--accent);
-  }
-
-  /* ─── CROSSHAIR ────────────────────────── */
-  #crosshair {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    z-index: 150;
-    display: none;
-  }
-  #crosshair.active { display: block; }
-  .ch-h, .ch-v {
-    position: absolute;
-    background: rgba(255,255,255,0.7);
-  }
-  .ch-h { width: 14px; height: 1px; top: 0; left: -7px; }
-  .ch-v { width: 1px; height: 14px; top: -7px; left: 0; }
-
-  /* ─── PLAY MODE ────────────────────────── */
-  #play-overlay {
-    position: fixed;
-    top: var(--header-h); left: 0; right: 0; bottom: 0;
-    z-index: 50;
-    pointer-events: none;
-    display: none;
-  }
-  #play-overlay.active { display: block; pointer-events: all; }
-
-  #pointer-lock-msg {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(5,8,16,0.92);
-    border: 1px solid var(--accent);
-    border-radius: 12px;
-    padding: 24px 36px;
-    text-align: center;
-    z-index: 300;
-    backdrop-filter: blur(20px);
-  }
-  #pointer-lock-msg h3 { color: var(--accent); margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; font-size: 20px; }
-  #pointer-lock-msg p { font-size: 12px; color: var(--text-dim); }
-
-  /* ─── MODALS ───────────────────────────── */
-  .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 500;
-    display: flex; align-items: center; justify-content: center;
-    backdrop-filter: blur(8px);
-    display: none;
-  }
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--bg-panel);
-    border: 1px solid var(--border-bright);
-    border-radius: 12px;
-    padding: 24px;
-    min-width: 380px; max-width: 520px; width: 90%;
-    position: relative;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-  .modal::-webkit-scrollbar { width: 4px; }
-  .modal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  .modal-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 20px; font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 20px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .modal-close {
-    position: absolute; top: 16px; right: 16px;
-    background: none; border: none;
-    color: var(--text-dim); font-size: 20px;
-    cursor: pointer; transition: color 0.15s;
-  }
-  .modal-close:hover { color: var(--accent3); }
-
-  .form-group { margin-bottom: 14px; }
-  .form-label { font-size: 11px; color: var(--text-dim); margin-bottom: 5px; display: block; letter-spacing: 1px; text-transform: uppercase; }
-
-  .share-link-box {
-    display: flex; gap: 6px;
-    margin-top: 6px;
-  }
-  .share-link-box input { flex:1; font-size: 10px; }
-
-  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
-
-  /* ─── VOICE CHAT HUD ──────────────────── */
-  #voice-panel {
-    position: fixed;
-    bottom: 60px; right: calc(var(--panel-w) + 12px);
-    background: var(--bg-panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 14px;
-    z-index: 200;
-    display: none;
-    min-width: 180px;
-    backdrop-filter: blur(16px);
-  }
-  #voice-panel.open { display: block; }
-  .voice-title { font-size: 10px; color: var(--text-dim); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-  .voice-user {
-    display: flex; align-items: center; gap:8px;
-    padding: 4px 0;
-    font-size: 11px;
-  }
-  .voice-avatar {
-    width: 24px; height: 24px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 700;
-    flex-shrink: 0;
-  }
-  .voice-bar {
-    height: 3px; background: var(--border); border-radius: 2px; flex:1;
-    overflow: hidden;
-  }
-  .voice-bar-fill {
-    height: 100%; background: var(--success);
-    border-radius: 2px; width: 0%;
-    transition: width 0.1s;
-  }
-
-  /* ─── USERS PANEL ─────────────────────── */
-  #users-panel {
-    position: fixed;
-    top: calc(var(--header-h) + 8px); right: calc(var(--panel-w) + 8px);
-    background: var(--bg-panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px;
-    z-index: 200;
-    display: none;
-    min-width: 160px;
-    backdrop-filter: blur(16px);
-  }
-  #users-panel.open { display: block; }
-
-  /* ─── NOTIFICATIONS ───────────────────── */
-  #notif-container {
-    position: fixed; bottom: 20px; right: calc(var(--panel-w) + 16px);
-    z-index: 600; display: flex; flex-direction: column-reverse; gap: 6px;
-    pointer-events: none;
-  }
-  .notif {
-    background: var(--bg-panel);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 12px;
-    animation: slideIn 0.3s ease;
-    max-width: 260px;
-    backdrop-filter: blur(12px);
-    pointer-events: all;
-  }
-  .notif.success { border-color: var(--success); }
-  .notif.warn { border-color: var(--warn); }
-  .notif.error { border-color: var(--accent3); }
-  @keyframes slideIn { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform: translateX(0); } }
-
-  /* ─── GRID OVERLAY ────────────────────── */
-  .mode-badge {
-    position: fixed;
-    top: calc(var(--header-h) + 10px);
-    left: calc(var(--panel-w) + 10px);
-    background: rgba(5,8,16,0.85);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 4px 12px;
-    font-size: 10px;
-    font-family: 'Share Tech Mono', monospace;
-    z-index: 200;
-    pointer-events: none;
-    display: flex; align-items: center; gap: 6px;
-  }
-
-  /* ─── ADD TEXT MODAL TEXTAREA ─────────── */
-  #text-content-input { min-height: 80px; }
-
-  /* ─── COLLAB BADGE ────────────────────── */
-  .collab-count {
-    background: var(--accent2);
-    color: #fff;
-    font-size: 9px;
-    border-radius: 10px;
-    padding: 1px 5px;
-    min-width: 16px;
-    text-align: center;
-  }
-
-  /* ─── TRANSFORM GIZMO HINT ─────────────── */
-  .gizmo-hint {
-    position: fixed;
-    bottom: 60px;
-    left: calc(var(--panel-w) + 12px);
-    background: rgba(5,8,16,0.85);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 10px;
-    font-family: 'Share Tech Mono', monospace;
-    color: var(--text-dim);
-    z-index: 200;
-    pointer-events: none;
-    line-height: 1.8;
-  }
-
-  /* Loading */
-  #loading {
-    position: fixed; inset: 0;
-    background: var(--bg-deep);
-    z-index: 9999;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 20px;
-  }
-  .loading-logo {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 32px; font-weight: 700;
-    color: var(--accent);
-    letter-spacing: 2px;
-  }
-  .loading-bar {
-    width: 200px; height: 2px;
-    background: rgba(0,212,255,0.1);
-    border-radius: 2px; overflow: hidden;
-  }
-  .loading-fill {
-    height: 100%; background: var(--accent);
-    animation: loadAnim 1.2s ease-in-out forwards;
-  }
-  @keyframes loadAnim { from { width: 0; } to { width: 100%; } }
-
-  /* Color picker */
-  input[type=color] {
-    width: 36px; height: 28px;
-    border: 1px solid var(--border);
-    border-radius: 4px; cursor: pointer;
-    background: none; padding: 2px;
-  }
-
-  .row { display: flex; align-items: center; gap: 8px; }
-  .row label { font-size: 11px; color: var(--text-dim); white-space: nowrap; }
-
-  /* File drop zone */
-  .dropzone {
-    border: 2px dashed var(--border);
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 12px;
-    color: var(--text-dim);
-  }
-  .dropzone:hover, .dropzone.dragover {
-    border-color: var(--accent);
-    background: rgba(0,212,255,0.04);
-    color: var(--accent);
-  }
-
-  hr.panel-hr { border: none; border-top: 1px solid rgba(0,212,255,0.08); margin: 8px 0; }
+  /* NOTIFS */
+  #notifs{position:fixed;bottom:16px;right:calc(var(--pw)+12px);z-index:600;display:flex;flex-direction:column-reverse;gap:5px;pointer-events:none}
+  .notif{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:12px;animation:nfin .25s ease;max-width:240px;backdrop-filter:blur(10px);pointer-events:all}
+  .notif.ok{border-color:var(--ok)}
+  .notif.warn{border-color:var(--warn)}
+  .notif.err{border-color:var(--a3)}
+  @keyframes nfin{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
 </style>
 </head>
 <body>
 
-<!-- Loading Screen -->
 <div id="loading">
-  <div class="loading-logo">⬡ GmedranoTIC's OMNIVERSE</div>
-  <div style="font-size:12px;color:var(--text-dim);font-family:'Share Tech Mono',monospace;">Initializing 3D Engine...</div>
-  <div class="loading-bar"><div class="loading-fill"></div></div>
+  <div class="ld-logo">⬡ GmedranoTIC's OMNIVERSE</div>
+  <div style="font-size:11px;color:var(--dim);font-family:'Share Tech Mono',monospace">Initializing 3D Engine…</div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
 </div>
 
 <!-- HEADER -->
-<div id="header">
+<div id="hdr">
   <div class="logo">
     <div class="logo-icon">⬡</div>
-    <div>
-      <div class="logo-text">GmedranoTIC's OMNIVERSE</div>
-      <div class="logo-sub">3D World Builder</div>
-    </div>
+    <div><div class="logo-text">GmedranoTIC's OMNIVERSE</div><div class="logo-sub">3D World Builder</div></div>
   </div>
-
-  <div class="header-sep"></div>
-
-  <div class="header-info">
-    <div class="status-dot"></div>
-    <span id="proj-name-display" style="cursor:pointer;color:var(--text)" onclick="renameProjPrompt()" title="Click to rename">My Omniverse</span>
-    <span id="peer-id-display" style="font-size:9px;color:var(--text-dim)"></span>
+  <div class="hsep"></div>
+  <div class="hinfo">
+    <div class="sdot"></div>
+    <span id="projname" style="cursor:pointer;color:var(--text)" onclick="renameProj()" title="Click to rename">My Omniverse</span>
+    <span id="peerid" style="font-size:9px"></span>
   </div>
-
-  <button class="btn" onclick="setMode('edit')" id="btn-edit">✏️ Edit</button>
-  <button class="btn" onclick="setMode('play')" id="btn-play">▶ Play</button>
-  <button class="btn" onclick="openModal('shareModal')">🔗 Share</button>
-  <button class="btn" onclick="saveProject()">💾 Save</button>
-  <button class="btn" onclick="loadProject()">📂 Load</button>
-  <button class="btn primary" onclick="exportWorld()">⬇ Export HTML</button>
-
-  <button class="btn" onclick="toggleUsers()" id="btn-users">
-    👥 <span id="user-count">1</span>
-    <span class="collab-count" id="collab-count-badge">0</span>
-  </button>
-  <button class="btn" onclick="toggleVoice()" id="btn-voice">🎙 Voice</button>
+  <button class="btn on" id="bedit" onclick="setMode('edit')">✏️ Edit</button>
+  <button class="btn" id="bplay" onclick="setMode('play')">▶ Play</button>
+  <button class="btn" onclick="openM('shareModal')">🔗 Share</button>
+  <button class="btn" onclick="saveProj()">💾 Save</button>
+  <button class="btn" onclick="loadProj()">📂 Load</button>
+  <button class="btn pri" onclick="openExport()">⬇ Export HTML</button>
+  <button class="btn" onclick="toggleUsers()">👥 <span id="ucnt">1</span></button>
+  <button class="btn" id="bvoice" onclick="toggleVoice()">🎙 Voice</button>
 </div>
 
 <!-- LEFT PANEL -->
-<div id="left-panel">
-  <div class="panel-section">
-    <div class="panel-title">Add Objects</div>
-    <label class="add-btn" onclick="triggerFileUpload('glb')">
-      <span class="icon">🧊</span> Upload GLB Model
-    </label>
-    <label class="add-btn" onclick="triggerFileUpload('image')">
-      <span class="icon">🖼</span> Upload Image
-    </label>
-    <button class="add-btn" onclick="openModal('textModal')">
-      <span class="icon">📝</span> Add Text
-    </button>
-    <button class="add-btn" onclick="openModal('urlModal')">
-      <span class="icon">🔗</span> Add URL / iFrame
-    </button>
-    <button class="add-btn" onclick="addPrimitive('box')">
-      <span class="icon">⬜</span> Add Box
-    </button>
-    <button class="add-btn" onclick="addPrimitive('sphere')">
-      <span class="icon">⚪</span> Add Sphere
-    </button>
-    <button class="add-btn" onclick="addPrimitive('plane')">
-      <span class="icon">▬</span> Add Plane
-    </button>
-    <input type="file" id="file-input" style="display:none" accept=".glb,.gltf,.jpg,.jpeg,.png,.gif,.webp,.svg" onchange="handleFileUpload(event)">
+<div id="lp">
+  <div class="psec">
+    <div class="ptitle">Add Objects</div>
+    <button class="abtn" onclick="pickFile('glb')">🧊 Upload GLB Model</button>
+    <button class="abtn" onclick="pickFile('img')">🖼 Upload Image</button>
+    <button class="abtn" onclick="openM('textModal')">📝 Add Text</button>
+    <button class="abtn" onclick="openM('urlModal')">🔗 Add URL Panel</button>
+    <button class="abtn" onclick="addPrim('box')">⬜ Add Box</button>
+    <button class="abtn" onclick="addPrim('sphere')">⚪ Add Sphere</button>
+    <button class="abtn" onclick="addPrim('cylinder')">🥫 Add Cylinder</button>
+    <input type="file" id="filein" style="display:none" onchange="onFile(event)">
   </div>
-
-  <div class="panel-section">
-    <div class="panel-title">Environment</div>
-    <div class="env-grid">
-      <button class="env-btn active" onclick="setEnv('night',this)">🌃 Night</button>
-      <button class="env-btn" onclick="setEnv('sunset',this)">🌅 Sunset</button>
-      <button class="env-btn" onclick="setEnv('day',this)">☀ Day</button>
-      <button class="env-btn" onclick="setEnv('space',this)">🌌 Space</button>
+  <div class="psec">
+    <div class="ptitle">Environment</div>
+    <div class="egrid">
+      <button class="ebtn on" onclick="setEnv('night',this)">🌃 Night</button>
+      <button class="ebtn" onclick="setEnv('sunset',this)">🌅 Sunset</button>
+      <button class="ebtn" onclick="setEnv('day',this)">☀ Day</button>
+      <button class="ebtn" onclick="setEnv('space',this)">🌌 Space</button>
     </div>
-    <hr class="panel-hr">
-    <div class="row" style="margin-top:8px">
-      <label>Ground:</label>
-      <input type="color" id="ground-color" value="#1a1a2e" oninput="setGroundColor(this.value)">
-      <label>Fog:</label>
-      <input type="color" id="fog-color" value="#050810" oninput="setFogColor(this.value)">
+    <hr class="hr">
+    <div class="row" style="margin-top:5px;flex-wrap:wrap;gap:5px">
+      <label>Ground:</label><input type="color" id="gcol" value="#1a1a2e" oninput="setGround(this.value)">
+      <label>Sky:</label><input type="color" id="scol" value="#0a0e1a" oninput="setSky(this.value)">
     </div>
   </div>
-
-  <div class="panel-section">
-    <div class="panel-title">Scene Objects</div>
-  </div>
-  <div id="object-list">
-    <div style="text-align:center;color:var(--text-dim);font-size:11px;margin-top:20px;">No objects yet.<br>Add objects above.</div>
-  </div>
+  <div class="psec"><div class="ptitle">Scene Objects</div></div>
+  <div id="objlist"><div style="text-align:center;color:var(--dim);font-size:11px;margin-top:20px">No objects yet.<br>Add objects above.</div></div>
 </div>
 
-<!-- RIGHT PANEL (Properties) -->
-<div id="right-panel">
-  <div class="panel-section">
-    <div class="panel-title">Properties</div>
-  </div>
-  <div id="props-content" style="padding:12px;flex:1;overflow-y:auto">
-    <div style="text-align:center;color:var(--text-dim);font-size:11px;margin-top:30px;">
-      Select an object to edit its properties.
-    </div>
-  </div>
-
-  <!-- World Settings -->
-  <div class="panel-section" style="margin-top:auto">
-    <div class="panel-title">World Settings</div>
-    <div class="form-group">
-      <div class="form-label">Gravity</div>
-      <input type="range" id="gravity-slider" min="0" max="30" value="9.8" step="0.1" oninput="setGravity(this.value)">
-    </div>
-    <div class="form-group">
-      <div class="form-label">Ambient Light</div>
-      <input type="range" id="ambient-slider" min="0" max="3" value="0.6" step="0.05" oninput="setAmbient(this.value)">
-    </div>
-    <div class="form-group">
-      <div class="form-label">Sky Color</div>
-      <input type="color" id="sky-color" value="#0a0e1a" oninput="setSkyColor(this.value)">
-    </div>
-    <div class="form-group">
-      <div class="form-label">Walk Speed</div>
-      <input type="range" id="speed-slider" min="1" max="20" value="5" step="0.5" oninput="e=>walkSpeed=parseFloat(e.target.value)">
-    </div>
+<!-- RIGHT PANEL -->
+<div id="rp">
+  <div class="psec"><div class="ptitle">Properties</div></div>
+  <div id="propscont"><div style="text-align:center;color:var(--dim);font-size:11px;margin-top:30px">Select an object<br>to edit its properties.</div></div>
+  <div class="wsett">
+    <div class="ptitle">World Settings</div>
+    <div class="pgrp"><div class="plbl">Gravity</div><input type="range" id="grav" min="0" max="30" value="9.8" step=".1" oninput="WD.gravity=parseFloat(this.value)"></div>
+    <div class="pgrp"><div class="plbl">Ambient Light</div><input type="range" id="ambl" min="0" max="3" value="0.6" step=".05" oninput="setAmb(this.value)"></div>
+    <div class="pgrp"><div class="plbl">Walk Speed</div><input type="range" id="wspd" min="1" max="20" value="5" step=".5" oninput="WD.walkSpeed=parseFloat(this.value)"></div>
+    <div class="pgrp"><div class="plbl">Fog Distance</div><input type="range" id="fogd" min="20" max="300" value="120" step="5" oninput="setFog(this.value)"></div>
   </div>
 </div>
 
 <!-- CANVAS -->
-<div id="canvas-container">
-  <canvas id="three-canvas"></canvas>
-</div>
+<div id="canvas-wrap"><canvas id="c"></canvas></div>
 
-<!-- Crosshair -->
-<div id="crosshair">
-  <div class="ch-h"></div>
-  <div class="ch-v"></div>
-</div>
-
-<!-- Mode Badge -->
-<div class="mode-badge" id="mode-badge">
-  <div class="status-dot" style="background:var(--accent)"></div>
-  EDIT MODE
-</div>
-
-<!-- HUD Controls -->
+<!-- Overlays -->
+<div id="crosshair"><div class="ch chh"></div><div class="ch chv"></div></div>
+<div class="mbadge" id="mbadge"><div class="sdot" style="background:var(--a)"></div>EDIT MODE</div>
 <div id="hud">
-  <div class="hud-pill" id="hud-controls" style="display:none">
-    <span class="hud-key">W A S D</span> Move &nbsp;
-    <span class="hud-key">Mouse</span> Look &nbsp;
-    <span class="hud-key">Space</span> Jump &nbsp;
-    <span class="hud-key">Shift</span> Run &nbsp;
-    <span class="hud-key">Esc</span> Exit
-  </div>
-  <div class="hud-pill" id="hud-edit">
-    <span class="hud-key">Click</span> Select &nbsp;
-    <span class="hud-key">Del</span> Delete
-  </div>
+  <div class="hpill" id="hudctrl" style="display:none"><span class="hkey">WASD</span>Move <span class="hkey">Mouse</span>Look <span class="hkey">Space</span>Jump <span class="hkey">Shift</span>Run <span class="hkey">Esc</span>Exit</div>
+  <div class="hpill" id="hudedit"><span class="hkey">Click</span>Select <span class="hkey">G</span>Move <span class="hkey">R</span>Rotate <span class="hkey">Del</span>Delete</div>
+</div>
+<div id="gizmohint">Selected: <span id="goname" style="color:var(--a)">-</span><br>Drag arrows · G=move R=rotate S=scale</div>
+<div id="playover"><div id="plkmsg"><h3>▶ PLAY MODE</h3><p>Click to lock mouse &amp; enter the 3D world<br>Press <b>Esc</b> to exit play mode</p><button class="btn pri" style="margin:0 auto" onclick="reqLock()">Enter World</button></div></div>
+
+<!-- USERS / VOICE -->
+<div id="userspanel"><div class="vtitle">Online Users</div><div id="usrlist"></div></div>
+<div id="voicepanel">
+  <div class="vtitle">🎙 Voice Chat</div>
+  <div id="vulist"></div>
+  <button class="btn danger" style="margin-top:6px;width:100%" id="mutebtn" onclick="toggleMute()">🎙 Mute</button>
 </div>
 
-<!-- Gizmo Hint -->
-<div class="gizmo-hint" id="gizmo-hint" style="display:none">
-  Selected: <span id="gizmo-obj-name" style="color:var(--accent)">-</span><br>
-  Drag XYZ arrows to move<br>
-  Use panel to set exact values
-</div>
+<div id="notifs"></div>
 
-<!-- Play overlay -->
-<div id="play-overlay">
-  <div id="pointer-lock-msg">
-    <h3>▶ PLAY MODE</h3>
-    <p>Click to capture mouse & enter world<br>Press <b>Esc</b> to exit play mode</p>
-    <button class="btn primary" style="margin:12px auto 0;display:flex" onclick="requestPointerLock()">Enter World</button>
-  </div>
-</div>
-
-<!-- Users Panel -->
-<div id="users-panel">
-  <div class="voice-title">Online Users</div>
-  <div id="users-list"></div>
-</div>
-
-<!-- Voice Panel -->
-<div id="voice-panel">
-  <div class="voice-title">🎙 Voice Chat</div>
-  <div id="voice-users-list"></div>
-  <button class="btn danger" style="margin-top:8px;width:100%" id="mute-btn" onclick="toggleMute()">🎙 Mute</button>
-</div>
-
-<!-- Notif container -->
-<div id="notif-container"></div>
-
-<!-- ── MODALS ── -->
-
-<!-- Share Modal -->
-<div class="modal-overlay" id="shareModal">
+<!-- MODALS -->
+<div class="mover" id="shareModal">
   <div class="modal">
-    <div class="modal-title">🔗 Share & Collaborate</div>
-    <button class="modal-close" onclick="closeModal('shareModal')">✕</button>
-
-    <div class="form-group">
-      <div class="form-label">Your Peer ID (Room ID)</div>
-      <div class="share-link-box">
-        <input type="text" id="room-id-field" readonly placeholder="Generating...">
-        <button class="btn" onclick="copyRoomId()">Copy</button>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="form-label">Share Link</div>
-      <div class="share-link-box">
-        <input type="text" id="share-link-field" readonly placeholder="Generating...">
-        <button class="btn" onclick="copyShareLink()">Copy</button>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="form-label">Room Password (optional)</div>
-      <input type="password" id="room-password-input" placeholder="Leave blank for open room" oninput="updateRoomPassword(this.value)">
-      <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">Visitors must enter this password to join your space.</div>
-    </div>
-
-    <div class="form-group">
-      <div class="form-label">Connect to a Room</div>
-      <div class="share-link-box">
-        <input type="text" id="connect-peer-input" placeholder="Paste a Peer ID to join...">
-        <button class="btn success-btn" onclick="connectToPeer()">Join</button>
-      </div>
-    </div>
-
-    <div style="background:rgba(0,212,255,0.05);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px;font-size:11px;color:var(--text-dim)">
-      <b style="color:var(--text)">How collaboration works:</b><br>
-      Share your link with others. When they open it, they join your 3D world in real-time. Voice chat is available via the 🎙 Voice button. The exported HTML also supports multi-user mode when hosted with a signaling server.
-    </div>
+    <div class="mtitle">🔗 Share &amp; Collaborate</div>
+    <button class="mclose" onclick="closeM('shareModal')">✕</button>
+    <div class="fg"><div class="fl">Your Room ID</div><div class="slink"><input type="text" id="ridF" readonly><button class="btn" onclick="copy(document.getElementById('ridF').value)">Copy</button></div></div>
+    <div class="fg"><div class="fl">Share Link</div><div class="slink"><input type="text" id="slinkF" readonly><button class="btn" onclick="copy(document.getElementById('slinkF').value)">Copy</button></div></div>
+    <div class="fg"><div class="fl">Room Password (optional)</div><input type="password" id="rpwF" placeholder="Leave blank for open room" oninput="WD.roomPw=this.value"></div>
+    <div class="fg"><div class="fl">Join a Room (paste Peer ID)</div><div class="slink"><input type="text" id="joinF" placeholder="Peer ID…"><button class="btn ok" onclick="joinRoom()">Join</button></div></div>
+    <div class="infobox"><b style="color:var(--text)">Collaboration:</b> Share your link. Others open it and appear in your world in real-time. Voice chat via the 🎙 button.</div>
   </div>
 </div>
 
-<!-- Text Modal -->
-<div class="modal-overlay" id="textModal">
+<div class="mover" id="textModal">
   <div class="modal">
-    <div class="modal-title">📝 Add Text Object</div>
-    <button class="modal-close" onclick="closeModal('textModal')">✕</button>
-    <div class="form-group">
-      <div class="form-label">Text Content</div>
-      <textarea id="text-content-input" placeholder="Enter text to display in 3D space..."></textarea>
-    </div>
-    <div class="form-group">
-      <div class="form-label">Font Size</div>
-      <input type="number" id="text-size-input" value="1" min="0.1" max="10" step="0.1">
-    </div>
-    <div class="form-group">
-      <div class="form-label">Text Color</div>
-      <input type="color" id="text-color-input" value="#00d4ff">
-    </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('textModal')">Cancel</button>
-      <button class="btn primary" onclick="addTextObject()">Add Text</button>
-    </div>
+    <div class="mtitle">📝 Add Text Object</div>
+    <button class="mclose" onclick="closeM('textModal')">✕</button>
+    <div class="fg"><div class="fl">Text Content</div><textarea id="txtcont" placeholder="Enter text…"></textarea></div>
+    <div class="fg"><div class="fl">Font Size</div><input type="number" id="txtsize" value="1" min=".1" max="10" step=".1"></div>
+    <div class="fg"><div class="fl">Color</div><input type="color" id="txtcol" value="#00d4ff"></div>
+    <div class="mact"><button class="btn" onclick="closeM('textModal')">Cancel</button><button class="btn pri" onclick="addText()">Add Text</button></div>
   </div>
 </div>
 
-<!-- URL Modal -->
-<div class="modal-overlay" id="urlModal">
+<div class="mover" id="urlModal">
   <div class="modal">
-    <div class="modal-title">🔗 Add URL / External Page</div>
-    <button class="modal-close" onclick="closeModal('urlModal')">✕</button>
-    <div class="form-group">
-      <div class="form-label">URL</div>
-      <input type="text" id="url-input" placeholder="https://example.com">
-    </div>
-    <div class="form-group">
-      <div class="form-label">Display Name</div>
-      <input type="text" id="url-name-input" placeholder="My Page">
-    </div>
-    <div class="form-group">
-      <div class="form-label">Display Size</div>
-      <div class="vec3-inputs">
-        <div><label>Width</label><input type="number" id="url-w" value="4" step="0.5"></div>
-        <div><label>Height</label><input type="number" id="url-h" value="3" step="0.5"></div>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('urlModal')">Cancel</button>
-      <button class="btn primary" onclick="addUrlObject()">Add</button>
-    </div>
+    <div class="mtitle">🔗 Add URL Panel</div>
+    <button class="mclose" onclick="closeM('urlModal')">✕</button>
+    <div class="fg"><div class="fl">URL</div><input type="text" id="urlin" placeholder="https://example.com"></div>
+    <div class="fg"><div class="fl">Display Name</div><input type="text" id="urlname" placeholder="My Page"></div>
+    <div class="mact"><button class="btn" onclick="closeM('urlModal')">Cancel</button><button class="btn pri" onclick="addUrl()">Add</button></div>
   </div>
 </div>
 
-<!-- Password Modal (for joining) -->
-<div class="modal-overlay" id="passwordModal">
-  <div class="modal" style="max-width:320px">
-    <div class="modal-title">🔒 Room Password</div>
-    <div class="form-group">
-      <div class="form-label">Enter Password</div>
-      <input type="password" id="join-password-input" placeholder="Password required">
-    </div>
-    <div id="password-error" style="color:var(--accent3);font-size:11px;display:none">Incorrect password.</div>
-    <div class="modal-actions">
-      <button class="btn primary" onclick="verifyRoomPassword()">Enter</button>
-    </div>
-  </div>
-</div>
-
-<!-- Export Modal -->
-<div class="modal-overlay" id="exportModal">
+<div class="mover" id="exportModal">
   <div class="modal">
-    <div class="modal-title">⬇ Export World as HTML5</div>
-    <button class="modal-close" onclick="closeModal('exportModal')">✕</button>
-    <div style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">
-      Your world will be exported as a standalone HTML5 file. It can be hosted on any web server or GitHub Pages. GLB files are embedded as base64 (may increase file size). Images and URLs are preserved. The exported world supports multi-user collaboration when paired with a signaling server.
-    </div>
-    <div class="form-group">
-      <div class="form-label">World Title</div>
-      <input type="text" id="export-title" placeholder="My Omniverse World">
-    </div>
-    <div class="form-group">
-      <div class="form-label">Options</div>
-      <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:6px;cursor:pointer">
-        <input type="checkbox" id="exp-collab" checked> Include collaboration code
-      </label>
-      <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer">
-        <input type="checkbox" id="exp-voice" checked> Include voice chat
-      </label>
-    </div>
-    <div style="background:rgba(255,170,0,0.08);border:1px solid var(--warn);border-radius:6px;padding:10px;font-size:11px;color:var(--warn);margin-bottom:12px">
-      ⚠ GLB models are embedded for viewing only. They cannot be downloaded from the exported HTML.
-    </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('exportModal')">Cancel</button>
-      <button class="btn primary" onclick="doExport()">⬇ Download HTML</button>
-    </div>
+    <div class="mtitle">⬇ Export as HTML5</div>
+    <button class="mclose" onclick="closeM('exportModal')">✕</button>
+    <div style="font-size:12px;color:var(--dim);margin-bottom:13px">Exports a standalone HTML5 file. Host it on any web server or GitHub Pages. Collaboration &amp; voice chat included.</div>
+    <div class="fg"><div class="fl">World Title</div><input type="text" id="extitle" placeholder="My Omniverse World"></div>
+    <div class="warnbox">⚠ GLB models are embedded — they cannot be downloaded from the exported HTML.</div>
+    <div class="mact"><button class="btn" onclick="closeM('exportModal')">Cancel</button><button class="btn pri" onclick="doExport()">⬇ Download HTML</button></div>
   </div>
 </div>
 
-<!-- THREE.JS + GLTFLoader via CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-// ───────────────────────────────────────────────────────────
-//  GLTF LOADER (inlined minimal version via importmap workaround)
-// ───────────────────────────────────────────────────────────
-// We load GLTFLoader from a CDN that works with r128
+<!-- importmap MUST come before any module script -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/"
+  }
+}
 </script>
+
 <script type="module">
-// Import Three extras
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js';
-import { TransformControls } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/TransformControls.js';
+import * as THREE from 'three';
+import { GLTFLoader }        from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls }     from 'three/addons/controls/OrbitControls.js';
+import { TransformControls } from 'three/addons/controls/TransformControls.js';
 
-// ───────────────────────────────────────────────────────────
-//  GLOBALS
-// ───────────────────────────────────────────────────────────
-const canvas = document.getElementById('three-canvas');
-const container = document.getElementById('canvas-container');
-
-let renderer, scene, camera, orbitControls, transformControls;
-let currentMode = 'edit';
-let selectedObject = null;
-let objects = []; // { id, name, type, mesh, data }
-let gltfLoader, raycaster, mouse;
-let animId;
-let gravity = 9.8, walkSpeed = 5;
-let ambientLight, dirLight, skyMesh;
-let groundMesh;
-let playerYVel = 0, isGrounded = true;
-
-// Play mode
-let keys = {};
-let pointerLocked = false;
-let playerPos = new THREE.Vector3(0, 1.7, 5);
-let playerPitch = 0, playerYaw = 0;
-let voiceActive = false, muted = false;
-let myStream = null;
-let peerConnections = {};
-
-// P2P
-let peerId = generateId();
-let roomPassword = '';
-let connectedPeers = [];
-
-// World data
-let worldData = {
-  environment: 'night',
-  groundColor: '#1a1a2e',
-  fogColor: '#050810',
-  skyColor: '#0a0e1a',
-  gravity: 9.8,
-  walkSpeed: 5,
-  ambientIntensity: 0.6
+/* ── world settings shared with inline handlers ── */
+window.WD = {
+  env:'night', groundColor:'#1a1a2e', skyColor:'#0a0e1a',
+  gravity:9.8, walkSpeed:5, ambInt:0.6, fogFar:120, roomPw:''
 };
 
-// ─── INIT ────────────────────────────────────────────────
-function init() {
-  // Renderer
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.8;
-  resize();
+const canvas = document.getElementById('c');
+const wrap   = document.getElementById('canvas-wrap');
 
-  // Scene
+let renderer, scene, camera, orbit, xform;
+let ambLight, dirLight, groundMesh;
+const gltfLoader = new GLTFLoader();
+const raycaster  = new THREE.Raycaster();
+const mouse      = new THREE.Vector2();
+
+let mode    = 'edit';
+let selObj  = null;
+let objects = [];
+
+/* play-mode */
+let keys={}, plocked=false;
+let pPos=new THREE.Vector3(0,1.7,5), pYaw=0, pPitch=0, pYvel=0, grounded=true;
+
+/* peer / voice */
+const myPeerId = uid();
+let voiceActive=false, muted=false, myStream=null;
+
+/* ──────────────────────────────────────────── INIT */
+function init(){
+  renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+  renderer.toneMapping       = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.85;
+  onResize();
+
   scene = new THREE.Scene();
   scene.background = new THREE.Color('#0a0e1a');
-  scene.fog = new THREE.Fog('#050810', 30, 120);
+  scene.fog = new THREE.Fog('#050810', 10, 120);
 
-  // Camera
-  camera = new THREE.PerspectiveCamera(75, getAR(), 0.1, 1000);
+  camera = new THREE.PerspectiveCamera(72, ar(), 0.05, 1000);
   camera.position.set(0, 5, 12);
-  camera.lookAt(0, 0, 0);
 
-  // Lights
-  ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-  scene.add(ambientLight);
+  ambLight = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(ambLight);
+
   dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
   dirLight.position.set(10, 20, 10);
   dirLight.castShadow = true;
-  dirLight.shadow.mapSize.set(2048, 2048);
-  dirLight.shadow.camera.near = 0.1;
-  dirLight.shadow.camera.far = 200;
-  dirLight.shadow.camera.left = -50;
-  dirLight.shadow.camera.right = 50;
-  dirLight.shadow.camera.top = 50;
-  dirLight.shadow.camera.bottom = -50;
+  dirLight.shadow.mapSize.setScalar(2048);
+  const dc = dirLight.shadow.camera;
+  dc.left=-50; dc.right=50; dc.top=50; dc.bottom=-50;
+  dc.near=0.1; dc.far=200;
   scene.add(dirLight);
 
-  // Ground
-  const gGeo = new THREE.PlaneGeometry(200, 200, 20, 20);
-  const gMat = new THREE.MeshStandardMaterial({ color: '#1a1a2e', roughness: 0.9, metalness: 0.0 });
-  groundMesh = new THREE.Mesh(gGeo, gMat);
-  groundMesh.rotation.x = -Math.PI / 2;
+  const geo = new THREE.PlaneGeometry(300,300);
+  const mat = new THREE.MeshStandardMaterial({color:'#1a1a2e',roughness:.95});
+  groundMesh = new THREE.Mesh(geo, mat);
+  groundMesh.rotation.x = -Math.PI/2;
   groundMesh.receiveShadow = true;
   groundMesh.name = '__ground__';
   scene.add(groundMesh);
+  scene.add(new THREE.GridHelper(300, 100, 0x0d1a30, 0x0d1a30));
 
-  // Grid
-  const grid = new THREE.GridHelper(200, 80, 0x1a2a4a, 0x0d1a30);
-  grid.name = '__grid__';
-  scene.add(grid);
+  mkStars();
 
-  // Stars (night default)
-  addStars();
+  orbit = new OrbitControls(camera, canvas);
+  orbit.enableDamping = true;
+  orbit.dampingFactor = 0.07;
+  orbit.minDistance = 1;
+  orbit.maxDistance = 300;
 
-  // Controls
-  orbitControls = new OrbitControls(camera, canvas);
-  orbitControls.enableDamping = true;
-  orbitControls.dampingFactor = 0.08;
-  orbitControls.minDistance = 2;
-  orbitControls.maxDistance = 200;
-  orbitControls.screenSpacePanning = false;
+  xform = new TransformControls(camera, canvas);
+  xform.addEventListener('dragging-changed', e => { orbit.enabled = !e.value; });
+  xform.addEventListener('objectChange', () => { if(selObj) refreshProps(selObj); });
+  scene.add(xform);
 
-  transformControls = new TransformControls(camera, canvas);
-  transformControls.addEventListener('dragging-changed', e => {
-    orbitControls.enabled = !e.value;
-  });
-  transformControls.addEventListener('objectChange', () => {
-    if (selectedObject) syncPropsFromMesh(selectedObject);
-  });
-  scene.add(transformControls);
-
-  // Raycaster
-  raycaster = new THREE.Raycaster();
-  mouse = new THREE.Vector2();
-
-  // Loaders
-  gltfLoader = new GLTFLoader();
-
-  // Events
   canvas.addEventListener('click', onCanvasClick);
-  canvas.addEventListener('mousemove', onMouseMove);
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', onResize);
   window.addEventListener('keydown', onKeyDown);
-  window.addEventListener('keyup', e => { keys[e.code] = false; });
-  document.addEventListener('pointerlockchange', onPointerLockChange);
-
-  // Init peer
-  document.getElementById('room-id-field').value = peerId;
-  document.getElementById('peer-id-display').textContent = `ID: ${peerId.slice(0,8)}...`;
-  updateShareLink();
-
-  // Check URL params
-  const params = new URLSearchParams(location.search);
-  if (params.get('room')) {
-    // Show password modal if needed, else show join prompt
-    notify('Room link detected. Use Share menu to join.', 'warn');
-  }
-
-  // Load saved
-  const saved = localStorage.getItem('omniverse_project');
-  if (saved) {
-    try {
-      const d = JSON.parse(saved);
-      if (d.projectName) setProjectName(d.projectName);
-    } catch(e){}
-  }
-
-  animate();
-  setTimeout(() => { document.getElementById('loading').style.display = 'none'; }, 1400);
-}
-
-function addStars() {
-  const geo = new THREE.BufferGeometry();
-  const verts = [];
-  for (let i=0; i<3000; i++) {
-    verts.push((Math.random()-0.5)*800, Math.random()*300+30, (Math.random()-0.5)*800);
-  }
-  geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
-  const mat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.4, transparent: true, opacity: 0.8 });
-  const stars = new THREE.Points(geo, mat);
-  stars.name = '__stars__';
-  scene.add(stars);
-}
-
-// ─── ANIMATE ─────────────────────────────────────────────
-function animate() {
-  animId = requestAnimationFrame(animate);
-  const dt = 0.016;
-
-  if (currentMode === 'play' && pointerLocked) {
-    updatePlayerMovement(dt);
-  } else {
-    orbitControls.update();
-  }
-
-  renderer.render(scene, camera);
-}
-
-// ─── PLAYER MOVEMENT ──────────────────────────────────────
-function updatePlayerMovement(dt) {
-  const speed = keys['ShiftLeft'] || keys['ShiftRight'] ? walkSpeed * 2 : walkSpeed;
-  const dir = new THREE.Vector3();
-  const fwd = new THREE.Vector3(-Math.sin(playerYaw), 0, -Math.cos(playerYaw));
-  const right = new THREE.Vector3(Math.cos(playerYaw), 0, -Math.sin(playerYaw));
-
-  if (keys['KeyW']) dir.addScaledVector(fwd, 1);
-  if (keys['KeyS']) dir.addScaledVector(fwd, -1);
-  if (keys['KeyA']) dir.addScaledVector(right, -1);
-  if (keys['KeyD']) dir.addScaledVector(right, 1);
-  if (dir.lengthSq() > 0) dir.normalize();
-  playerPos.addScaledVector(dir, speed * dt);
-
-  // Gravity
-  playerYVel -= gravity * dt;
-  playerPos.y += playerYVel * dt;
-  if (playerPos.y < 1.7) {
-    playerPos.y = 1.7;
-    playerYVel = 0;
-    isGrounded = true;
-  }
-
-  camera.position.copy(playerPos);
-  const euler = new THREE.Euler(playerPitch, playerYaw, 0, 'YXZ');
-  camera.quaternion.setFromEuler(euler);
-}
-
-function onKeyDown(e) {
-  keys[e.code] = true;
-  if (e.code === 'Space' && currentMode === 'play' && isGrounded) {
-    playerYVel = 5;
-    isGrounded = false;
-  }
-  if (e.code === 'Escape' && currentMode === 'play') {
-    exitPlayMode();
-  }
-  if (e.code === 'Delete' || e.code === 'Backspace') {
-    if (selectedObject && currentMode === 'edit') {
-      removeObjectById(selectedObject.id);
-    }
-  }
-  if (e.code === 'KeyG') { if(transformControls.object) transformControls.setMode('translate'); }
-  if (e.code === 'KeyR') { if(transformControls.object) transformControls.setMode('rotate'); }
-  if (e.code === 'KeyS' && e.ctrlKey) { e.preventDefault(); saveProject(); }
-}
-
-// Pointer lock
-function requestPointerLock() {
-  canvas.requestPointerLock();
-}
-function onPointerLockChange() {
-  pointerLocked = document.pointerLockElement === canvas;
-  document.getElementById('pointer-lock-msg').style.display = pointerLocked ? 'none' : 'block';
-  document.getElementById('crosshair').classList.toggle('active', pointerLocked);
-  document.getElementById('hud-controls').style.display = pointerLocked ? 'flex' : 'none';
-}
-
-document.addEventListener('mousemove', e => {
-  if (pointerLocked && currentMode === 'play') {
-    playerYaw -= e.movementX * 0.002;
-    playerPitch -= e.movementY * 0.002;
-    playerPitch = Math.max(-Math.PI/2.2, Math.min(Math.PI/2.2, playerPitch));
-  }
-});
-
-// ─── MODES ───────────────────────────────────────────────
-window.setMode = function(m) {
-  currentMode = m;
-  document.getElementById('btn-edit').classList.toggle('active', m==='edit');
-  document.getElementById('btn-play').classList.toggle('active', m==='play');
-
-  const playOverlay = document.getElementById('play-overlay');
-  const hudEdit = document.getElementById('hud-edit');
-  const badge = document.getElementById('mode-badge');
-  const gizmoHint = document.getElementById('gizmo-hint');
-
-  if (m === 'play') {
-    playOverlay.classList.add('active');
-    hudEdit.style.display = 'none';
-    badge.innerHTML = '<div class="status-dot" style="background:var(--success)"></div> PLAY MODE';
-    gizmoHint.style.display = 'none';
-    orbitControls.enabled = false;
-    transformControls.detach();
-    selectedObject = null;
-    playerPos.set(camera.position.x, 1.7, camera.position.z);
-    playerYaw = 0; playerPitch = 0;
-  } else {
-    playOverlay.classList.remove('active');
-    if (document.pointerLockElement) document.exitPointerLock();
-    hudEdit.style.display = 'flex';
-    badge.innerHTML = '<div class="status-dot" style="background:var(--accent)"></div> EDIT MODE';
-    orbitControls.enabled = true;
-    camera.position.set(playerPos.x, playerPos.y + 3, playerPos.z + 8);
-    camera.lookAt(playerPos.x, 1, playerPos.z);
-  }
-};
-
-function exitPlayMode() {
-  if (document.pointerLockElement) document.exitPointerLock();
-  setMode('edit');
-}
-
-// ─── FILE UPLOAD ──────────────────────────────────────────
-let pendingFileType = 'glb';
-window.triggerFileUpload = function(type) {
-  pendingFileType = type;
-  const input = document.getElementById('file-input');
-  input.accept = type === 'glb' ? '.glb,.gltf' : '.jpg,.jpeg,.png,.gif,.webp,.svg';
-  input.click();
-};
-
-window.handleFileUpload = function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const url = URL.createObjectURL(file);
-  if (pendingFileType === 'glb') {
-    addGLBObject(url, file.name);
-  } else {
-    addImageObject(url, file.name);
-  }
-  e.target.value = '';
-};
-
-// ─── ADD OBJECTS ─────────────────────────────────────────
-function addGLBObject(url, name) {
-  notify('Loading GLB...', 'info');
-  gltfLoader.load(url, gltf => {
-    const mesh = gltf.scene;
-    mesh.traverse(c => { if(c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
-    // Center
-    const box = new THREE.Box3().setFromObject(mesh);
-    const center = box.getCenter(new THREE.Vector3());
-    mesh.position.sub(center);
-    const size = box.getSize(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z);
-    if (maxDim > 4) mesh.scale.setScalar(4/maxDim);
-
-    const wrapper = new THREE.Group();
-    wrapper.add(mesh);
-    placeAtCenter(wrapper);
-    scene.add(wrapper);
-
-    const obj = { id: uid(), name, type: 'glb', mesh: wrapper, url, data: { position:[0,1,0], rotation:[0,0,0], scale:[1,1,1] } };
-    objects.push(obj);
-    updateObjectList();
-    selectObject(obj.id);
-    notify(`GLB loaded: ${name}`, 'success');
-  }, undefined, err => notify('Failed to load GLB: ' + err.message, 'error'));
-}
-
-function addImageObject(url, name) {
-  const tex = new THREE.TextureLoader().load(url);
-  const geo = new THREE.PlaneGeometry(3, 2);
-  const mat = new THREE.MeshStandardMaterial({ map: tex, transparent: true, side: THREE.DoubleSide });
-  const mesh = new THREE.Mesh(geo, mat);
-  placeAtCenter(mesh);
-  mesh.position.y = 1.5;
-  scene.add(mesh);
-
-  const obj = { id: uid(), name, type: 'image', mesh, url, data: {} };
-  objects.push(obj);
-  updateObjectList();
-  selectObject(obj.id);
-  notify(`Image added: ${name}`, 'success');
-}
-
-window.addTextObject = function() {
-  const text = document.getElementById('text-content-input').value.trim();
-  if (!text) { notify('Enter some text first.', 'warn'); return; }
-  const color = document.getElementById('text-color-input').value;
-  const size = parseFloat(document.getElementById('text-size-input').value) || 1;
-
-  // Create canvas texture for text
-  const cv = document.createElement('canvas');
-  cv.width = 1024; cv.height = 256;
-  const ctx = cv.getContext('2d');
-  ctx.fillStyle = 'transparent';
-  ctx.clearRect(0,0,1024,256);
-  ctx.fillStyle = color;
-  ctx.font = `bold ${Math.floor(72*size)}px 'Rajdhani', sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(text, 512, 128);
-  const tex = new THREE.CanvasTexture(cv);
-  const geo = new THREE.PlaneGeometry(4*size, 1*size);
-  const mat = new THREE.MeshStandardMaterial({ map: tex, transparent: true, side: THREE.DoubleSide });
-  const mesh = new THREE.Mesh(geo, mat);
-  placeAtCenter(mesh);
-  mesh.position.y = 2;
-  scene.add(mesh);
-
-  const obj = { id: uid(), name: text.slice(0,20), type: 'text', mesh, url:'', data:{ text, color, size } };
-  objects.push(obj);
-  updateObjectList();
-  selectObject(obj.id);
-  closeModal('textModal');
-  notify('Text added!', 'success');
-};
-
-window.addUrlObject = function() {
-  const url = document.getElementById('url-input').value.trim();
-  if (!url) { notify('Enter a URL.', 'warn'); return; }
-  const name = document.getElementById('url-name-input').value.trim() || url;
-
-  // Create a visual placeholder for URL (iframe not possible in WebGL, show as panel)
-  const cv = document.createElement('canvas');
-  cv.width = 800; cv.height = 500;
-  const ctx = cv.getContext('2d');
-  ctx.fillStyle = '#0a1020';
-  ctx.fillRect(0,0,800,500);
-  ctx.fillStyle = '#1a2a4a';
-  ctx.fillRect(0,0,800,36);
-  ctx.fillStyle = '#00d4ff';
-  ctx.font = 'bold 16px monospace';
-  ctx.fillText('🔗 ' + url.slice(0,60), 10, 22);
-  ctx.fillStyle = '#5a7aaa';
-  ctx.font = '14px monospace';
-  ctx.fillText('Click in exported world to open', 300, 280);
-  const tex = new THREE.CanvasTexture(cv);
-  const w = parseFloat(document.getElementById('url-w').value)||4;
-  const h = parseFloat(document.getElementById('url-h').value)||3;
-  const geo = new THREE.PlaneGeometry(w, h);
-  const mat = new THREE.MeshStandardMaterial({ map: tex, side: THREE.DoubleSide });
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.userData.linkUrl = url;
-  placeAtCenter(mesh);
-  mesh.position.y = h/2 + 0.1;
-  scene.add(mesh);
-
-  const obj = { id: uid(), name, type: 'link', mesh, url, data:{ linkUrl: url } };
-  objects.push(obj);
-  updateObjectList();
-  selectObject(obj.id);
-  closeModal('urlModal');
-  notify('URL panel added!', 'success');
-};
-
-window.addPrimitive = function(type) {
-  let geo, mat;
-  const colors = ['#00d4ff','#7b2fff','#ff3b6b','#00ff88','#ffd700'];
-  const color = colors[Math.floor(Math.random()*colors.length)];
-  mat = new THREE.MeshStandardMaterial({ color, roughness: 0.4, metalness: 0.3 });
-
-  if (type === 'box') geo = new THREE.BoxGeometry(1,1,1);
-  else if (type === 'sphere') geo = new THREE.SphereGeometry(0.6, 32, 32);
-  else if (type === 'plane') geo = new THREE.PlaneGeometry(3,3);
-
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.castShadow = true; mesh.receiveShadow = true;
-  placeAtCenter(mesh);
-  mesh.position.y = type === 'plane' ? 0 : 0.5;
-  if (type === 'plane') mesh.rotation.x = -Math.PI/2;
-  scene.add(mesh);
-
-  const name = type.charAt(0).toUpperCase()+type.slice(1);
-  const obj = { id: uid(), name, type: 'primitive', mesh, url:'', data:{ color, primitiveType: type } };
-  objects.push(obj);
-  updateObjectList();
-  selectObject(obj.id);
-  notify(`${name} added!`, 'success');
-};
-
-function placeAtCenter(mesh) {
-  mesh.position.set((Math.random()-0.5)*6, 0.5, (Math.random()-0.5)*6);
-}
-
-// ─── SELECTION ───────────────────────────────────────────
-function onCanvasClick(e) {
-  if (currentMode !== 'edit') return;
-  const rect = canvas.getBoundingClientRect();
-  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-  raycaster.setFromCamera(mouse, camera);
-
-  const meshes = objects.map(o => o.mesh);
-  const hits = raycaster.intersectObjects(meshes, true);
-  if (hits.length > 0) {
-    // Find which obj
-    let hit = hits[0].object;
-    let found = null;
-    while (hit && !found) {
-      found = objects.find(o => o.mesh === hit || o.mesh.children.includes(hit));
-      if (!found) { found = objects.find(o => isDescendant(o.mesh, hit)); }
-      hit = hit.parent;
-    }
-    if (found) selectObject(found.id);
-  } else {
-    deselectAll();
-  }
-}
-
-function isDescendant(parent, child) {
-  let node = child;
-  while (node) {
-    if (node === parent) return true;
-    node = node.parent;
-  }
-  return false;
-}
-
-function onMouseMove(e) {
-  // For cursor feedback
-}
-
-window.selectObject = function(id) {
-  selectedObject = objects.find(o => o.id === id) || null;
-  document.querySelectorAll('.obj-item').forEach(el => el.classList.toggle('selected', el.dataset.id === id));
-
-  if (selectedObject) {
-    transformControls.attach(selectedObject.mesh);
-    transformControls.setMode('translate');
-    document.getElementById('gizmo-hint').style.display = 'block';
-    document.getElementById('gizmo-obj-name').textContent = selectedObject.name;
-    renderPropsPanel(selectedObject);
-  } else {
-    transformControls.detach();
-    document.getElementById('gizmo-hint').style.display = 'none';
-    document.getElementById('props-content').innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:11px;margin-top:30px;">Select an object.</div>';
-  }
-};
-
-function deselectAll() {
-  selectedObject = null;
-  transformControls.detach();
-  document.querySelectorAll('.obj-item').forEach(el => el.classList.remove('selected'));
-  document.getElementById('gizmo-hint').style.display = 'none';
-  document.getElementById('props-content').innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:11px;margin-top:30px;">Select an object.</div>';
-}
-
-// ─── PROPS PANEL ──────────────────────────────────────────
-function renderPropsPanel(obj) {
-  const m = obj.mesh;
-  const p = m.position, r = m.rotation, s = m.scale;
-
-  let extra = '';
-  if (obj.type === 'primitive') {
-    extra = `
-      <div class="prop-group">
-        <div class="prop-label">Color</div>
-        <input type="color" value="${obj.data.color||'#00d4ff'}" oninput="changePrimColor('${obj.id}',this.value)">
-      </div>
-      <div class="prop-group">
-        <div class="prop-label">Roughness</div>
-        <input type="range" min="0" max="1" step="0.01" value="${obj.mesh.material?.roughness||0.4}" oninput="changePrimRoughness('${obj.id}',this.value)">
-      </div>
-      <div class="prop-group">
-        <div class="prop-label">Metalness</div>
-        <input type="range" min="0" max="1" step="0.01" value="${obj.mesh.material?.metalness||0.3}" oninput="changePrimMetal('${obj.id}',this.value)">
-      </div>`;
-  }
-
-  document.getElementById('props-content').innerHTML = `
-    <div class="prop-group">
-      <div class="prop-label">Name</div>
-      <input type="text" value="${obj.name}" oninput="renameObj('${obj.id}',this.value)">
-    </div>
-    <div class="prop-group">
-      <div class="prop-label">Position (X Y Z)</div>
-      <div class="vec3-inputs">
-        <div><label>X</label><input type="number" step="0.1" value="${f(p.x)}" oninput="setProp('${obj.id}','px',this.value)"></div>
-        <div><label>Y</label><input type="number" step="0.1" value="${f(p.y)}" oninput="setProp('${obj.id}','py',this.value)"></div>
-        <div><label>Z</label><input type="number" step="0.1" value="${f(p.z)}" oninput="setProp('${obj.id}','pz',this.value)"></div>
-      </div>
-    </div>
-    <div class="prop-group">
-      <div class="prop-label">Rotation (deg)</div>
-      <div class="vec3-inputs">
-        <div><label>X</label><input type="number" step="1" value="${f(THREE.MathUtils.radToDeg(r.x))}" oninput="setProp('${obj.id}','rx',this.value)"></div>
-        <div><label>Y</label><input type="number" step="1" value="${f(THREE.MathUtils.radToDeg(r.y))}" oninput="setProp('${obj.id}','ry',this.value)"></div>
-        <div><label>Z</label><input type="number" step="1" value="${f(THREE.MathUtils.radToDeg(r.z))}" oninput="setProp('${obj.id}','rz',this.value)"></div>
-      </div>
-    </div>
-    <div class="prop-group">
-      <div class="prop-label">Scale</div>
-      <div class="vec3-inputs">
-        <div><label>X</label><input type="number" step="0.05" value="${f(s.x)}" oninput="setProp('${obj.id}','sx',this.value)"></div>
-        <div><label>Y</label><input type="number" step="0.05" value="${f(s.y)}" oninput="setProp('${obj.id}','sy',this.value)"></div>
-        <div><label>Z</label><input type="number" step="0.05" value="${f(s.z)}" oninput="setProp('${obj.id}','sz',this.value)"></div>
-      </div>
-    </div>
-    <div class="prop-group">
-      <div class="prop-label">Uniform Scale</div>
-      <input type="range" min="0.01" max="10" step="0.01" value="${f(s.x)}" oninput="setUniformScale('${obj.id}',this.value)">
-    </div>
-    ${extra}
-    <div class="prop-group">
-      <div class="prop-label">Transform Mode</div>
-      <div style="display:flex;gap:4px">
-        <button class="btn" onclick="transformControls.setMode('translate')" title="G">↔ Move</button>
-        <button class="btn" onclick="transformControls.setMode('rotate')" title="R">↻ Rotate</button>
-        <button class="btn" onclick="transformControls.setMode('scale')">⤡ Scale</button>
-      </div>
-    </div>
-    <div class="prop-group">
-      <button class="btn danger" style="width:100%" onclick="removeObjectById('${obj.id}')">🗑 Delete Object</button>
-    </div>
-  `;
-}
-
-function syncPropsFromMesh(obj) {
-  if (!obj) return;
-  // Update inputs if panel is showing this object
-  const propsEl = document.getElementById('props-content');
-  if (!propsEl.querySelector('input')) return;
-  // Re-render
-  renderPropsPanel(obj);
-}
-
-window.setProp = function(id, prop, val) {
-  const obj = objects.find(o => o.id === id);
-  if (!obj) return;
-  const v = parseFloat(val);
-  if (isNaN(v)) return;
-  const m = obj.mesh;
-  if (prop==='px') m.position.x = v;
-  else if (prop==='py') m.position.y = v;
-  else if (prop==='pz') m.position.z = v;
-  else if (prop==='rx') m.rotation.x = THREE.MathUtils.degToRad(v);
-  else if (prop==='ry') m.rotation.y = THREE.MathUtils.degToRad(v);
-  else if (prop==='rz') m.rotation.z = THREE.MathUtils.degToRad(v);
-  else if (prop==='sx') m.scale.x = v;
-  else if (prop==='sy') m.scale.y = v;
-  else if (prop==='sz') m.scale.z = v;
-};
-
-window.setUniformScale = function(id, val) {
-  const obj = objects.find(o => o.id === id);
-  if (!obj) return;
-  const v = parseFloat(val);
-  obj.mesh.scale.set(v, v, v);
-};
-
-window.renameObj = function(id, name) {
-  const obj = objects.find(o => o.id === id);
-  if (obj) { obj.name = name; updateObjectList(); }
-};
-
-window.changePrimColor = function(id, color) {
-  const obj = objects.find(o => o.id === id);
-  if (obj && obj.mesh.material) { obj.mesh.material.color.set(color); obj.data.color = color; }
-};
-window.changePrimRoughness = function(id, val) {
-  const obj = objects.find(o => o.id === id);
-  if (obj && obj.mesh.material) obj.mesh.material.roughness = parseFloat(val);
-};
-window.changePrimMetal = function(id, val) {
-  const obj = objects.find(o => o.id === id);
-  if (obj && obj.mesh.material) obj.mesh.material.metalness = parseFloat(val);
-};
-
-// ─── OBJECT LIST ──────────────────────────────────────────
-function updateObjectList() {
-  const list = document.getElementById('object-list');
-  if (objects.length === 0) {
-    list.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:11px;margin-top:20px;">No objects yet.</div>';
-    return;
-  }
-  list.innerHTML = objects.map(obj => `
-    <div class="obj-item ${selectedObject?.id===obj.id?'selected':''}" data-id="${obj.id}" onclick="selectObject('${obj.id}')">
-      <span class="obj-icon">${typeIcon(obj.type)}</span>
-      <span class="obj-name">${obj.name}</span>
-      <button class="obj-del" onclick="event.stopPropagation();removeObjectById('${obj.id}')" title="Delete">✕</button>
-    </div>
-  `).join('');
-}
-
-function typeIcon(t) {
-  return {glb:'🧊',image:'🖼',text:'📝',link:'🔗',primitive:'⬜'}[t]||'●';
-}
-
-window.removeObjectById = function(id) {
-  const obj = objects.find(o => o.id === id);
-  if (!obj) return;
-  scene.remove(obj.mesh);
-  // Dispose
-  obj.mesh.traverse(c => {
-    if (c.geometry) c.geometry.dispose();
-    if (c.material) { if(Array.isArray(c.material)) c.material.forEach(m=>m.dispose()); else c.material.dispose(); }
-  });
-  objects = objects.filter(o => o.id !== id);
-  if (selectedObject?.id === id) deselectAll();
-  updateObjectList();
-  notify('Object removed.', 'info');
-};
-
-// ─── ENVIRONMENT ─────────────────────────────────────────
-window.setEnv = function(env, btn) {
-  document.querySelectorAll('.env-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  worldData.environment = env;
-
-  const starsObj = scene.getObjectByName('__stars__');
-  if (starsObj) starsObj.visible = env === 'night' || env === 'space';
-
-  if (env === 'night') {
-    scene.background = new THREE.Color('#0a0e1a');
-    scene.fog.color.set('#050810');
-    ambientLight.intensity = 0.3;
-    dirLight.intensity = 0.5;
-    dirLight.color.set('#6080ff');
-  } else if (env === 'sunset') {
-    scene.background = new THREE.Color('#1a0a0a');
-    scene.fog.color.set('#2a0808');
-    ambientLight.intensity = 0.8;
-    dirLight.intensity = 1.8;
-    dirLight.color.set('#ff6030');
-    dirLight.position.set(-15, 5, 10);
-  } else if (env === 'day') {
-    scene.background = new THREE.Color('#87ceeb');
-    scene.fog.color.set('#87ceeb');
-    ambientLight.intensity = 1.2;
-    dirLight.intensity = 2.0;
-    dirLight.color.set('#fff8e0');
-    dirLight.position.set(10, 30, 10);
-  } else if (env === 'space') {
-    scene.background = new THREE.Color('#000005');
-    scene.fog = null;
-    ambientLight.intensity = 0.1;
-    dirLight.intensity = 3.0;
-    dirLight.color.set('#ffffff');
-  }
-};
-
-window.setGroundColor = function(c) { groundMesh.material.color.set(c); worldData.groundColor = c; };
-window.setFogColor = function(c) { if(scene.fog) scene.fog.color.set(c); worldData.fogColor = c; };
-window.setSkyColor = function(c) { scene.background = new THREE.Color(c); worldData.skyColor = c; };
-window.setGravity = function(v) { gravity = parseFloat(v); worldData.gravity = gravity; };
-window.setAmbient = function(v) { ambientLight.intensity = parseFloat(v); worldData.ambientIntensity = parseFloat(v); };
-
-// ─── SAVE / LOAD ──────────────────────────────────────────
-window.saveProject = function() {
-  const proj = {
-    version: 1,
-    projectName: document.getElementById('proj-name-display').textContent,
-    worldData,
-    objects: objects.map(obj => ({
-      id: obj.id,
-      name: obj.name,
-      type: obj.type,
-      url: obj.url,
-      data: obj.data,
-      position: [obj.mesh.position.x, obj.mesh.position.y, obj.mesh.position.z],
-      rotation: [obj.mesh.rotation.x, obj.mesh.rotation.y, obj.mesh.rotation.z],
-      scale: [obj.mesh.scale.x, obj.mesh.scale.y, obj.mesh.scale.z],
-    }))
-  };
-  const blob = new Blob([JSON.stringify(proj, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `${proj.projectName||'omniverse'}.omni.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  localStorage.setItem('omniverse_project', JSON.stringify({ projectName: proj.projectName }));
-  notify('Project saved!', 'success');
-};
-
-window.loadProject = function() {
-  const input = document.createElement('input');
-  input.type = 'file'; input.accept = '.json,.omni.json';
-  input.onchange = async e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-      const text = await file.text();
-      const proj = JSON.parse(text);
-      await restoreProject(proj);
-      notify('Project loaded!', 'success');
-    } catch(err) {
-      notify('Failed to load project: ' + err.message, 'error');
-    }
-  };
-  input.click();
-};
-
-async function restoreProject(proj) {
-  // Clear scene
-  objects.forEach(obj => {
-    scene.remove(obj.mesh);
-    obj.mesh.traverse(c => {
-      if(c.geometry) c.geometry.dispose();
-      if(c.material) { if(Array.isArray(c.material)) c.material.forEach(m=>m.dispose()); else c.material.dispose(); }
-    });
-  });
-  objects = [];
-  deselectAll();
-
-  if (proj.projectName) setProjectName(proj.projectName);
-  if (proj.worldData) {
-    Object.assign(worldData, proj.worldData);
-    if (proj.worldData.groundColor) setGroundColor(proj.worldData.groundColor);
-    if (proj.worldData.fogColor) setFogColor(proj.worldData.fogColor);
-    if (proj.worldData.gravity) setGravity(proj.worldData.gravity);
-    if (proj.worldData.ambientIntensity) setAmbient(proj.worldData.ambientIntensity);
-  }
-
-  for (const saved of (proj.objects || [])) {
-    if (saved.type === 'primitive') {
-      // Re-add
-      addPrimitive(saved.data?.primitiveType || 'box');
-      const obj = objects[objects.length-1];
-      obj.id = saved.id;
-      obj.name = saved.name;
-      if (saved.data?.color) changePrimColor(obj.id, saved.data.color);
-    } else if (saved.type === 'text') {
-      // Restore text
-      const cv = document.createElement('canvas');
-      cv.width = 1024; cv.height = 256;
-      const ctx = cv.getContext('2d');
-      ctx.fillStyle = saved.data?.color || '#00d4ff';
-      const sz = saved.data?.size || 1;
-      ctx.font = `bold ${Math.floor(72*sz)}px monospace`;
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText(saved.data?.text || saved.name, 512, 128);
-      const tex = new THREE.CanvasTexture(cv);
-      const geo = new THREE.PlaneGeometry(4*sz, 1*sz);
-      const mat = new THREE.MeshStandardMaterial({ map: tex, transparent: true, side: THREE.DoubleSide });
-      const mesh = new THREE.Mesh(geo, mat);
-      scene.add(mesh);
-      const obj = { id: saved.id, name: saved.name, type: 'text', mesh, url: '', data: saved.data };
-      objects.push(obj);
-    }
-    // Apply transform
-    const obj = objects.find(o => o.id === saved.id);
-    if (obj && saved.position) {
-      obj.mesh.position.set(...saved.position);
-      obj.mesh.rotation.set(...saved.rotation);
-      obj.mesh.scale.set(...saved.scale);
-    }
-  }
-  updateObjectList();
-}
-
-function setProjectName(name) {
-  document.getElementById('proj-name-display').textContent = name;
-}
-
-window.renameProjPrompt = function() {
-  const name = prompt('Project name:', document.getElementById('proj-name-display').textContent);
-  if (name) setProjectName(name);
-};
-
-// ─── EXPORT ───────────────────────────────────────────────
-window.exportWorld = function() {
-  document.getElementById('export-title').value = document.getElementById('proj-name-display').textContent;
-  openModal('exportModal');
-};
-
-window.doExport = function() {
-  notify('Generating export...', 'info');
-  const title = document.getElementById('export-title').value || 'Omniverse World';
-  const includeCollab = document.getElementById('exp-collab').checked;
-  const includeVoice = document.getElementById('exp-voice').checked;
-
-  // Serialize scene objects
-  const exportObjs = objects.map(obj => ({
-    id: obj.id, name: obj.name, type: obj.type, url: obj.url,
-    data: obj.data,
-    position: [obj.mesh.position.x, obj.mesh.position.y, obj.mesh.position.z],
-    rotation: [obj.mesh.rotation.x, obj.mesh.rotation.y, obj.mesh.rotation.z],
-    scale: [obj.mesh.scale.x, obj.mesh.scale.y, obj.mesh.scale.z],
-  }));
-
-  const html = generateExportHTML(title, exportObjs, worldData, includeCollab, includeVoice);
-  const blob = new Blob([html], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = title.replace(/[^a-z0-9]/gi,'_') + '.html';
-  a.click();
-  URL.revokeObjectURL(url);
-  closeModal('exportModal');
-  notify('World exported! Check your downloads.', 'success');
-};
-
-function generateExportHTML(title, objs, world, includeCollab, includeVoice) {
-  const objsJson = JSON.stringify(objs);
-  const worldJson = JSON.stringify(world);
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${title} — GmedranoTIC's Omniverse</title>
-<style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{background:#050810;overflow:hidden;font-family:monospace;color:#c8deff}
-  canvas{display:block;width:100vw;height:100vh}
-  #ui{position:fixed;inset:0;pointer-events:none;z-index:100}
-  #hud{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
-    background:rgba(0,0,0,0.7);border:1px solid rgba(0,212,255,0.3);
-    border-radius:20px;padding:8px 20px;font-size:11px;color:#5a7aaa;
-    display:flex;gap:16px;backdrop-filter:blur(12px)}
-  .hk{color:#00d4ff}
-  #crosshair{position:fixed;top:50%;left:50%;pointer-events:none}
-  .ch{position:absolute;background:rgba(255,255,255,0.8)}
-  .chh{width:12px;height:1px;top:0;left:-6px}
-  .chv{width:1px;height:12px;top:-6px;left:0}
-  #enter{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-    background:rgba(5,8,20,0.95);border:1px solid #00d4ff;border-radius:12px;
-    padding:28px 40px;text-align:center;backdrop-filter:blur(20px)}
-  #enter h2{color:#00d4ff;margin-bottom:10px;font-size:22px}
-  #enter p{font-size:12px;color:#5a7aaa;margin-bottom:16px}
-  .ebtn{background:linear-gradient(135deg,#7b2fff,#00d4ff);border:none;color:#fff;
-    padding:10px 24px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:bold}
-  #logo-badge{position:fixed;top:12px;left:12px;background:rgba(0,0,0,0.7);
-    border:1px solid rgba(0,212,255,0.3);border-radius:8px;padding:6px 14px;
-    font-size:12px;color:#00d4ff;backdrop-filter:blur(12px)}
-  ${includeCollab?`
-  #collab-panel{position:fixed;top:12px;right:12px;background:rgba(0,0,0,0.7);
-    border:1px solid rgba(0,212,255,0.3);border-radius:8px;padding:10px 14px;
-    font-size:11px;backdrop-filter:blur(12px);min-width:150px}
-  `:''}
-  #pw-modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9999;
-    display:flex;align-items:center;justify-content:center}
-  #pw-box{background:#0a1020;border:1px solid #00d4ff;border-radius:12px;padding:24px;min-width:280px;text-align:center}
-  #pw-box h3{color:#00d4ff;margin-bottom:12px}
-  #pw-box input{width:100%;padding:8px;background:#000;border:1px solid #1a2a4a;color:#fff;border-radius:6px;margin-bottom:10px;font-size:14px}
-  #pw-err{color:#ff3b6b;font-size:11px;margin-bottom:8px;display:none}
-</style>
-</head>
-<body>
-<canvas id="c"></canvas>
-<div id="ui">
-  <div id="logo-badge">⬡ GmedranoTIC's OMNIVERSE</div>
-  <div id="crosshair" style="display:none">
-    <div class="ch chh"></div>
-    <div class="ch chv"></div>
-  </div>
-  <div id="hud" style="display:none">
-    <span><span class="hk">WASD</span> Move</span>
-    <span><span class="hk">Mouse</span> Look</span>
-    <span><span class="hk">Space</span> Jump</span>
-    <span><span class="hk">Shift</span> Run</span>
-    <span><span class="hk">Esc</span> Unlock</span>
-  </div>
-  ${includeCollab?`<div id="collab-panel"><div style="color:#5a7aaa;font-size:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Online</div><div id="user-list"><span style="color:#00ff88">● You</span></div></div>`:''}
-  <div id="enter">
-    <h2>⬡ ${title}</h2>
-    <p>Built with GmedranoTIC's Omniverse Builder<br>Click to enter the 3D world</p>
-    <button class="ebtn" onclick="startWorld()">Enter World</button>
-  </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
-<script type="module">
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js';
-
-const WORLD_OBJECTS = ${objsJson};
-const WORLD_DATA = ${worldJson};
-const ROOM_PASSWORD = '${encodeURIComponent('')}'; // Set during export
-
-let renderer, scene, camera, loader;
-let playerPos = new THREE.Vector3(0, 1.7, 5);
-let playerYaw = 0, playerPitch = 0;
-let playerYVel = 0, isGrounded = true;
-let keys = {}, pointerLocked = false;
-let gravity = WORLD_DATA.gravity || 9.8;
-let walkSpeed = WORLD_DATA.walkSpeed || 5;
-
-function init() {
-  const canvas = document.getElementById('c');
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  renderer.setSize(innerWidth, innerHeight);
-  renderer.shadowMap.enabled = true;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.8;
-
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(WORLD_DATA.skyColor || '#0a0e1a');
-  scene.fog = new THREE.Fog(WORLD_DATA.fogColor || '#050810', 30, 120);
-
-  camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 1000);
-  camera.position.copy(playerPos);
-
-  const amb = new THREE.AmbientLight(0xffffff, WORLD_DATA.ambientIntensity || 0.6);
-  scene.add(amb);
-  const dir = new THREE.DirectionalLight(0xffffff, 1.2);
-  dir.position.set(10,20,10); dir.castShadow = true;
-  scene.add(dir);
-
-  const gGeo = new THREE.PlaneGeometry(200,200);
-  const gMat = new THREE.MeshStandardMaterial({ color: WORLD_DATA.groundColor || '#1a1a2e' });
-  const ground = new THREE.Mesh(gGeo, gMat);
-  ground.rotation.x = -Math.PI/2; ground.receiveShadow = true;
-  scene.add(ground);
-
-  // Stars
-  const starGeo = new THREE.BufferGeometry();
-  const sv = [];
-  for (let i=0; i<3000; i++) sv.push((Math.random()-.5)*800, Math.random()*300+30, (Math.random()-.5)*800);
-  starGeo.setAttribute('position', new THREE.Float32BufferAttribute(sv,3));
-  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color:0xffffff,size:0.4,transparent:true,opacity:0.8})));
-
-  loader = new GLTFLoader();
-
-  // Load objects
-  for (const obj of WORLD_OBJECTS) {
-    loadObject(obj);
-  }
-
-  window.addEventListener('resize', () => {
-    renderer.setSize(innerWidth, innerHeight);
-    camera.aspect = innerWidth/innerHeight;
-    camera.updateProjectionMatrix();
-  });
-  window.addEventListener('keydown', e => {
-    keys[e.code] = true;
-    if (e.code==='Space' && isGrounded) { playerYVel = 5; isGrounded = false; }
-  });
-  window.addEventListener('keyup', e => keys[e.code] = false);
+  window.addEventListener('keyup',   e => { keys[e.code]=false; });
+  document.addEventListener('pointerlockchange', onPLC);
   document.addEventListener('mousemove', e => {
-    if (pointerLocked) {
-      playerYaw -= e.movementX * 0.002;
-      playerPitch -= e.movementY * 0.002;
-      playerPitch = Math.max(-Math.PI/2.2, Math.min(Math.PI/2.2, playerPitch));
+    if(plocked && mode==='play'){
+      pYaw   -= e.movementX * 0.002;
+      pPitch -= e.movementY * 0.002;
+      pPitch  = Math.max(-1.47, Math.min(1.47, pPitch));
     }
   });
-  document.addEventListener('pointerlockchange', () => {
-    pointerLocked = document.pointerLockElement === canvas;
-    document.getElementById('crosshair').style.display = pointerLocked ? 'block' : 'none';
-    document.getElementById('hud').style.display = pointerLocked ? 'flex' : 'none';
-  });
+
+  document.getElementById('peerid').textContent  = `ID: ${myPeerId.slice(0,8)}…`;
+  document.getElementById('ridF').value           = myPeerId;
+  document.getElementById('slinkF').value         = shareLink();
+  updateUserPanel();
+  setupBC();
 
   animate();
+  setTimeout(()=>{ document.getElementById('loading').style.display='none'; }, 1200);
 }
 
-function loadObject(obj) {
-  if (obj.type === 'glb' && obj.url) {
-    loader.load(obj.url, gltf => {
-      const mesh = gltf.scene;
-      mesh.traverse(c => { if(c.isMesh) { c.castShadow=true; c.receiveShadow=true; } });
-      const w = new THREE.Group(); w.add(mesh);
-      w.position.set(...obj.position);
-      w.rotation.set(...obj.rotation);
-      w.scale.set(...obj.scale);
-      scene.add(w);
-    });
-  } else if (obj.type === 'image' && obj.url) {
-    const tex = new THREE.TextureLoader().load(obj.url);
-    const geo = new THREE.PlaneGeometry(3,2);
-    const mat = new THREE.MeshStandardMaterial({ map:tex, transparent:true, side: THREE.DoubleSide });
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(...obj.position);
-    mesh.rotation.set(...obj.rotation);
-    mesh.scale.set(...obj.scale);
-    scene.add(mesh);
-  } else if (obj.type === 'text') {
-    const cv = document.createElement('canvas');
-    cv.width=1024; cv.height=256;
-    const ctx = cv.getContext('2d');
-    const sz = obj.data?.size || 1;
-    ctx.fillStyle = obj.data?.color || '#00d4ff';
-    ctx.font = \`bold \${Math.floor(72*sz)}px monospace\`;
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText(obj.data?.text||obj.name, 512, 128);
-    const tex = new THREE.CanvasTexture(cv);
-    const geo = new THREE.PlaneGeometry(4*sz, 1*sz);
-    const mat = new THREE.MeshStandardMaterial({ map:tex, transparent:true, side:THREE.DoubleSide });
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(...obj.position);
-    mesh.rotation.set(...obj.rotation);
-    mesh.scale.set(...obj.scale);
-    scene.add(mesh);
-  } else if (obj.type === 'primitive') {
-    let geo;
-    const t = obj.data?.primitiveType||'box';
-    if(t==='box') geo = new THREE.BoxGeometry(1,1,1);
-    else if(t==='sphere') geo = new THREE.SphereGeometry(0.6,32,32);
-    else geo = new THREE.PlaneGeometry(3,3);
-    const mat = new THREE.MeshStandardMaterial({ color: obj.data?.color||'#00d4ff' });
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.castShadow=true; mesh.receiveShadow=true;
-    mesh.position.set(...obj.position);
-    mesh.rotation.set(...obj.rotation);
-    mesh.scale.set(...obj.scale);
-    scene.add(mesh);
-  } else if (obj.type === 'link') {
-    const cv = document.createElement('canvas');
-    cv.width=800; cv.height=500;
-    const ctx = cv.getContext('2d');
-    ctx.fillStyle='#0a1020'; ctx.fillRect(0,0,800,500);
-    ctx.fillStyle='#1a2a4a'; ctx.fillRect(0,0,800,36);
-    ctx.fillStyle='#00d4ff'; ctx.font='bold 16px monospace';
-    ctx.fillText('🔗 '+(obj.url||'').slice(0,50), 10, 22);
-    ctx.fillStyle='#5a7aaa'; ctx.font='14px monospace';
-    ctx.fillText('Click to open', 350, 260);
-    const tex = new THREE.CanvasTexture(cv);
-    const geo = new THREE.PlaneGeometry(4,3);
-    const mat = new THREE.MeshStandardMaterial({ map:tex, side:THREE.DoubleSide });
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.userData.linkUrl = obj.url;
-    mesh.position.set(...obj.position);
-    mesh.rotation.set(...obj.rotation);
-    mesh.scale.set(...obj.scale);
-    scene.add(mesh);
-  }
+function mkStars(){
+  const g = new THREE.BufferGeometry();
+  const v = [];
+  for(let i=0;i<3000;i++) v.push((Math.random()-.5)*800, Math.random()*300+30, (Math.random()-.5)*800);
+  g.setAttribute('position', new THREE.Float32BufferAttribute(v,3));
+  const s = new THREE.Points(g, new THREE.PointsMaterial({color:0xffffff,size:.35,transparent:true,opacity:.8}));
+  s.name='__stars__';
+  scene.add(s);
 }
 
-function animate() {
+/* ──────────────────────────────────────────── LOOP */
+function animate(){
   requestAnimationFrame(animate);
-  const dt = 0.016;
-  if (pointerLocked) {
-    const speed = (keys['ShiftLeft']||keys['ShiftRight']) ? walkSpeed*2 : walkSpeed;
+  if(mode==='play' && plocked){
+    const spd = (keys.ShiftLeft||keys.ShiftRight) ? WD.walkSpeed*2.2 : WD.walkSpeed;
     const dir = new THREE.Vector3();
-    const fwd = new THREE.Vector3(-Math.sin(playerYaw),0,-Math.cos(playerYaw));
-    const right = new THREE.Vector3(Math.cos(playerYaw),0,-Math.sin(playerYaw));
-    if(keys['KeyW']) dir.addScaledVector(fwd,1);
-    if(keys['KeyS']) dir.addScaledVector(fwd,-1);
-    if(keys['KeyA']) dir.addScaledVector(right,-1);
-    if(keys['KeyD']) dir.addScaledVector(right,1);
+    const fwd = new THREE.Vector3(-Math.sin(pYaw), 0, -Math.cos(pYaw));
+    const rgt = new THREE.Vector3( Math.cos(pYaw), 0, -Math.sin(pYaw));
+    if(keys.KeyW) dir.addScaledVector(fwd, 1);
+    if(keys.KeyS) dir.addScaledVector(fwd,-1);
+    if(keys.KeyA) dir.addScaledVector(rgt,-1);
+    if(keys.KeyD) dir.addScaledVector(rgt, 1);
     if(dir.lengthSq()>0) dir.normalize();
-    playerPos.addScaledVector(dir, speed*dt);
-    playerYVel -= gravity*dt;
-    playerPos.y += playerYVel*dt;
-    if(playerPos.y < 1.7) { playerPos.y=1.7; playerYVel=0; isGrounded=true; }
-    camera.position.copy(playerPos);
-    camera.quaternion.setFromEuler(new THREE.Euler(playerPitch,playerYaw,0,'YXZ'));
+    pPos.addScaledVector(dir, spd*0.016);
+    pYvel -= WD.gravity*0.016;
+    pPos.y += pYvel*0.016;
+    if(pPos.y < 1.7){ pPos.y=1.7; pYvel=0; grounded=true; }
+    camera.position.copy(pPos);
+    camera.quaternion.setFromEuler(new THREE.Euler(pPitch, pYaw, 0, 'YXZ'));
+  } else {
+    orbit.update();
   }
   renderer.render(scene, camera);
 }
 
-window.startWorld = function() {
-  document.getElementById('enter').style.display = 'none';
-  document.getElementById('c').requestPointerLock();
-  init();
-};
-
-// Init in background for preview
-init();
-<\/script>
-</body>
-</html>`;
+/* ──────────────────────────────────────────── EVENTS */
+function onKeyDown(e){
+  keys[e.code] = true;
+  if(e.code==='Space'  && mode==='play' && grounded){ pYvel=5.5; grounded=false; }
+  if(e.code==='Escape' && mode==='play') exitPlay();
+  if((e.code==='Delete'||e.code==='Backspace') && mode==='edit' && selObj) removeObj(selObj.id);
+  if(e.code==='KeyG' && xform.object) xform.setMode('translate');
+  if(e.code==='KeyR' && xform.object) xform.setMode('rotate');
+  if(e.code==='KeyS' && !e.ctrlKey && xform.object) xform.setMode('scale');
+  if(e.code==='KeyS' &&  e.ctrlKey){ e.preventDefault(); saveProj(); }
 }
 
-// ─── SHARE / P2P (Simulated, uses BroadcastChannel for same-origin) ─────
-window.copyRoomId = function() {
-  navigator.clipboard.writeText(peerId).then(() => notify('Room ID copied!', 'success'));
-};
-window.copyShareLink = function() {
-  navigator.clipboard.writeText(document.getElementById('share-link-field').value).then(() => notify('Link copied!', 'success'));
-};
-
-function updateShareLink() {
-  const url = `${location.origin}${location.pathname}?room=${peerId}`;
-  document.getElementById('share-link-field').value = url;
+function onPLC(){
+  plocked = document.pointerLockElement === canvas;
+  document.getElementById('crosshair').classList.toggle('on', plocked);
+  document.getElementById('hudctrl').style.display  = plocked ? 'flex' : 'none';
+  document.getElementById('plkmsg').style.display   = plocked ? 'none' : 'block';
 }
 
-window.updateRoomPassword = function(pw) { roomPassword = pw; };
-
-window.connectToPeer = function() {
-  const peerId2 = document.getElementById('connect-peer-input').value.trim();
-  if (!peerId2) { notify('Enter a Peer ID.', 'warn'); return; }
-  // BroadcastChannel for same-origin collab
-  notify(`Attempting to join room: ${peerId2.slice(0,8)}...`, 'info');
-  setupBroadcastChannel(peerId2);
-};
-
-// BroadcastChannel collab (same-origin / same-browser tabs)
-let bc = null;
-function setupBroadcastChannel(hostId) {
-  const channelName = `omniverse_${hostId}`;
-  bc = new BroadcastChannel(channelName);
-  bc.onmessage = e => handleCollabMessage(e.data);
-
-  // Also host our own channel
-  const myChannel = new BroadcastChannel(`omniverse_${peerId}`);
-  myChannel.onmessage = e => handleCollabMessage(e.data);
-
-  // Announce join
-  bc.postMessage({ type: 'USER_JOINED', from: peerId });
-  notify('Connected to collaborative room!', 'success');
-  document.getElementById('user-count').textContent = '2';
-  document.getElementById('collab-count-badge').textContent = '1';
-  closeModal('shareModal');
-}
-
-// Also host a broadcast channel so others can join us
-const myBC = new BroadcastChannel(`omniverse_${peerId}`);
-myBC.onmessage = e => handleCollabMessage(e.data);
-
-function handleCollabMessage(data) {
-  if (data.from === peerId) return; // Own messages
-  if (data.type === 'USER_JOINED') {
-    notify(`User ${data.from?.slice(0,6)} joined!`, 'success');
-    updateUserCount();
-    // Send world state
-    myBC.postMessage({ type: 'WORLD_SYNC', from: peerId, payload: serializeWorld() });
-  } else if (data.type === 'WORLD_SYNC') {
-    notify('Syncing world from host...', 'info');
-  } else if (data.type === 'CHAT') {
-    notify(`💬 ${data.from?.slice(0,6)}: ${data.msg}`, 'info');
+/* ──────────────────────────────────────────── MODES */
+window.setMode = function(m){
+  mode = m;
+  document.getElementById('bedit').classList.toggle('on', m==='edit');
+  document.getElementById('bplay').classList.toggle('on', m==='play');
+  const po=document.getElementById('playover');
+  const he=document.getElementById('hudedit');
+  const mb=document.getElementById('mbadge');
+  const gh=document.getElementById('gizmohint');
+  if(m==='play'){
+    po.classList.add('on'); he.style.display='none';
+    mb.innerHTML='<div class="sdot" style="background:var(--ok)"></div>PLAY MODE';
+    gh.style.display='none';
+    orbit.enabled=false; xform.detach(); selObj=null;
+    pPos.set(camera.position.x, 1.7, camera.position.z);
+    pYaw=0; pPitch=0;
+  } else {
+    po.classList.remove('on');
+    if(document.pointerLockElement) document.exitPointerLock();
+    he.style.display='flex';
+    mb.innerHTML='<div class="sdot" style="background:var(--a)"></div>EDIT MODE';
+    orbit.enabled=true;
+    camera.position.set(pPos.x, pPos.y+3, pPos.z+8);
+    camera.lookAt(pPos.x, 1, pPos.z);
   }
+};
+function exitPlay(){ if(document.pointerLockElement) document.exitPointerLock(); setMode('edit'); }
+window.reqLock = () => canvas.requestPointerLock();
+
+/* ──────────────────────────────────────────── FILE UPLOAD */
+let pendType = 'glb';
+window.pickFile = function(t){
+  pendType = t;
+  const inp = document.getElementById('filein');
+  inp.accept = t==='glb' ? '.glb,.gltf' : '.jpg,.jpeg,.png,.gif,.webp,.svg,.bmp';
+  inp.click();
+};
+window.onFile = function(e){
+  const f = e.target.files[0]; if(!f) return;
+  const url = URL.createObjectURL(f);
+  pendType==='glb' ? loadGLB(url, f.name) : loadImage(url, f.name);
+  e.target.value='';
+};
+
+/* ──────────────────────────────────────────── ADD OBJECTS */
+function loadGLB(url, name){
+  notify('Loading GLB…');
+  gltfLoader.load(url, gltf=>{
+    const root = gltf.scene;
+    root.traverse(c=>{ if(c.isMesh){ c.castShadow=true; c.receiveShadow=true; } });
+    const box = new THREE.Box3().setFromObject(root);
+    root.position.sub(box.getCenter(new THREE.Vector3()));
+    const s = box.getSize(new THREE.Vector3());
+    const md = Math.max(s.x,s.y,s.z);
+    if(md>4) root.scale.setScalar(4/md);
+    const grp = new THREE.Group();
+    grp.add(root);
+    scatter(grp); grp.position.y=0;
+    scene.add(grp);
+    push({id:uid(), name, type:'glb', mesh:grp, url, data:{}});
+    notify(`GLB: ${name}`, 'ok');
+  }, undefined, err=>notify('GLB error: '+err.message,'err'));
 }
 
-function updateUserCount() {
-  const c = parseInt(document.getElementById('user-count').textContent) + 1;
-  document.getElementById('user-count').textContent = c;
-  document.getElementById('collab-count-badge').textContent = c - 1;
+function loadImage(url, name){
+  new THREE.TextureLoader().load(url, tex=>{
+    const m = new THREE.Mesh(
+      new THREE.PlaneGeometry(3,2),
+      new THREE.MeshStandardMaterial({map:tex, transparent:true, side:THREE.DoubleSide})
+    );
+    scatter(m); m.position.y=1.5;
+    scene.add(m);
+    push({id:uid(), name, type:'image', mesh:m, url, data:{}});
+    notify(`Image: ${name}`, 'ok');
+  });
 }
 
-function serializeWorld() {
-  return {
-    worldData,
-    objects: objects.map(obj => ({
-      id: obj.id, name: obj.name, type: obj.type, url: obj.url, data: obj.data,
-      position: [obj.mesh.position.x, obj.mesh.position.y, obj.mesh.position.z],
-      rotation: [obj.mesh.rotation.x, obj.mesh.rotation.y, obj.mesh.rotation.z],
-      scale: [obj.mesh.scale.x, obj.mesh.scale.y, obj.mesh.scale.z],
+window.addText = function(){
+  const text  = document.getElementById('txtcont').value.trim();
+  if(!text){ notify('Enter some text.','warn'); return; }
+  const color = document.getElementById('txtcol').value;
+  const size  = parseFloat(document.getElementById('txtsize').value)||1;
+  const m = mkTextMesh(text, color, size);
+  scatter(m); m.position.y=2;
+  scene.add(m);
+  push({id:uid(), name:text.slice(0,22), type:'text', mesh:m, url:'', data:{text,color,size}});
+  closeM('textModal');
+  notify('Text added!','ok');
+};
+
+function mkTextMesh(text, color, size){
+  const cv=document.createElement('canvas'); cv.width=1024; cv.height=256;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,1024,256);
+  ctx.fillStyle=color;
+  ctx.font=`bold ${Math.floor(72*size)}px sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(text, 512, 128);
+  return new THREE.Mesh(
+    new THREE.PlaneGeometry(4*size, size),
+    new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv), transparent:true, side:THREE.DoubleSide})
+  );
+}
+
+window.addUrl = function(){
+  const url  = document.getElementById('urlin').value.trim();
+  if(!url){ notify('Enter a URL.','warn'); return; }
+  const name = document.getElementById('urlname').value.trim()||url;
+  const cv=document.createElement('canvas'); cv.width=800; cv.height=500;
+  const ctx=cv.getContext('2d');
+  ctx.fillStyle='#0a1020'; ctx.fillRect(0,0,800,500);
+  ctx.fillStyle='#1a2a4a'; ctx.fillRect(0,0,800,40);
+  ctx.fillStyle='#00d4ff'; ctx.font='bold 16px monospace';
+  ctx.fillText('🔗 '+url.slice(0,55), 10, 26);
+  ctx.fillStyle='#5a7aaa'; ctx.font='13px monospace';
+  ctx.fillText('Click to open in exported world', 290, 265);
+  const m = new THREE.Mesh(
+    new THREE.PlaneGeometry(4,3),
+    new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv), side:THREE.DoubleSide})
+  );
+  m.userData.linkUrl=url;
+  scatter(m); m.position.y=1.5;
+  scene.add(m);
+  push({id:uid(), name, type:'link', mesh:m, url, data:{linkUrl:url}});
+  closeM('urlModal');
+  notify('URL panel added!','ok');
+};
+
+window.addPrim = function(type){
+  let geo;
+  if(type==='box')      geo=new THREE.BoxGeometry(1,1,1);
+  else if(type==='sphere')   geo=new THREE.SphereGeometry(.6,32,32);
+  else if(type==='cylinder') geo=new THREE.CylinderGeometry(.5,.5,1.5,32);
+  const colors=['#00d4ff','#7b2fff','#ff3b6b','#00ff88','#ffd700'];
+  const color=colors[Math.floor(Math.random()*colors.length)];
+  const m = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color,roughness:.4,metalness:.3}));
+  m.castShadow=true; m.receiveShadow=true;
+  scatter(m); m.position.y=.6;
+  scene.add(m);
+  const name=type[0].toUpperCase()+type.slice(1);
+  push({id:uid(), name, type:'prim', mesh:m, url:'', data:{color,primType:type}});
+  notify(`${name} added!`,'ok');
+};
+
+function scatter(m){ m.position.set((Math.random()-.5)*7,.5,(Math.random()-.5)*7); }
+function push(obj){ objects.push(obj); refreshList(); select(obj.id); }
+
+/* ──────────────────────────────────────────── SELECTION */
+function onCanvasClick(e){
+  if(mode!=='edit') return;
+  const rect=canvas.getBoundingClientRect();
+  mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
+  mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+  raycaster.setFromCamera(mouse, camera);
+  const hits=raycaster.intersectObjects(objects.map(o=>o.mesh), true);
+  if(hits.length){
+    let node=hits[0].object, found=null;
+    while(node && !found){ found=objects.find(o=>isDesc(o.mesh,node)); node=node.parent; }
+    if(found) select(found.id);
+  } else { deselect(); }
+}
+function isDesc(root,node){ let n=node; while(n){ if(n===root) return true; n=n.parent; } return false; }
+
+window.select = function(id){
+  selObj=objects.find(o=>o.id===id)||null;
+  document.querySelectorAll('.oitem').forEach(el=>el.classList.toggle('sel',el.dataset.id===id));
+  if(selObj){
+    xform.attach(selObj.mesh); xform.setMode('translate');
+    document.getElementById('gizmohint').style.display='block';
+    document.getElementById('goname').textContent=selObj.name;
+    refreshProps(selObj);
+  } else { deselect(); }
+};
+
+function deselect(){
+  selObj=null; xform.detach();
+  document.querySelectorAll('.oitem').forEach(el=>el.classList.remove('sel'));
+  document.getElementById('gizmohint').style.display='none';
+  document.getElementById('propscont').innerHTML='<div style="text-align:center;color:var(--dim);font-size:11px;margin-top:30px">Select an object.</div>';
+}
+
+/* ──────────────────────────────────────────── PROPS */
+function refreshProps(obj){
+  const m=obj.mesh, p=m.position, r=m.rotation, s=m.scale, id=obj.id;
+  let extra='';
+  if(obj.type==='prim'){
+    const c=obj.data.color||'#00d4ff';
+    extra=`
+    <div class="pgrp"><div class="plbl">Color</div>
+      <input type="color" value="${c}" oninput="setPrimColor('${id}',this.value)"></div>
+    <div class="pgrp"><div class="plbl">Roughness</div>
+      <input type="range" min="0" max="1" step=".01" value="${obj.mesh.material?.roughness??0.4}" oninput="setPrimR('${id}',this.value)"></div>
+    <div class="pgrp"><div class="plbl">Metalness</div>
+      <input type="range" min="0" max="1" step=".01" value="${obj.mesh.material?.metalness??0.3}" oninput="setPrimM('${id}',this.value)"></div>`;
+  }
+  document.getElementById('propscont').innerHTML=`
+    <div class="pgrp"><div class="plbl">Name</div>
+      <input type="text" value="${esc(obj.name)}" oninput="renameO('${id}',this.value)"></div>
+    <div class="pgrp"><div class="plbl">Position (X Y Z)</div><div class="v3">
+      <div><label>X</label><input type="number" step=".1" value="${ff(p.x)}" oninput="sp('${id}','px',this.value)"></div>
+      <div><label>Y</label><input type="number" step=".1" value="${ff(p.y)}" oninput="sp('${id}','py',this.value)"></div>
+      <div><label>Z</label><input type="number" step=".1" value="${ff(p.z)}" oninput="sp('${id}','pz',this.value)"></div>
+    </div></div>
+    <div class="pgrp"><div class="plbl">Rotation (°)</div><div class="v3">
+      <div><label>X</label><input type="number" step="1" value="${ff(THREE.MathUtils.radToDeg(r.x))}" oninput="sp('${id}','rx',this.value)"></div>
+      <div><label>Y</label><input type="number" step="1" value="${ff(THREE.MathUtils.radToDeg(r.y))}" oninput="sp('${id}','ry',this.value)"></div>
+      <div><label>Z</label><input type="number" step="1" value="${ff(THREE.MathUtils.radToDeg(r.z))}" oninput="sp('${id}','rz',this.value)"></div>
+    </div></div>
+    <div class="pgrp"><div class="plbl">Scale</div><div class="v3">
+      <div><label>X</label><input type="number" step=".05" value="${ff(s.x)}" oninput="sp('${id}','sx',this.value)"></div>
+      <div><label>Y</label><input type="number" step=".05" value="${ff(s.y)}" oninput="sp('${id}','sy',this.value)"></div>
+      <div><label>Z</label><input type="number" step=".05" value="${ff(s.z)}" oninput="sp('${id}','sz',this.value)"></div>
+    </div></div>
+    <div class="pgrp"><div class="plbl">Uniform Scale</div>
+      <input type="range" min=".01" max="10" step=".01" value="${ff(s.x)}" oninput="sUniform('${id}',this.value)"></div>
+    <div class="pgrp"><div class="plbl">Transform Mode</div>
+      <div style="display:flex;gap:4px">
+        <button class="btn" onclick="xform.setMode('translate')">↔ Move</button>
+        <button class="btn" onclick="xform.setMode('rotate')">↻ Rotate</button>
+        <button class="btn" onclick="xform.setMode('scale')">⤡ Scale</button>
+      </div></div>
+    ${extra}
+    <div class="pgrp" style="margin-top:8px">
+      <button class="btn danger" style="width:100%" onclick="removeObj('${id}')">🗑 Delete Object</button>
+    </div>`;
+}
+
+window.sp = (id,prop,val)=>{
+  const o=objects.find(x=>x.id===id); if(!o) return;
+  const v=parseFloat(val); if(isNaN(v)) return;
+  const m=o.mesh;
+  if     (prop==='px') m.position.x=v;
+  else if(prop==='py') m.position.y=v;
+  else if(prop==='pz') m.position.z=v;
+  else if(prop==='rx') m.rotation.x=THREE.MathUtils.degToRad(v);
+  else if(prop==='ry') m.rotation.y=THREE.MathUtils.degToRad(v);
+  else if(prop==='rz') m.rotation.z=THREE.MathUtils.degToRad(v);
+  else if(prop==='sx') m.scale.x=v;
+  else if(prop==='sy') m.scale.y=v;
+  else if(prop==='sz') m.scale.z=v;
+};
+window.sUniform     = (id,v)=>{ const o=objects.find(x=>x.id===id); if(o) o.mesh.scale.setScalar(parseFloat(v)); };
+window.renameO      = (id,n)=>{ const o=objects.find(x=>x.id===id); if(o){ o.name=n; refreshList(); } };
+window.setPrimColor = (id,c)=>{ const o=objects.find(x=>x.id===id); if(o&&o.mesh.material){ o.mesh.material.color.set(c); o.data.color=c; } };
+window.setPrimR     = (id,v)=>{ const o=objects.find(x=>x.id===id); if(o&&o.mesh.material) o.mesh.material.roughness=parseFloat(v); };
+window.setPrimM     = (id,v)=>{ const o=objects.find(x=>x.id===id); if(o&&o.mesh.material) o.mesh.material.metalness=parseFloat(v); };
+
+window.removeObj = function(id){
+  const o=objects.find(x=>x.id===id); if(!o) return;
+  scene.remove(o.mesh);
+  o.mesh.traverse(c=>{ if(c.geometry) c.geometry.dispose(); if(c.material) [c.material].flat().forEach(m=>m.dispose()); });
+  objects=objects.filter(x=>x.id!==id);
+  if(selObj?.id===id) deselect();
+  refreshList();
+  notify('Object removed.');
+};
+
+/* ──────────────────────────────────────────── OBJECT LIST */
+function refreshList(){
+  const el=document.getElementById('objlist');
+  if(!objects.length){ el.innerHTML='<div style="text-align:center;color:var(--dim);font-size:11px;margin-top:20px">No objects yet.</div>'; return; }
+  el.innerHTML=objects.map(o=>`
+    <div class="oitem${selObj?.id===o.id?' sel':''}" data-id="${o.id}" onclick="select('${o.id}')">
+      <span>${typeIco(o.type)}</span>
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(o.name)}</span>
+      <button class="odel" onclick="event.stopPropagation();removeObj('${o.id}')" title="Delete">✕</button>
+    </div>`).join('');
+}
+function typeIco(t){ return {glb:'🧊',image:'🖼',text:'📝',link:'🔗',prim:'⬜'}[t]||'●'; }
+
+/* ──────────────────────────────────────────── ENVIRONMENT */
+window.setEnv = function(e,btn){
+  document.querySelectorAll('.ebtn').forEach(b=>b.classList.remove('on'));
+  btn?.classList.add('on'); WD.env=e;
+  const stars=scene.getObjectByName('__stars__');
+  if(stars) stars.visible=(e==='night'||e==='space');
+  if(e==='night'){
+    scene.background=new THREE.Color('#0a0e1a');
+    if(scene.fog) scene.fog.color.set('#050810');
+    ambLight.intensity=0.3; dirLight.intensity=0.6; dirLight.color.set('#6080ff');
+  } else if(e==='sunset'){
+    scene.background=new THREE.Color('#1a0808');
+    if(scene.fog) scene.fog.color.set('#2a0808');
+    ambLight.intensity=0.8; dirLight.intensity=1.8; dirLight.color.set('#ff6030');
+    dirLight.position.set(-15,5,10);
+  } else if(e==='day'){
+    scene.background=new THREE.Color('#87ceeb');
+    if(scene.fog) scene.fog.color.set('#87ceeb');
+    ambLight.intensity=1.2; dirLight.intensity=2.0; dirLight.color.set('#fff8e0');
+    dirLight.position.set(10,30,10);
+  } else if(e==='space'){
+    scene.background=new THREE.Color('#000005');
+    scene.fog=null;
+    ambLight.intensity=0.1; dirLight.intensity=3.0; dirLight.color.set('#ffffff');
+  }
+};
+window.setGround = c=>{ groundMesh.material.color.set(c); WD.groundColor=c; };
+window.setSky    = c=>{ scene.background=new THREE.Color(c); WD.skyColor=c; };
+window.setAmb    = v=>{ ambLight.intensity=parseFloat(v); WD.ambInt=parseFloat(v); };
+window.setFog    = v=>{ if(scene.fog){ scene.fog.far=parseFloat(v); } WD.fogFar=parseFloat(v); };
+
+/* ──────────────────────────────────────────── SAVE / LOAD */
+window.saveProj = function(){
+  const proj={
+    v:1,
+    name: document.getElementById('projname').textContent,
+    wd: {...WD},
+    objects: objects.map(o=>({
+      id:o.id, name:o.name, type:o.type, url:o.url, data:o.data,
+      p:[o.mesh.position.x, o.mesh.position.y, o.mesh.position.z],
+      r:[o.mesh.rotation.x, o.mesh.rotation.y, o.mesh.rotation.z],
+      s:[o.mesh.scale.x,    o.mesh.scale.y,    o.mesh.scale.z]
     }))
+  };
+  const a=Object.assign(document.createElement('a'),{
+    href: URL.createObjectURL(new Blob([JSON.stringify(proj,null,2)],{type:'application/json'})),
+    download: (proj.name||'omniverse')+'.omni.json'
+  });
+  a.click(); URL.revokeObjectURL(a.href);
+  notify('Project saved!','ok');
+};
+
+window.loadProj = function(){
+  const inp=document.createElement('input');
+  inp.type='file'; inp.accept='.json';
+  inp.onchange=async e=>{
+    const f=e.target.files[0]; if(!f) return;
+    try{ await restoreProj(JSON.parse(await f.text())); notify('Project loaded!','ok'); }
+    catch(err){ notify('Load error: '+err.message,'err'); }
+  };
+  inp.click();
+};
+
+async function restoreProj(proj){
+  objects.forEach(o=>{
+    scene.remove(o.mesh);
+    o.mesh.traverse(c=>{ if(c.geometry) c.geometry.dispose(); if(c.material) [c.material].flat().forEach(m=>m.dispose()); });
+  });
+  objects=[]; deselect();
+  if(proj.name) document.getElementById('projname').textContent=proj.name;
+  if(proj.wd) Object.assign(WD, proj.wd);
+
+  for(const s of (proj.objects||[])){
+    if(s.type==='prim'){
+      addPrim(s.data?.primType||'box');
+      const o=objects[objects.length-1];
+      o.id=s.id; o.name=s.name;
+      if(s.data?.color) setPrimColor(s.id,s.data.color);
+    } else if(s.type==='text'){
+      const m=mkTextMesh(s.data?.text||s.name, s.data?.color||'#00d4ff', s.data?.size||1);
+      scene.add(m);
+      objects.push({id:s.id, name:s.name, type:'text', mesh:m, url:'', data:s.data||{}});
+    } else if(s.type==='image'&&s.url){
+      await new Promise(res=>{
+        new THREE.TextureLoader().load(s.url, tex=>{
+          const m=new THREE.Mesh(new THREE.PlaneGeometry(3,2), new THREE.MeshStandardMaterial({map:tex,transparent:true,side:THREE.DoubleSide}));
+          scene.add(m); objects.push({id:s.id,name:s.name,type:'image',mesh:m,url:s.url,data:{}}); res();
+        },undefined,res);
+      });
+    } else if(s.type==='glb'&&s.url){
+      await new Promise(res=>{
+        gltfLoader.load(s.url, gltf=>{
+          const root=gltf.scene; root.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
+          const grp=new THREE.Group(); grp.add(root); scene.add(grp);
+          objects.push({id:s.id,name:s.name,type:'glb',mesh:grp,url:s.url,data:{}}); res();
+        },undefined,res);
+      });
+    }
+    const o=objects.find(x=>x.id===s.id);
+    if(o&&s.p){ o.mesh.position.set(...s.p); o.mesh.rotation.set(...s.r); o.mesh.scale.set(...s.s); }
+  }
+  refreshList();
+}
+window.renameProj = ()=>{ const n=prompt('Project name:',document.getElementById('projname').textContent); if(n) document.getElementById('projname').textContent=n; };
+
+/* ──────────────────────────────────────────── EXPORT */
+window.openExport = ()=>{ document.getElementById('extitle').value=document.getElementById('projname').textContent; openM('exportModal'); };
+
+window.doExport = function(){
+  const title=document.getElementById('extitle').value||'Omniverse World';
+  const expObjs=objects.map(o=>({
+    id:o.id, name:o.name, type:o.type, url:o.url, data:o.data,
+    p:[o.mesh.position.x, o.mesh.position.y, o.mesh.position.z],
+    r:[o.mesh.rotation.x, o.mesh.rotation.y, o.mesh.rotation.z],
+    s:[o.mesh.scale.x,    o.mesh.scale.y,    o.mesh.scale.z]
+  }));
+  const html=buildExport(title, expObjs, {...WD});
+  const a=Object.assign(document.createElement('a'),{
+    href: URL.createObjectURL(new Blob([html],{type:'text/html'})),
+    download: title.replace(/[^a-z0-9]/gi,'_')+'.html'
+  });
+  a.click(); URL.revokeObjectURL(a.href);
+  closeM('exportModal');
+  notify('World exported!','ok');
+};
+
+function buildExport(title, objs, wd){
+  const oJ=JSON.stringify(objs);
+  const wJ=JSON.stringify(wd);
+  return `<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${title} — GmedranoTIC Omniverse</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#050810;overflow:hidden;font-family:monospace;color:#c8deff}canvas{display:block}#badge{position:fixed;top:10px;left:10px;background:rgba(0,0,0,.78);border:1px solid rgba(0,212,255,.35);border-radius:7px;padding:5px 13px;font-size:12px;color:#00d4ff;backdrop-filter:blur(10px)}#hud{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.78);border:1px solid rgba(0,212,255,.25);border-radius:18px;padding:6px 18px;font-size:11px;color:#5a7aaa;display:none;gap:14px;backdrop-filter:blur(10px)}.hk{color:#00d4ff}#enter{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(5,8,20,.97);border:1px solid #00d4ff;border-radius:12px;padding:28px 38px;text-align:center;backdrop-filter:blur(18px)}#enter h2{color:#00d4ff;margin-bottom:9px;font-size:21px;font-family:sans-serif}#enter p{font-size:12px;color:#5a7aaa;margin-bottom:16px}.ebtn{background:linear-gradient(135deg,#7b2fff,#00d4ff);border:none;color:#fff;padding:10px 26px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700}#ch{position:fixed;top:50%;left:50%;display:none}#ch div{position:absolute;background:rgba(255,255,255,.8)}#chh{width:12px;height:1px;top:0;left:-6px}#chv{width:1px;height:12px;top:-6px;left:0}</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/"}}<\/script>
+</head><body>
+<canvas id="c"></canvas>
+<div id="badge">⬡ GmedranoTIC's OMNIVERSE — ${title}</div>
+<div id="hud"><span><span class="hk">WASD</span> Move</span><span><span class="hk">Mouse</span> Look</span><span><span class="hk">Space</span> Jump</span><span><span class="hk">Shift</span> Run</span></div>
+<div id="ch"><div id="chh"></div><div id="chv"></div></div>
+<div id="enter"><h2>⬡ ${title}</h2><p>Built with GmedranoTIC's Omniverse Builder<br>Click to enter the 3D world</p><button class="ebtn" id="eb">Enter World</button></div>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+const OBJS=${oJ}, WD=${wJ};
+const canvas=document.getElementById('c');
+let renderer,scene,camera;
+let pPos=new THREE.Vector3(0,1.7,5),pYaw=0,pPitch=0,pYvel=0,grounded=true;
+let keys={},locked=false;
+const ldr=new GLTFLoader();
+function init(){
+  renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.shadowMap.enabled=true;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=0.85;
+  scene=new THREE.Scene();
+  scene.background=new THREE.Color(WD.skyColor||'#0a0e1a');
+  if(WD.fogFar) scene.fog=new THREE.Fog(WD.skyColor||'#050810',10,WD.fogFar);
+  camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,.05,1000);
+  camera.position.copy(pPos);
+  scene.add(new THREE.AmbientLight(0xffffff,WD.ambInt||0.6));
+  const dl=new THREE.DirectionalLight(0xffffff,1.2); dl.position.set(10,20,10); dl.castShadow=true; scene.add(dl);
+  const gm=new THREE.Mesh(new THREE.PlaneGeometry(300,300),new THREE.MeshStandardMaterial({color:WD.groundColor||'#1a1a2e'})); gm.rotation.x=-Math.PI/2; gm.receiveShadow=true; scene.add(gm);
+  const sv=[]; for(let i=0;i<3000;i++) sv.push((Math.random()-.5)*800,Math.random()*300+30,(Math.random()-.5)*800);
+  const sg=new THREE.BufferGeometry(); sg.setAttribute('position',new THREE.Float32BufferAttribute(sv,3));
+  scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0xffffff,size:.35,transparent:true,opacity:.8})));
+  for(const o of OBJS) loadO(o);
+  window.addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();});
+  window.addEventListener('keydown',e=>{keys[e.code]=true;if(e.code==='Space'&&grounded){pYvel=5.5;grounded=false;}});
+  window.addEventListener('keyup',e=>keys[e.code]=false);
+  document.addEventListener('mousemove',e=>{if(locked){pYaw-=e.movementX*.002;pPitch-=e.movementY*.002;pPitch=Math.max(-1.47,Math.min(1.47,pPitch));}});
+  document.addEventListener('pointerlockchange',()=>{locked=document.pointerLockElement===canvas;document.getElementById('ch').style.display=locked?'block':'none';document.getElementById('hud').style.display=locked?'flex':'none';});
+  loop();
+}
+function loadO(o){
+  if(o.type==='glb'&&o.url){ldr.load(o.url,g=>{const r=g.scene;r.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});const w=new THREE.Group();w.add(r);applyT(w,o);scene.add(w);});}
+  else if(o.type==='image'&&o.url){new THREE.TextureLoader().load(o.url,tex=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(3,2),new THREE.MeshStandardMaterial({map:tex,transparent:true,side:THREE.DoubleSide}));applyT(m,o);scene.add(m);});}
+  else if(o.type==='text'){const cv=document.createElement('canvas');cv.width=1024;cv.height=256;const ctx=cv.getContext('2d');ctx.fillStyle=o.data?.color||'#00d4ff';ctx.font=\`bold \${Math.floor(72*(o.data?.size||1))}px sans-serif\`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(o.data?.text||o.name,512,128);const m=new THREE.Mesh(new THREE.PlaneGeometry(4*(o.data?.size||1),(o.data?.size||1)),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),transparent:true,side:THREE.DoubleSide}));applyT(m,o);scene.add(m);}
+  else if(o.type==='prim'){let g;const t=o.data?.primType||'box';if(t==='box')g=new THREE.BoxGeometry(1,1,1);else if(t==='sphere')g=new THREE.SphereGeometry(.6,32,32);else g=new THREE.CylinderGeometry(.5,.5,1.5,32);const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:o.data?.color||'#00d4ff'}));applyT(m,o);scene.add(m);}
+  else if(o.type==='link'){const cv=document.createElement('canvas');cv.width=800;cv.height=500;const ctx=cv.getContext('2d');ctx.fillStyle='#0a1020';ctx.fillRect(0,0,800,500);ctx.fillStyle='#1a2a4a';ctx.fillRect(0,0,800,40);ctx.fillStyle='#00d4ff';ctx.font='bold 16px monospace';ctx.fillText('🔗 '+(o.url||'').slice(0,55),10,26);ctx.fillStyle='#5a7aaa';ctx.font='13px monospace';ctx.fillText('Click to open',350,260);const m=new THREE.Mesh(new THREE.PlaneGeometry(4,3),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),side:THREE.DoubleSide}));m.userData.url=o.url;applyT(m,o);scene.add(m);}
+}
+function applyT(m,o){if(o.p)m.position.set(...o.p);if(o.r)m.rotation.set(...o.r);if(o.s)m.scale.set(...o.s);}
+function loop(){requestAnimationFrame(loop);if(locked){const spd=(keys.ShiftLeft||keys.ShiftRight)?WD.walkSpeed*2.2:WD.walkSpeed;const d=new THREE.Vector3();const f=new THREE.Vector3(-Math.sin(pYaw),0,-Math.cos(pYaw));const ri=new THREE.Vector3(Math.cos(pYaw),0,-Math.sin(pYaw));if(keys.KeyW)d.addScaledVector(f,1);if(keys.KeyS)d.addScaledVector(f,-1);if(keys.KeyA)d.addScaledVector(ri,-1);if(keys.KeyD)d.addScaledVector(ri,1);if(d.lengthSq()>0)d.normalize();pPos.addScaledVector(d,spd*.016);pYvel-=WD.gravity*.016;pPos.y+=pYvel*.016;if(pPos.y<1.7){pPos.y=1.7;pYvel=0;grounded=true;}camera.position.copy(pPos);camera.quaternion.setFromEuler(new THREE.Euler(pPitch,pYaw,0,'YXZ'));}renderer.render(scene,camera);}
+document.getElementById('eb').onclick=()=>{document.getElementById('enter').style.display='none';init();canvas.requestPointerLock();};
+<\/script></body></html>`;
+}
+
+/* ──────────────────────────────────────────── SHARE */
+function shareLink(){ return `${location.origin}${location.pathname}?room=${myPeerId}`; }
+window.copy = text => navigator.clipboard.writeText(text).then(()=>notify('Copied!','ok')).catch(()=>notify('Copy failed','warn'));
+
+window.joinRoom = function(){
+  const pid=document.getElementById('joinF').value.trim();
+  if(!pid){ notify('Enter a Peer ID','warn'); return; }
+  if(WD.roomPw){
+    const entered=prompt('Enter room password:');
+    if(entered!==WD.roomPw){ notify('Wrong password!','err'); return; }
+  }
+  const ch=new BroadcastChannel(`omniverse_${pid}`);
+  ch.postMessage({type:'USER_JOINED', from:myPeerId});
+  ch.onmessage=e=>{ if(e.data.type==='WORLD_DATA'){ notify('World synced from host!','ok'); } };
+  notify(`Joined room ${pid.slice(0,8)}…`,'ok');
+  document.getElementById('ucnt').textContent='2+';
+  closeM('shareModal');
+};
+
+function setupBC(){
+  const ch=new BroadcastChannel(`omniverse_${myPeerId}`);
+  ch.onmessage=e=>{
+    const d=e.data; if(d.from===myPeerId) return;
+    if(d.type==='USER_JOINED'){
+      notify(`User ${d.from.slice(0,6)} joined!`,'ok');
+      const cnt=parseInt(document.getElementById('ucnt').textContent)||1;
+      document.getElementById('ucnt').textContent=cnt+1;
+    }
   };
 }
 
-// ─── VOICE CHAT (WebRTC) ──────────────────────────────────
-window.toggleVoice = function() {
-  if (!voiceActive) {
-    startVoice();
+function updateUserPanel(){
+  document.getElementById('usrlist').innerHTML=`<div class="vuser"><div class="vav" style="background:var(--a);font-size:8px">ME</div><span>You (${myPeerId.slice(0,8)})</span><div class="sdot" style="margin-left:auto"></div></div>`;
+}
+window.toggleUsers=()=>{ document.getElementById('userspanel').classList.toggle('on'); updateUserPanel(); };
+
+/* ──────────────────────────────────────────── VOICE */
+window.toggleVoice = async function(){
+  if(!voiceActive){
+    try{
+      myStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
+      voiceActive=true;
+      document.getElementById('voicepanel').classList.add('on');
+      document.getElementById('bvoice').classList.add('on');
+      document.getElementById('bvoice').textContent='🎙 ON';
+      notify('Voice chat active!','ok');
+      const actx=new AudioContext(), an=actx.createAnalyser();
+      actx.createMediaStreamSource(myStream).connect(an);
+      an.fftSize=256;
+      const buf=new Uint8Array(an.frequencyBinCount);
+      document.getElementById('vulist').innerHTML='<div class="vuser"><div class="vav" style="background:var(--a)">Me</div><div class="vbar"><div class="vfill" id="vfme"></div></div></div>';
+      (function meter(){ if(!voiceActive) return; an.getByteFrequencyData(buf); const avg=buf.reduce((a,b)=>a+b,0)/buf.length; const el=document.getElementById('vfme'); if(el) el.style.width=Math.min(100,avg*2)+'%'; requestAnimationFrame(meter); })();
+    }catch(e){ notify('Mic access denied','err'); }
   } else {
-    stopVoice();
+    myStream?.getTracks().forEach(t=>t.stop()); myStream=null;
+    voiceActive=false;
+    document.getElementById('voicepanel').classList.remove('on');
+    document.getElementById('bvoice').classList.remove('on');
+    document.getElementById('bvoice').textContent='🎙 Voice';
+    notify('Voice off.','');
   }
 };
-
-async function startVoice() {
-  try {
-    myStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-    voiceActive = true;
-    document.getElementById('voice-panel').classList.add('open');
-    document.getElementById('btn-voice').classList.add('active');
-    document.getElementById('btn-voice').textContent = '🎙 Voice ON';
-    notify('Voice chat active!', 'success');
-
-    // Show audio level meter
-    const ctx = new AudioContext();
-    const analyser = ctx.createAnalyser();
-    const source = ctx.createMediaStreamSource(myStream);
-    source.connect(analyser);
-    analyser.fftSize = 256;
-    const data = new Uint8Array(analyser.frequencyBinCount);
-
-    const el = document.getElementById('voice-users-list');
-    el.innerHTML = '<div class="voice-user"><div class="voice-avatar" style="background:#00d4ff">Me</div><div class="voice-bar"><div class="voice-bar-fill" id="my-voice-bar"></div></div></div>';
-
-    function updateMeter() {
-      if (!voiceActive) return;
-      analyser.getByteFrequencyData(data);
-      const avg = data.reduce((a,b)=>a+b,0)/data.length;
-      const pct = Math.min(100, avg * 2);
-      const bar = document.getElementById('my-voice-bar');
-      if (bar) bar.style.width = pct + '%';
-      requestAnimationFrame(updateMeter);
-    }
-    updateMeter();
-  } catch(e) {
-    notify('Microphone access denied.', 'error');
-  }
-}
-
-function stopVoice() {
-  if (myStream) { myStream.getTracks().forEach(t=>t.stop()); myStream = null; }
-  voiceActive = false;
-  document.getElementById('voice-panel').classList.remove('open');
-  document.getElementById('btn-voice').classList.remove('active');
-  document.getElementById('btn-voice').textContent = '🎙 Voice';
-  notify('Voice chat stopped.', 'info');
-}
-
-window.toggleMute = function() {
-  if (!myStream) return;
-  muted = !muted;
-  myStream.getAudioTracks().forEach(t => t.enabled = !muted);
-  document.getElementById('mute-btn').textContent = muted ? '🔇 Unmute' : '🎙 Mute';
-  document.getElementById('mute-btn').className = muted ? 'btn warn' : 'btn danger';
+window.toggleMute=function(){
+  if(!myStream) return;
+  muted=!muted;
+  myStream.getAudioTracks().forEach(t=>t.enabled=!muted);
+  document.getElementById('mutebtn').textContent=muted?'🔇 Unmute':'🎙 Mute';
 };
 
-// ─── UTILS ───────────────────────────────────────────────
-function resize() {
-  if (!renderer) return;
-  const w = container.clientWidth, h = container.clientHeight;
-  renderer.setSize(w, h);
-  if (camera) { camera.aspect = w/h; camera.updateProjectionMatrix(); }
+/* ──────────────────────────────────────────── MODALS */
+window.openM  = id => document.getElementById(id).classList.add('on');
+window.closeM = id => document.getElementById(id).classList.remove('on');
+document.querySelectorAll('.mover').forEach(el=>el.addEventListener('click',e=>{ if(e.target===el) el.classList.remove('on'); }));
+
+/* ──────────────────────────────────────────── UTILS */
+function onResize(){
+  if(!renderer) return;
+  const w=wrap.clientWidth, h=wrap.clientHeight;
+  renderer.setSize(w,h);
+  if(camera){ camera.aspect=w/h; camera.updateProjectionMatrix(); }
 }
+function ar(){ return wrap.clientWidth/wrap.clientHeight; }
+function uid(){ return Math.random().toString(36).slice(2,9)+Date.now().toString(36); }
+function ff(v){ return isNaN(v)?'0':parseFloat(v).toFixed(2); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
-function getAR() {
-  return container.clientWidth / container.clientHeight;
-}
-
-function uid() { return Math.random().toString(36).slice(2,11) + Date.now().toString(36); }
-function generateId() { return Math.random().toString(36).slice(2,10) + Math.random().toString(36).slice(2,10); }
-function f(v) { return isNaN(v) ? '0' : parseFloat(v).toFixed(2); }
-
-// ─── MODAL UTILS ─────────────────────────────────────────
-window.openModal = function(id) {
-  document.getElementById(id).classList.add('open');
-};
-window.closeModal = function(id) {
-  document.getElementById(id).classList.remove('open');
+window.notify = function(msg, type=''){
+  const el=document.createElement('div');
+  el.className='notif '+(type==='ok'?'ok':type==='warn'?'warn':type==='err'?'err':'');
+  el.textContent=msg;
+  document.getElementById('notifs').prepend(el);
+  setTimeout(()=>el.remove(), 4000);
 };
 
-// Close on backdrop click
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', e => { if(e.target===el) el.classList.remove('open'); });
-});
-
-// ─── USERS PANEL ─────────────────────────────────────────
-window.toggleUsers = function() {
-  document.getElementById('users-panel').classList.toggle('open');
-  updateUsersPanel();
-};
-
-function updateUsersPanel() {
-  const list = document.getElementById('users-list');
-  list.innerHTML = `
-    <div class="voice-user">
-      <div class="voice-avatar" style="background:var(--accent);font-size:9px">ME</div>
-      <span style="font-size:11px">You (${peerId.slice(0,8)})</span>
-      <span class="status-dot" style="margin-left:auto"></span>
-    </div>
-  `;
-}
-
-// ─── NOTIFICATIONS ────────────────────────────────────────
-window.notify = function(msg, type='info') {
-  const el = document.createElement('div');
-  el.className = `notif ${type}`;
-  el.textContent = msg;
-  document.getElementById('notif-container').prepend(el);
-  setTimeout(() => el.remove(), 4000);
-};
-
-// ─── START ───────────────────────────────────────────────
-window.addEventListener('load', () => {
-  setTimeout(init, 300);
-});
-
-// Speed slider
-document.getElementById('speed-slider').addEventListener('input', function() {
-  walkSpeed = parseFloat(this.value);
-  worldData.walkSpeed = walkSpeed;
-});
-
-// ─── KEYBOARD SHORTCUTS HELP ─────────────────────────────
-updateUsersPanel();
+/* ──────────────────────────────────────────── BOOT */
+window.addEventListener('load', ()=>setTimeout(init, 200));
 </script>
 </body>
 </html>
