@@ -5,136 +5,134 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GmedranoTIC's Omniverse Builder</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@200;400;600;800&display=swap');
-  :root {
-    --bg: #050810; --panel: rgba(8,14,30,0.95); --glass: rgba(16,26,52,0.7);
-    --a: #00d4ff; --a2: #7b2fff; --a3: #ff3b6b;
-    --text: #c8deff; --dim: #5a7aaa;
-    --border: rgba(0,212,255,0.18); --brite: rgba(0,212,255,0.55);
-    --ok: #00ff88; --warn: #ffaa00;
-    --pw: 270px; --hh: 52px;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Exo 2',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;width:100vw;user-select:none}
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&family=Exo+2:wght@400;600;800&display=swap');
+:root{
+  --bg:#050810;--panel:rgba(8,14,30,0.96);--glass:rgba(16,26,52,0.7);
+  --a:#00d4ff;--a2:#7b2fff;--a3:#ff3b6b;
+  --text:#c8deff;--dim:#5a7aaa;
+  --border:rgba(0,212,255,0.18);--brite:rgba(0,212,255,0.55);
+  --ok:#00ff88;--warn:#ffaa00;--lock:#ffd700;
+  --pw:272px;--hh:52px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Exo 2',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;width:100vw;user-select:none}
 
-  /* LOADING */
-  #loading{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
-  .ld-logo{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:var(--a);letter-spacing:2px}
-  .ld-bar{width:220px;height:2px;background:rgba(0,212,255,0.1);border-radius:2px;overflow:hidden}
-  .ld-fill{height:100%;background:var(--a);animation:ldanim 1.6s ease forwards}
-  @keyframes ldanim{from{width:0}to{width:100%}}
+/* ── LOADING ── */
+#loading{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+.ld-logo{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--a);letter-spacing:2px}
+.ld-bar{width:220px;height:2px;background:rgba(0,212,255,.1);border-radius:2px;overflow:hidden}
+.ld-fill{height:100%;background:var(--a);animation:ldanim 1.6s ease forwards}
+@keyframes ldanim{from{width:0}to{width:100%}}
 
-  /* HEADER */
-  #hdr{position:fixed;top:0;left:0;right:0;height:var(--hh);background:rgba(5,8,16,0.97);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;padding:0 12px;z-index:1000;backdrop-filter:blur(20px)}
-  .logo{display:flex;align-items:center;gap:9px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;white-space:nowrap}
-  .logo-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--a),var(--a2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 0 14px rgba(0,212,255,0.35);flex-shrink:0}
-  .logo-text{color:var(--a)}
-  .logo-sub{color:var(--dim);font-size:10px;font-weight:400}
-  .hsep{flex:1}
-  .hinfo{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);display:flex;align-items:center;gap:12px}
-  .sdot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);animation:pulse 2s infinite;flex-shrink:0}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-  .btn{background:var(--glass);border:1px solid var(--border);color:var(--text);padding:5px 11px;border-radius:6px;cursor:pointer;font-family:'Exo 2',sans-serif;font-size:11px;font-weight:600;transition:all .18s;display:flex;align-items:center;gap:5px;white-space:nowrap}
-  .btn:hover{border-color:var(--a);color:var(--a);background:rgba(0,212,255,0.08)}
-  .btn.on{border-color:var(--a);color:var(--a);background:rgba(0,212,255,0.12)}
-  .btn.danger{border-color:var(--a3);color:var(--a3)}
-  .btn.danger:hover{background:rgba(255,59,107,.1)}
-  .btn.pri{background:linear-gradient(135deg,var(--a2),var(--a));border-color:transparent;color:#fff}
-  .btn.pri:hover{opacity:.85}
-  .btn.ok{border-color:var(--ok);color:var(--ok)}
+/* ── HEADER ── */
+#hdr{position:fixed;top:0;left:0;right:0;height:var(--hh);background:rgba(5,8,16,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;padding:0 10px;z-index:1000;backdrop-filter:blur(20px);overflow-x:auto}
+.logo{display:flex;align-items:center;gap:8px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;white-space:nowrap;flex-shrink:0}
+.logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--a),var(--a2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 0 12px rgba(0,212,255,.35);flex-shrink:0}
+.logo-text{color:var(--a)}.logo-sub{color:var(--dim);font-size:9px;font-weight:400}
+.hsep{flex:1;min-width:4px}
+.hinfo{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.btn{background:var(--glass);border:1px solid var(--border);color:var(--text);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:'Exo 2',sans-serif;font-size:11px;font-weight:600;transition:all .18s;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0}
+.btn:hover{border-color:var(--a);color:var(--a);background:rgba(0,212,255,.08)}
+.btn.on{border-color:var(--a);color:var(--a);background:rgba(0,212,255,.12)}
+.btn.danger{border-color:var(--a3);color:var(--a3)}.btn.danger:hover{background:rgba(255,59,107,.1)}
+.btn.pri{background:linear-gradient(135deg,var(--a2),var(--a));border-color:transparent;color:#fff}.btn.pri:hover{opacity:.85}
+.btn.ok{border-color:var(--ok);color:var(--ok)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
 
-  /* PANELS */
-  #lp,#rp{position:fixed;top:var(--hh);width:var(--pw);bottom:0;background:var(--panel);z-index:100;backdrop-filter:blur(20px);display:flex;flex-direction:column;overflow:hidden}
-  #lp{left:0;border-right:1px solid var(--border)}
-  #rp{right:0;border-left:1px solid var(--border)}
-  #canvas-wrap{position:fixed;top:var(--hh);left:var(--pw);right:var(--pw);bottom:0;background:#08090f}
-  #c{width:100%;height:100%;display:block;cursor:crosshair}
-  .psec{padding:10px;border-bottom:1px solid rgba(0,212,255,0.07);flex-shrink:0}
-  .ptitle{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;display:flex;align-items:center;gap:5px}
-  .ptitle::before{content:'';width:3px;height:10px;background:var(--a);border-radius:2px;flex-shrink:0}
-  .abtn{display:flex;align-items:center;gap:7px;width:100%;background:transparent;border:1px solid rgba(0,212,255,0.1);border-radius:5px;color:var(--text);padding:6px 8px;cursor:pointer;font-family:'Exo 2',sans-serif;font-size:11px;font-weight:500;transition:all .18s;margin-bottom:3px;text-align:left}
-  .abtn:hover{border-color:var(--a);color:var(--a);background:rgba(0,212,255,0.05)}
-  #objlist{flex:1;overflow-y:auto;padding:6px}
-  #objlist::-webkit-scrollbar{width:3px}
-  #objlist::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-  .oitem{display:flex;align-items:center;gap:6px;padding:5px 7px;border-radius:5px;cursor:pointer;border:1px solid transparent;margin-bottom:2px;transition:all .14s;font-size:11px}
-  .oitem:hover{background:rgba(0,212,255,0.05);border-color:rgba(0,212,255,0.13)}
-  .oitem.sel{background:rgba(0,212,255,0.1);border-color:var(--a)}
-  .odel{background:none;border:none;cursor:pointer;color:var(--dim);font-size:12px;padding:2px;transition:color .14s;flex-shrink:0;margin-left:auto}
-  .odel:hover{color:var(--a3)}
-  #propscont{padding:10px;flex:1;overflow-y:auto}
-  #propscont::-webkit-scrollbar{width:3px}
-  #propscont::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-  .pgrp{margin-bottom:10px}
-  .plbl{font-size:10px;color:var(--dim);margin-bottom:4px;font-family:'Share Tech Mono',monospace}
-  .v3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px}
-  .v3 label{font-size:9px;color:var(--dim);display:block;text-align:center;margin-bottom:2px}
-  input[type=number],input[type=text],input[type=password],select,textarea{width:100%;background:rgba(0,0,0,.45);border:1px solid rgba(0,212,255,.18);border-radius:4px;color:var(--text);padding:4px 7px;font-family:'Share Tech Mono',monospace;font-size:11px;outline:none;transition:border-color .18s}
-  input:focus,select:focus,textarea:focus{border-color:var(--a)}
-  input[type=range]{width:100%;accent-color:var(--a)}
-  input[type=color]{width:32px;height:24px;border:1px solid var(--border);border-radius:4px;cursor:pointer;background:none;padding:2px}
-  select option{background:#0a1020}
-  textarea{resize:vertical;min-height:60px}
-  .row{display:flex;align-items:center;gap:6px}
-  .row label{font-size:11px;color:var(--dim);white-space:nowrap}
-  .egrid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
-  .ebtn{background:transparent;border:1px solid rgba(0,212,255,.1);border-radius:4px;color:var(--dim);padding:5px 3px;cursor:pointer;font-size:10px;font-weight:600;text-align:center;transition:all .14s;font-family:'Exo 2',sans-serif}
-  .ebtn:hover,.ebtn.on{border-color:var(--a);color:var(--a);background:rgba(0,212,255,.07)}
-  .hr{border:none;border-top:1px solid rgba(0,212,255,.07);margin:6px 0}
-  .wsett{border-top:1px solid rgba(0,212,255,.07);padding:10px;flex-shrink:0}
+/* ── PANELS ── */
+#lp,#rp{position:fixed;top:var(--hh);width:var(--pw);bottom:0;background:var(--panel);z-index:100;backdrop-filter:blur(20px);display:flex;flex-direction:column;overflow:hidden}
+#lp{left:0;border-right:1px solid var(--border)}
+#rp{right:0;border-left:1px solid var(--border)}
+#canvas-wrap{position:fixed;top:var(--hh);left:var(--pw);right:var(--pw);bottom:0;background:#08090f}
+#c{width:100%;height:100%;display:block;cursor:crosshair}
+.psec{padding:9px;border-bottom:1px solid rgba(0,212,255,.07);flex-shrink:0}
+.ptitle{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.ptitle::before{content:'';width:3px;height:10px;background:var(--a);border-radius:2px;flex-shrink:0}
+.abtn{display:flex;align-items:center;gap:6px;width:100%;background:transparent;border:1px solid rgba(0,212,255,.1);border-radius:5px;color:var(--text);padding:5px 8px;cursor:pointer;font-family:'Exo 2',sans-serif;font-size:11px;font-weight:500;transition:all .18s;margin-bottom:3px;text-align:left}
+.abtn:hover{border-color:var(--a);color:var(--a);background:rgba(0,212,255,.05)}
+#objlist{flex:1;overflow-y:auto;padding:5px}
+#objlist::-webkit-scrollbar{width:3px}
+#objlist::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.oitem{display:flex;align-items:center;gap:5px;padding:5px 6px;border-radius:5px;cursor:pointer;border:1px solid transparent;margin-bottom:2px;transition:all .14s;font-size:11px}
+.oitem:hover{background:rgba(0,212,255,.05);border-color:rgba(0,212,255,.13)}
+.oitem.sel{background:rgba(0,212,255,.1);border-color:var(--a)}
+.oitem.locked{border-color:rgba(255,215,0,.25);background:rgba(255,215,0,.04)}
+.oibtn{background:none;border:none;cursor:pointer;color:var(--dim);font-size:12px;padding:2px;transition:color .14s;flex-shrink:0}
+.oibtn:hover{color:var(--a3)}
+.oibtn.lock-on{color:var(--lock)}
+#propscont{padding:9px;flex:1;overflow-y:auto}
+#propscont::-webkit-scrollbar{width:3px}
+#propscont::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.pgrp{margin-bottom:9px}
+.plbl{font-size:10px;color:var(--dim);margin-bottom:4px;font-family:'Share Tech Mono',monospace}
+.v3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px}
+.v3 label{font-size:9px;color:var(--dim);display:block;text-align:center;margin-bottom:1px}
+input[type=number],input[type=text],input[type=password],select,textarea{width:100%;background:rgba(0,0,0,.45);border:1px solid rgba(0,212,255,.18);border-radius:4px;color:var(--text);padding:4px 6px;font-family:'Share Tech Mono',monospace;font-size:11px;outline:none;transition:border-color .18s}
+input:focus,select:focus,textarea:focus{border-color:var(--a)}
+input[type=range]{width:100%;accent-color:var(--a)}
+input[type=color]{width:30px;height:23px;border:1px solid var(--border);border-radius:3px;cursor:pointer;background:none;padding:2px}
+select option{background:#0a1020}
+textarea{resize:vertical;min-height:55px}
+.row{display:flex;align-items:center;gap:5px}.row label{font-size:11px;color:var(--dim);white-space:nowrap}
+.egrid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.ebtn{background:transparent;border:1px solid rgba(0,212,255,.1);border-radius:4px;color:var(--dim);padding:4px 3px;cursor:pointer;font-size:10px;font-weight:600;text-align:center;transition:all .14s;font-family:'Exo 2',sans-serif}
+.ebtn:hover,.ebtn.on{border-color:var(--a);color:var(--a);background:rgba(0,212,255,.07)}
+.hr{border:none;border-top:1px solid rgba(0,212,255,.07);margin:5px 0}
+.wsett{border-top:1px solid rgba(0,212,255,.07);padding:9px;flex-shrink:0}
 
-  /* OVERLAYS */
-  #crosshair{position:fixed;top:50%;left:50%;pointer-events:none;z-index:150;display:none}
-  #crosshair.on{display:block}
-  .ch{position:absolute;background:rgba(255,255,255,.75)}
-  .chh{width:12px;height:1px;top:0;left:-6px}
-  .chv{width:1px;height:12px;top:-6px;left:0}
-  .mbadge{position:fixed;top:calc(var(--hh)+8px);left:calc(var(--pw)+8px);background:rgba(5,8,16,.87);border:1px solid var(--border);border-radius:5px;padding:3px 10px;font-size:10px;font-family:'Share Tech Mono',monospace;z-index:200;pointer-events:none;display:flex;align-items:center;gap:5px}
-  #hud{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:200;pointer-events:none}
-  .hpill{background:rgba(5,8,16,.87);border:1px solid var(--border);border-radius:16px;padding:5px 12px;font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--dim);display:flex;align-items:center;gap:5px;backdrop-filter:blur(10px)}
-  .hkey{background:var(--glass);border:1px solid var(--border);border-radius:3px;padding:1px 4px;font-size:9px;color:var(--a)}
-  #gizmohint{position:fixed;bottom:55px;left:calc(var(--pw)+10px);background:rgba(5,8,16,.87);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--dim);z-index:200;pointer-events:none;line-height:1.8;display:none}
-  #playover{position:fixed;top:var(--hh);left:var(--pw);right:var(--pw);bottom:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(5,8,20,.55)}
-  #playover.on{display:flex}
-  #plkmsg{background:rgba(5,8,16,.96);border:1px solid var(--a);border-radius:11px;padding:22px 32px;text-align:center;backdrop-filter:blur(18px)}
-  #plkmsg h3{color:var(--a);margin-bottom:7px;font-family:'Rajdhani',sans-serif;font-size:18px}
-  #plkmsg p{font-size:11px;color:var(--dim);margin-bottom:13px}
+/* ── OVERLAYS ── */
+#crosshair{position:fixed;top:50%;left:50%;pointer-events:none;z-index:150;display:none}
+#crosshair.on{display:block}
+.ch{position:absolute;background:rgba(255,255,255,.75)}
+.chh{width:12px;height:1px;top:0;left:-6px}.chv{width:1px;height:12px;top:-6px;left:0}
+.mbadge{position:fixed;top:calc(var(--hh)+8px);left:calc(var(--pw)+8px);background:rgba(5,8,16,.87);border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:10px;font-family:'Share Tech Mono',monospace;z-index:200;pointer-events:none;display:flex;align-items:center;gap:5px}
+#hud{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:200;pointer-events:none}
+.hpill{background:rgba(5,8,16,.87);border:1px solid var(--border);border-radius:16px;padding:4px 11px;font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--dim);display:flex;align-items:center;gap:4px;backdrop-filter:blur(10px)}
+.hkey{background:var(--glass);border:1px solid var(--border);border-radius:3px;padding:1px 4px;font-size:9px;color:var(--a)}
+#gizmohint{position:fixed;bottom:52px;left:calc(var(--pw)+9px);background:rgba(5,8,16,.87);border:1px solid var(--border);border-radius:6px;padding:5px 9px;font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--dim);z-index:200;pointer-events:none;line-height:1.8;display:none}
+#playover{position:fixed;top:var(--hh);left:var(--pw);right:var(--pw);bottom:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(5,8,20,.55)}
+#playover.on{display:flex}
+#plkmsg{background:rgba(5,8,16,.96);border:1px solid var(--a);border-radius:11px;padding:20px 30px;text-align:center;backdrop-filter:blur(18px)}
+#plkmsg h3{color:var(--a);margin-bottom:7px;font-family:'Rajdhani',sans-serif;font-size:18px}
+#plkmsg p{font-size:11px;color:var(--dim);margin-bottom:12px}
 
-  /* MODALS */
-  .mover{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(7px)}
-  .mover.on{display:flex}
-  .modal{background:var(--panel);border:1px solid var(--brite);border-radius:11px;padding:20px;min-width:360px;max-width:490px;width:90%;position:relative;max-height:80vh;overflow-y:auto}
-  .modal::-webkit-scrollbar{width:3px}
-  .modal::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-  .mtitle{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--a);margin-bottom:16px}
-  .mclose{position:absolute;top:13px;right:13px;background:none;border:none;color:var(--dim);font-size:17px;cursor:pointer;transition:color .14s}
-  .mclose:hover{color:var(--a3)}
-  .fg{margin-bottom:12px}
-  .fl{font-size:10px;color:var(--dim);margin-bottom:4px;display:block;letter-spacing:1px;text-transform:uppercase}
-  .slink{display:flex;gap:5px;margin-top:4px}
-  .slink input{flex:1;font-size:10px}
-  .mact{display:flex;gap:7px;justify-content:flex-end;margin-top:16px}
-  .infobox{background:rgba(0,212,255,.04);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:11px;color:var(--dim);margin-top:6px}
-  .warnbox{background:rgba(255,170,0,.07);border:1px solid var(--warn);border-radius:5px;padding:8px;font-size:11px;color:var(--warn);margin-bottom:10px}
+/* ── MODALS ── */
+.mover{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(7px)}
+.mover.on{display:flex}
+.modal{background:var(--panel);border:1px solid var(--brite);border-radius:11px;padding:20px;min-width:350px;max-width:490px;width:90%;position:relative;max-height:82vh;overflow-y:auto}
+.modal::-webkit-scrollbar{width:3px}
+.modal::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.mtitle{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--a);margin-bottom:15px}
+.mclose{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--dim);font-size:17px;cursor:pointer;transition:color .14s}
+.mclose:hover{color:var(--a3)}
+.fg{margin-bottom:11px}.fl{font-size:10px;color:var(--dim);margin-bottom:3px;display:block;letter-spacing:1px;text-transform:uppercase}
+.slink{display:flex;gap:4px;margin-top:4px}.slink input{flex:1;font-size:10px}
+.mact{display:flex;gap:6px;justify-content:flex-end;margin-top:14px}
+.infobox{background:rgba(0,212,255,.04);border:1px solid var(--border);border-radius:6px;padding:9px;font-size:11px;color:var(--dim);margin-top:6px}
+.warnbox{background:rgba(255,170,0,.07);border:1px solid var(--warn);border-radius:5px;padding:8px;font-size:11px;color:var(--warn);margin-bottom:9px}
 
-  /* VOICE / USERS */
-  #voicepanel,#userspanel{position:fixed;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:9px 12px;z-index:200;display:none;backdrop-filter:blur(15px)}
-  #voicepanel.on,#userspanel.on{display:block}
-  #voicepanel{bottom:55px;right:calc(var(--pw)+10px);min-width:165px}
-  #userspanel{top:calc(var(--hh)+6px);right:calc(var(--pw)+6px);min-width:150px}
-  .vtitle{font-size:10px;color:var(--dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
-  .vuser{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:11px}
-  .vav{width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0}
-  .vbar{height:3px;background:var(--border);border-radius:2px;flex:1;overflow:hidden}
-  .vfill{height:100%;background:var(--ok);border-radius:2px;width:0%;transition:width .1s}
+/* ── VOICE / USERS ── */
+#voicepanel,#userspanel{position:fixed;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:9px 11px;z-index:200;display:none;backdrop-filter:blur(15px)}
+#voicepanel.on,#userspanel.on{display:block}
+#voicepanel{bottom:52px;right:calc(var(--pw)+9px);min-width:160px}
+#userspanel{top:calc(var(--hh)+6px);right:calc(var(--pw)+6px);min-width:148px}
+.vtitle{font-size:10px;color:var(--dim);margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
+.vuser{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:11px}
+.vav{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0}
+.vbar{height:3px;background:var(--border);border-radius:2px;flex:1;overflow:hidden}
+.vfill{height:100%;background:var(--ok);border-radius:2px;width:0%;transition:width .1s}
 
-  /* NOTIFS */
-  #notifs{position:fixed;bottom:16px;right:calc(var(--pw)+12px);z-index:600;display:flex;flex-direction:column-reverse;gap:5px;pointer-events:none}
-  .notif{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:12px;animation:nfin .25s ease;max-width:240px;backdrop-filter:blur(10px);pointer-events:all}
-  .notif.ok{border-color:var(--ok)}
-  .notif.warn{border-color:var(--warn)}
-  .notif.err{border-color:var(--a3)}
-  @keyframes nfin{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
+/* ── NOTIFS ── */
+#notifs{position:fixed;bottom:14px;right:calc(var(--pw)+10px);z-index:600;display:flex;flex-direction:column-reverse;gap:4px;pointer-events:none}
+.notif{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:7px 11px;font-size:11px;animation:nfin .22s ease;max-width:230px;backdrop-filter:blur(10px);pointer-events:all}
+.notif.ok{border-color:var(--ok)}.notif.warn{border-color:var(--warn)}.notif.err{border-color:var(--a3)}
+@keyframes nfin{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── COLLAB badge ── */
+#collab-badge{position:fixed;top:calc(var(--hh)+8px);right:calc(var(--pw)+8px);background:rgba(123,47,255,.18);border:1px solid var(--a2);border-radius:6px;padding:3px 10px;font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--a2);z-index:200;display:none;align-items:center;gap:5px}
+#collab-badge.on{display:flex}
 </style>
 </head>
 <body>
@@ -155,10 +153,11 @@
   <div class="hinfo">
     <div class="sdot"></div>
     <span id="projname" style="cursor:pointer;color:var(--text)" onclick="renameProj()" title="Click to rename">My Omniverse</span>
-    <span id="peerid" style="font-size:9px"></span>
+    <span id="peerid" style="font-size:9px;color:var(--dim)"></span>
   </div>
   <button class="btn on" id="bedit" onclick="setMode('edit')">✏️ Edit</button>
   <button class="btn" id="bplay" onclick="setMode('play')">▶ Play</button>
+  <button class="btn" onclick="undoAction()" id="btn-undo" title="Undo (Ctrl+Z)" disabled>↩ Undo</button>
   <button class="btn" onclick="openM('shareModal')">🔗 Share</button>
   <button class="btn" onclick="saveProj()">💾 Save</button>
   <button class="btn" onclick="loadProj()">📂 Load</button>
@@ -195,13 +194,13 @@
     </div>
   </div>
   <div class="psec"><div class="ptitle">Scene Objects</div></div>
-  <div id="objlist"><div style="text-align:center;color:var(--dim);font-size:11px;margin-top:20px">No objects yet.<br>Add objects above.</div></div>
+  <div id="objlist"><div style="text-align:center;color:var(--dim);font-size:11px;margin-top:18px">No objects yet.<br>Add objects above.</div></div>
 </div>
 
 <!-- RIGHT PANEL -->
 <div id="rp">
   <div class="psec"><div class="ptitle">Properties</div></div>
-  <div id="propscont"><div style="text-align:center;color:var(--dim);font-size:11px;margin-top:30px">Select an object<br>to edit its properties.</div></div>
+  <div id="propscont"><div style="text-align:center;color:var(--dim);font-size:11px;margin-top:28px">Select an object<br>to edit its properties.</div></div>
   <div class="wsett">
     <div class="ptitle">World Settings</div>
     <div class="pgrp"><div class="plbl">Gravity</div><input type="range" id="grav" min="0" max="30" value="9.8" step=".1" oninput="WD.gravity=parseFloat(this.value)"></div>
@@ -217,11 +216,12 @@
 <!-- Overlays -->
 <div id="crosshair"><div class="ch chh"></div><div class="ch chv"></div></div>
 <div class="mbadge" id="mbadge"><div class="sdot" style="background:var(--a)"></div>EDIT MODE</div>
+<div id="collab-badge"><div class="sdot" style="background:var(--a2)"></div><span id="collab-info">Collaborating</span></div>
 <div id="hud">
   <div class="hpill" id="hudctrl" style="display:none"><span class="hkey">WASD</span>Move <span class="hkey">Mouse</span>Look <span class="hkey">Space</span>Jump <span class="hkey">Shift</span>Run <span class="hkey">Esc</span>Exit</div>
-  <div class="hpill" id="hudedit"><span class="hkey">Click</span>Select <span class="hkey">G</span>Move <span class="hkey">R</span>Rotate <span class="hkey">Del</span>Delete</div>
+  <div class="hpill" id="hudedit"><span class="hkey">Click</span>Sel <span class="hkey">G</span>Move <span class="hkey">R</span>Rot <span class="hkey">Del</span>Del <span class="hkey">L</span>Lock</div>
 </div>
-<div id="gizmohint">Selected: <span id="goname" style="color:var(--a)">-</span><br>Drag arrows · G=move R=rotate S=scale</div>
+<div id="gizmohint">Sel: <span id="goname" style="color:var(--a)">-</span> <span id="golock" style="color:var(--lock);display:none">🔒LOCKED</span><br>G=move R=rotate S=scale L=lock/unlock</div>
 <div id="playover"><div id="plkmsg"><h3>▶ PLAY MODE</h3><p>Click to lock mouse &amp; enter the 3D world<br>Press <b>Esc</b> to exit play mode</p><button class="btn pri" style="margin:0 auto" onclick="reqLock()">Enter World</button></div></div>
 
 <!-- USERS / VOICE -->
@@ -231,7 +231,6 @@
   <div id="vulist"></div>
   <button class="btn danger" style="margin-top:6px;width:100%" id="mutebtn" onclick="toggleMute()">🎙 Mute</button>
 </div>
-
 <div id="notifs"></div>
 
 <!-- MODALS -->
@@ -239,11 +238,34 @@
   <div class="modal">
     <div class="mtitle">🔗 Share &amp; Collaborate</div>
     <button class="mclose" onclick="closeM('shareModal')">✕</button>
-    <div class="fg"><div class="fl">Your Room ID</div><div class="slink"><input type="text" id="ridF" readonly><button class="btn" onclick="copy(document.getElementById('ridF').value)">Copy</button></div></div>
-    <div class="fg"><div class="fl">Share Link</div><div class="slink"><input type="text" id="slinkF" readonly><button class="btn" onclick="copy(document.getElementById('slinkF').value)">Copy</button></div></div>
-    <div class="fg"><div class="fl">Room Password (optional)</div><input type="password" id="rpwF" placeholder="Leave blank for open room" oninput="WD.roomPw=this.value"></div>
-    <div class="fg"><div class="fl">Join a Room (paste Peer ID)</div><div class="slink"><input type="text" id="joinF" placeholder="Peer ID…"><button class="btn ok" onclick="joinRoom()">Join</button></div></div>
-    <div class="infobox"><b style="color:var(--text)">Collaboration:</b> Share your link. Others open it and appear in your world in real-time. Voice chat via the 🎙 button.</div>
+    <div class="fg">
+      <div class="fl">Your Room ID</div>
+      <div class="slink"><input type="text" id="ridF" readonly><button class="btn" onclick="copy(document.getElementById('ridF').value)">Copy</button></div>
+    </div>
+    <div class="fg">
+      <div class="fl">Share Link (send this to collaborators)</div>
+      <div class="slink"><input type="text" id="slinkF" readonly><button class="btn" onclick="copy(document.getElementById('slinkF').value)">Copy</button></div>
+    </div>
+    <div class="fg">
+      <div class="fl">Room Password (optional)</div>
+      <input type="password" id="rpwF" placeholder="Leave blank for open room" oninput="WD.roomPw=this.value">
+    </div>
+    <div class="fg">
+      <div class="fl">Join a Room (paste Peer ID or full link)</div>
+      <div class="slink"><input type="text" id="joinF" placeholder="Peer ID or URL…"><button class="btn ok" onclick="joinRoom()">Join</button></div>
+    </div>
+    <div class="infobox">
+      <b style="color:var(--text)">How it works:</b> You are the <b style="color:var(--a)">host</b>. Share the link above. When someone opens it, they connect to <i>your</i> room automatically and receive a copy of your world. Objects added by either side sync in real-time. For cross-device collaboration use a public signaling server (see README).
+    </div>
+  </div>
+</div>
+
+<div class="mover" id="pwModal">
+  <div class="modal" style="min-width:280px;max-width:340px">
+    <div class="mtitle">🔒 Password Required</div>
+    <div class="fg"><div class="fl">Room Password</div><input type="password" id="pwInput" placeholder="Enter password…"></div>
+    <div id="pwErr" style="color:var(--a3);font-size:11px;margin-bottom:8px;display:none">❌ Wrong password</div>
+    <div class="mact"><button class="btn pri" onclick="submitPw()">Enter Room</button></div>
   </div>
 </div>
 
@@ -272,14 +294,13 @@
   <div class="modal">
     <div class="mtitle">⬇ Export as HTML5</div>
     <button class="mclose" onclick="closeM('exportModal')">✕</button>
-    <div style="font-size:12px;color:var(--dim);margin-bottom:13px">Exports a standalone HTML5 file. Host it on any web server or GitHub Pages. Collaboration &amp; voice chat included.</div>
+    <div style="font-size:11px;color:var(--dim);margin-bottom:12px">Exports a standalone HTML5 file for any web server or GitHub Pages. All assets embedded. Collaboration &amp; voice chat included.</div>
     <div class="fg"><div class="fl">World Title</div><input type="text" id="extitle" placeholder="My Omniverse World"></div>
-    <div class="warnbox">⚠ GLB models are embedded — they cannot be downloaded from the exported HTML.</div>
+    <div class="warnbox">⚠ GLB models are embedded — visitors cannot download them from the exported HTML.</div>
     <div class="mact"><button class="btn" onclick="closeM('exportModal')">Cancel</button><button class="btn pri" onclick="doExport()">⬇ Download HTML</button></div>
   </div>
 </div>
 
-<!-- importmap MUST come before any module script -->
 <script type="importmap">
 {
   "imports": {
@@ -295,7 +316,9 @@ import { GLTFLoader }        from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls }     from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
 
-/* ── world settings shared with inline handlers ── */
+/* ═══════════════════════════════════════════════════════════
+   GLOBALS
+═══════════════════════════════════════════════════════════ */
 window.WD = {
   env:'night', groundColor:'#1a1a2e', skyColor:'#0a0e1a',
   gravity:9.8, walkSpeed:5, ambInt:0.6, fogFar:120, roomPw:''
@@ -312,17 +335,35 @@ const mouse      = new THREE.Vector2();
 
 let mode    = 'edit';
 let selObj  = null;
-let objects = [];
+let objects = [];   // { id, name, type, mesh, url, b64, data, locked, physBox }
 
-/* play-mode */
+/* ── UNDO ── */
+let undoStack = [];  // array of snapshot arrays of serialised objects+world
+const MAX_UNDO = 30;
+
+/* ── PHYSICS ── */
+// Simple AABB: each object gets a bounding box updated every frame in play mode
+const _box  = new THREE.Box3();
+const _pBox = new THREE.Box3(); // player box (capsule approx)
+const _pSize = new THREE.Vector3(0.4, 1.7, 0.4);
+
+/* ── PLAY MODE ── */
 let keys={}, plocked=false;
-let pPos=new THREE.Vector3(0,1.7,5), pYaw=0, pPitch=0, pYvel=0, grounded=true;
+let pPos=new THREE.Vector3(0, 1.7, 5), pYaw=0, pPitch=0, pYvel=0, grounded=true;
 
-/* peer / voice */
-const myPeerId = uid();
+/* ── VOICE ── */
 let voiceActive=false, muted=false, myStream=null;
 
-/* ──────────────────────────────────────────── INIT */
+/* ── PEER / COLLAB ── */
+const myPeerId = uid();
+let hostChannel  = null;   // BroadcastChannel we listen on (our ID)
+let guestChannel = null;   // BroadcastChannel to the host we joined
+let connectedPeers = [];   // IDs of known peers
+let pendingJoinId  = null; // while waiting for password confirm
+
+/* ═══════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════ */
 function init(){
   renderer = new THREE.WebGLRenderer({canvas, antialias:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
@@ -343,118 +384,161 @@ function init(){
   scene.add(ambLight);
 
   dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-  dirLight.position.set(10, 20, 10);
+  dirLight.position.set(10,20,10);
   dirLight.castShadow = true;
   dirLight.shadow.mapSize.setScalar(2048);
-  const dc = dirLight.shadow.camera;
-  dc.left=-50; dc.right=50; dc.top=50; dc.bottom=-50;
-  dc.near=0.1; dc.far=200;
+  const dc=dirLight.shadow.camera;
+  dc.left=-50;dc.right=50;dc.top=50;dc.bottom=-50;dc.near=0.1;dc.far=200;
   scene.add(dirLight);
 
-  const geo = new THREE.PlaneGeometry(300,300);
-  const mat = new THREE.MeshStandardMaterial({color:'#1a1a2e',roughness:.95});
-  groundMesh = new THREE.Mesh(geo, mat);
-  groundMesh.rotation.x = -Math.PI/2;
-  groundMesh.receiveShadow = true;
-  groundMesh.name = '__ground__';
+  groundMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(300,300),
+    new THREE.MeshStandardMaterial({color:'#1a1a2e',roughness:.95})
+  );
+  groundMesh.rotation.x=-Math.PI/2; groundMesh.receiveShadow=true; groundMesh.name='__ground__';
   scene.add(groundMesh);
-  scene.add(new THREE.GridHelper(300, 100, 0x0d1a30, 0x0d1a30));
-
+  scene.add(new THREE.GridHelper(300,100,0x0d1a30,0x0d1a30));
   mkStars();
 
   orbit = new OrbitControls(camera, canvas);
-  orbit.enableDamping = true;
-  orbit.dampingFactor = 0.07;
-  orbit.minDistance = 1;
-  orbit.maxDistance = 300;
+  orbit.enableDamping=true; orbit.dampingFactor=0.07;
+  orbit.minDistance=1; orbit.maxDistance=300;
 
   xform = new TransformControls(camera, canvas);
-  xform.addEventListener('dragging-changed', e => { orbit.enabled = !e.value; });
-  xform.addEventListener('objectChange', () => { if(selObj) refreshProps(selObj); });
+  xform.addEventListener('dragging-changed', e=>{ orbit.enabled=!e.value; });
+  xform.addEventListener('objectChange', ()=>{
+    if(selObj){ refreshProps(selObj); }
+  });
   scene.add(xform);
 
   canvas.addEventListener('click', onCanvasClick);
   window.addEventListener('resize', onResize);
   window.addEventListener('keydown', onKeyDown);
-  window.addEventListener('keyup',   e => { keys[e.code]=false; });
+  window.addEventListener('keyup',   e=>{ keys[e.code]=false; });
   document.addEventListener('pointerlockchange', onPLC);
-  document.addEventListener('mousemove', e => {
+  document.addEventListener('mousemove', e=>{
     if(plocked && mode==='play'){
-      pYaw   -= e.movementX * 0.002;
-      pPitch -= e.movementY * 0.002;
-      pPitch  = Math.max(-1.47, Math.min(1.47, pPitch));
+      pYaw  -= e.movementX*0.002;
+      pPitch -= e.movementY*0.002;
+      pPitch = Math.max(-1.47, Math.min(1.47, pPitch));
     }
   });
 
-  document.getElementById('peerid').textContent  = `ID: ${myPeerId.slice(0,8)}…`;
-  document.getElementById('ridF').value           = myPeerId;
-  document.getElementById('slinkF').value         = shareLink();
+  document.getElementById('peerid').textContent = `ID:${myPeerId.slice(0,7)}`;
+  document.getElementById('ridF').value   = myPeerId;
+  document.getElementById('slinkF').value = shareLink();
   updateUserPanel();
-  setupBC();
+  setupHostChannel();
+  checkUrlRoom();
 
   animate();
   setTimeout(()=>{ document.getElementById('loading').style.display='none'; }, 1200);
 }
 
 function mkStars(){
-  const g = new THREE.BufferGeometry();
-  const v = [];
-  for(let i=0;i<3000;i++) v.push((Math.random()-.5)*800, Math.random()*300+30, (Math.random()-.5)*800);
-  g.setAttribute('position', new THREE.Float32BufferAttribute(v,3));
-  const s = new THREE.Points(g, new THREE.PointsMaterial({color:0xffffff,size:.35,transparent:true,opacity:.8}));
-  s.name='__stars__';
-  scene.add(s);
+  const g=new THREE.BufferGeometry(), v=[];
+  for(let i=0;i<3000;i++) v.push((Math.random()-.5)*800,Math.random()*300+30,(Math.random()-.5)*800);
+  g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));
+  const s=new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:.35,transparent:true,opacity:.8}));
+  s.name='__stars__'; scene.add(s);
 }
 
-/* ──────────────────────────────────────────── LOOP */
+/* ═══════════════════════════════════════════════════════════
+   ANIMATE + PHYSICS
+═══════════════════════════════════════════════════════════ */
+const _clock = {last: performance.now()};
+
 function animate(){
   requestAnimationFrame(animate);
+  const now = performance.now();
+  const dt  = Math.min((now - _clock.last)/1000, 0.05);
+  _clock.last = now;
+
   if(mode==='play' && plocked){
-    const spd = (keys.ShiftLeft||keys.ShiftRight) ? WD.walkSpeed*2.2 : WD.walkSpeed;
-    const dir = new THREE.Vector3();
-    const fwd = new THREE.Vector3(-Math.sin(pYaw), 0, -Math.cos(pYaw));
-    const rgt = new THREE.Vector3( Math.cos(pYaw), 0, -Math.sin(pYaw));
-    if(keys.KeyW) dir.addScaledVector(fwd, 1);
-    if(keys.KeyS) dir.addScaledVector(fwd,-1);
-    if(keys.KeyA) dir.addScaledVector(rgt,-1);
-    if(keys.KeyD) dir.addScaledVector(rgt, 1);
-    if(dir.lengthSq()>0) dir.normalize();
-    pPos.addScaledVector(dir, spd*0.016);
-    pYvel -= WD.gravity*0.016;
-    pPos.y += pYvel*0.016;
-    if(pPos.y < 1.7){ pPos.y=1.7; pYvel=0; grounded=true; }
-    camera.position.copy(pPos);
-    camera.quaternion.setFromEuler(new THREE.Euler(pPitch, pYaw, 0, 'YXZ'));
+    updatePlayer(dt);
   } else {
     orbit.update();
   }
   renderer.render(scene, camera);
 }
 
-/* ──────────────────────────────────────────── EVENTS */
+function updatePlayer(dt){
+  const spd = (keys.ShiftLeft||keys.ShiftRight) ? WD.walkSpeed*2.2 : WD.walkSpeed;
+  const dir = new THREE.Vector3();
+  const fwd = new THREE.Vector3(-Math.sin(pYaw), 0, -Math.cos(pYaw));
+  const rgt = new THREE.Vector3( Math.cos(pYaw), 0, -Math.sin(pYaw));
+  if(keys.KeyW) dir.addScaledVector(fwd, 1);
+  if(keys.KeyS) dir.addScaledVector(fwd,-1);
+  if(keys.KeyA) dir.addScaledVector(rgt,-1);
+  if(keys.KeyD) dir.addScaledVector(rgt, 1);
+  if(dir.lengthSq()>0) dir.normalize();
+
+  // try move X and Z separately so we can slide along walls
+  const stepX = new THREE.Vector3(dir.x*spd*dt, 0, 0);
+  const stepZ = new THREE.Vector3(0, 0, dir.z*spd*dt);
+  if(!collidesObjects(pPos.clone().add(stepX))) pPos.add(stepX);
+  if(!collidesObjects(pPos.clone().add(stepZ))) pPos.add(stepZ);
+
+  // gravity
+  pYvel -= WD.gravity*dt;
+  const stepY = new THREE.Vector3(0, pYvel*dt, 0);
+  const newPosY = pPos.clone().add(stepY);
+  if(newPosY.y < 1.7){
+    pPos.y=1.7; pYvel=0; grounded=true;
+  } else {
+    // check ceiling/floor objects
+    if(!collidesObjects(newPosY)){ pPos.y=newPosY.y; }
+    else { pYvel=0; if(stepY.y<0) grounded=true; }
+  }
+
+  camera.position.copy(pPos);
+  camera.quaternion.setFromEuler(new THREE.Euler(pPitch, pYaw, 0, 'YXZ'));
+}
+
+function collidesObjects(testPos){
+  // player AABB
+  _pBox.setFromCenterAndSize(
+    new THREE.Vector3(testPos.x, testPos.y - _pSize.y/2 + 0.1, testPos.z),
+    _pSize
+  );
+  for(const obj of objects){
+    if(obj.locked) continue; // locked objects are collidable walls
+    _box.setFromObject(obj.mesh);
+    if(_pBox.intersectsBox(_box)) return true;
+  }
+  return false;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   KEY EVENTS
+═══════════════════════════════════════════════════════════ */
 function onKeyDown(e){
-  keys[e.code] = true;
+  keys[e.code]=true;
   if(e.code==='Space'  && mode==='play' && grounded){ pYvel=5.5; grounded=false; }
   if(e.code==='Escape' && mode==='play') exitPlay();
-  if((e.code==='Delete'||e.code==='Backspace') && mode==='edit' && selObj) removeObj(selObj.id);
+  if((e.code==='Delete'||e.code==='Backspace') && mode==='edit' && selObj && !selObj.locked) removeObj(selObj.id);
   if(e.code==='KeyG' && xform.object) xform.setMode('translate');
   if(e.code==='KeyR' && xform.object) xform.setMode('rotate');
   if(e.code==='KeyS' && !e.ctrlKey && xform.object) xform.setMode('scale');
   if(e.code==='KeyS' &&  e.ctrlKey){ e.preventDefault(); saveProj(); }
+  if(e.code==='KeyZ' &&  e.ctrlKey){ e.preventDefault(); undoAction(); }
+  if(e.code==='KeyL' && mode==='edit' && selObj) toggleLock(selObj.id);
 }
 
 function onPLC(){
-  plocked = document.pointerLockElement === canvas;
+  plocked = document.pointerLockElement===canvas;
   document.getElementById('crosshair').classList.toggle('on', plocked);
-  document.getElementById('hudctrl').style.display  = plocked ? 'flex' : 'none';
-  document.getElementById('plkmsg').style.display   = plocked ? 'none' : 'block';
+  document.getElementById('hudctrl').style.display = plocked?'flex':'none';
+  document.getElementById('plkmsg').style.display  = plocked?'none':'block';
 }
 
-/* ──────────────────────────────────────────── MODES */
+/* ═══════════════════════════════════════════════════════════
+   MODES
+═══════════════════════════════════════════════════════════ */
 window.setMode = function(m){
-  mode = m;
-  document.getElementById('bedit').classList.toggle('on', m==='edit');
-  document.getElementById('bplay').classList.toggle('on', m==='play');
+  mode=m;
+  document.getElementById('bedit').classList.toggle('on',m==='edit');
+  document.getElementById('bplay').classList.toggle('on',m==='play');
   const po=document.getElementById('playover');
   const he=document.getElementById('hudedit');
   const mb=document.getElementById('mbadge');
@@ -473,108 +557,132 @@ window.setMode = function(m){
     mb.innerHTML='<div class="sdot" style="background:var(--a)"></div>EDIT MODE';
     orbit.enabled=true;
     camera.position.set(pPos.x, pPos.y+3, pPos.z+8);
-    camera.lookAt(pPos.x, 1, pPos.z);
+    camera.lookAt(pPos.x,1,pPos.z);
   }
 };
 function exitPlay(){ if(document.pointerLockElement) document.exitPointerLock(); setMode('edit'); }
-window.reqLock = () => canvas.requestPointerLock();
+window.reqLock = ()=> canvas.requestPointerLock();
 
-/* ──────────────────────────────────────────── FILE UPLOAD */
-let pendType = 'glb';
+/* ═══════════════════════════════════════════════════════════
+   FILE UPLOAD — images converted to base64 for persistence
+═══════════════════════════════════════════════════════════ */
+let pendType='glb';
 window.pickFile = function(t){
-  pendType = t;
-  const inp = document.getElementById('filein');
-  inp.accept = t==='glb' ? '.glb,.gltf' : '.jpg,.jpeg,.png,.gif,.webp,.svg,.bmp';
+  pendType=t;
+  const inp=document.getElementById('filein');
+  inp.accept=t==='glb'?'.glb,.gltf':'.jpg,.jpeg,.png,.gif,.webp,.svg,.bmp';
   inp.click();
 };
 window.onFile = function(e){
-  const f = e.target.files[0]; if(!f) return;
-  const url = URL.createObjectURL(f);
-  pendType==='glb' ? loadGLB(url, f.name) : loadImage(url, f.name);
+  const f=e.target.files[0]; if(!f) return;
+  if(pendType==='glb'){
+    readAsDataURL(f).then(b64=>loadGLB(b64, f.name));
+  } else {
+    readAsDataURL(f).then(b64=>loadImageB64(b64, f.name));
+  }
   e.target.value='';
 };
 
-/* ──────────────────────────────────────────── ADD OBJECTS */
-function loadGLB(url, name){
-  notify('Loading GLB…');
-  gltfLoader.load(url, gltf=>{
-    const root = gltf.scene;
-    root.traverse(c=>{ if(c.isMesh){ c.castShadow=true; c.receiveShadow=true; } });
-    const box = new THREE.Box3().setFromObject(root);
-    root.position.sub(box.getCenter(new THREE.Vector3()));
-    const s = box.getSize(new THREE.Vector3());
-    const md = Math.max(s.x,s.y,s.z);
-    if(md>4) root.scale.setScalar(4/md);
-    const grp = new THREE.Group();
-    grp.add(root);
-    scatter(grp); grp.position.y=0;
-    scene.add(grp);
-    push({id:uid(), name, type:'glb', mesh:grp, url, data:{}});
-    notify(`GLB: ${name}`, 'ok');
-  }, undefined, err=>notify('GLB error: '+err.message,'err'));
+function readAsDataURL(file){
+  return new Promise(res=>{
+    const r=new FileReader();
+    r.onload=ev=>res(ev.target.result);
+    r.readAsDataURL(file);
+  });
 }
 
-function loadImage(url, name){
-  new THREE.TextureLoader().load(url, tex=>{
-    const m = new THREE.Mesh(
+/* ═══════════════════════════════════════════════════════════
+   ADD OBJECTS
+═══════════════════════════════════════════════════════════ */
+function loadGLB(b64, name){
+  notify('Loading GLB…');
+  // convert b64 dataURL to arraybuffer for GLTFLoader
+  const base64 = b64.split(',')[1];
+  const binary  = atob(base64);
+  const buffer  = new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++) buffer[i]=binary.charCodeAt(i);
+  gltfLoader.parse(buffer.buffer, '', gltf=>{
+    const root=gltf.scene;
+    root.traverse(c=>{ if(c.isMesh){ c.castShadow=true; c.receiveShadow=true; } });
+    const box=new THREE.Box3().setFromObject(root);
+    root.position.sub(box.getCenter(new THREE.Vector3()));
+    const s=box.getSize(new THREE.Vector3()), md=Math.max(s.x,s.y,s.z);
+    if(md>4) root.scale.setScalar(4/md);
+    const grp=new THREE.Group(); grp.add(root);
+    scatter(grp); grp.position.y=0;
+    scene.add(grp);
+    pushSnapshot();
+    push({id:uid(),name,type:'glb',mesh:grp,url:'',b64,data:{}});
+    notify(`GLB: ${name}`,'ok');
+  }, err=>notify('GLB error: '+err,'err'));
+}
+
+function loadImageB64(b64, name){
+  new THREE.TextureLoader().load(b64, tex=>{
+    const m=new THREE.Mesh(
       new THREE.PlaneGeometry(3,2),
-      new THREE.MeshStandardMaterial({map:tex, transparent:true, side:THREE.DoubleSide})
+      new THREE.MeshStandardMaterial({map:tex,transparent:true,side:THREE.DoubleSide})
     );
     scatter(m); m.position.y=1.5;
     scene.add(m);
-    push({id:uid(), name, type:'image', mesh:m, url, data:{}});
-    notify(`Image: ${name}`, 'ok');
+    pushSnapshot();
+    push({id:uid(),name,type:'image',mesh:m,url:'',b64,data:{}});
+    notify(`Image: ${name}`,'ok');
   });
 }
 
 window.addText = function(){
-  const text  = document.getElementById('txtcont').value.trim();
+  const text=document.getElementById('txtcont').value.trim();
   if(!text){ notify('Enter some text.','warn'); return; }
-  const color = document.getElementById('txtcol').value;
-  const size  = parseFloat(document.getElementById('txtsize').value)||1;
-  const m = mkTextMesh(text, color, size);
+  const color=document.getElementById('txtcol').value;
+  const size=parseFloat(document.getElementById('txtsize').value)||1;
+  const m=mkTextMesh(text,color,size);
   scatter(m); m.position.y=2;
   scene.add(m);
-  push({id:uid(), name:text.slice(0,22), type:'text', mesh:m, url:'', data:{text,color,size}});
+  pushSnapshot();
+  push({id:uid(),name:text.slice(0,22),type:'text',mesh:m,url:'',b64:'',data:{text,color,size}});
   closeM('textModal');
+  document.getElementById('txtcont').value='';
   notify('Text added!','ok');
 };
 
-function mkTextMesh(text, color, size){
+function mkTextMesh(text,color,size){
   const cv=document.createElement('canvas'); cv.width=1024; cv.height=256;
   const ctx=cv.getContext('2d');
   ctx.clearRect(0,0,1024,256);
   ctx.fillStyle=color;
   ctx.font=`bold ${Math.floor(72*size)}px sans-serif`;
   ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText(text, 512, 128);
+  ctx.fillText(text,512,128);
   return new THREE.Mesh(
-    new THREE.PlaneGeometry(4*size, size),
-    new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv), transparent:true, side:THREE.DoubleSide})
+    new THREE.PlaneGeometry(4*size,size),
+    new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),transparent:true,side:THREE.DoubleSide})
   );
 }
 
 window.addUrl = function(){
-  const url  = document.getElementById('urlin').value.trim();
+  const url=document.getElementById('urlin').value.trim();
   if(!url){ notify('Enter a URL.','warn'); return; }
-  const name = document.getElementById('urlname').value.trim()||url;
+  const name=document.getElementById('urlname').value.trim()||url;
   const cv=document.createElement('canvas'); cv.width=800; cv.height=500;
   const ctx=cv.getContext('2d');
   ctx.fillStyle='#0a1020'; ctx.fillRect(0,0,800,500);
   ctx.fillStyle='#1a2a4a'; ctx.fillRect(0,0,800,40);
   ctx.fillStyle='#00d4ff'; ctx.font='bold 16px monospace';
-  ctx.fillText('🔗 '+url.slice(0,55), 10, 26);
+  ctx.fillText('🔗 '+url.slice(0,55),10,26);
   ctx.fillStyle='#5a7aaa'; ctx.font='13px monospace';
-  ctx.fillText('Click to open in exported world', 290, 265);
-  const m = new THREE.Mesh(
+  ctx.fillText('Click to open in exported world',260,260);
+  const m=new THREE.Mesh(
     new THREE.PlaneGeometry(4,3),
-    new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv), side:THREE.DoubleSide})
+    new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),side:THREE.DoubleSide})
   );
   m.userData.linkUrl=url;
   scatter(m); m.position.y=1.5;
   scene.add(m);
-  push({id:uid(), name, type:'link', mesh:m, url, data:{linkUrl:url}});
+  pushSnapshot();
+  push({id:uid(),name,type:'link',mesh:m,url,b64:'',data:{linkUrl:url}});
   closeM('urlModal');
+  document.getElementById('urlin').value=''; document.getElementById('urlname').value='';
   notify('URL panel added!','ok');
 };
 
@@ -585,29 +693,31 @@ window.addPrim = function(type){
   else if(type==='cylinder') geo=new THREE.CylinderGeometry(.5,.5,1.5,32);
   const colors=['#00d4ff','#7b2fff','#ff3b6b','#00ff88','#ffd700'];
   const color=colors[Math.floor(Math.random()*colors.length)];
-  const m = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color,roughness:.4,metalness:.3}));
+  const m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color,roughness:.4,metalness:.3}));
   m.castShadow=true; m.receiveShadow=true;
   scatter(m); m.position.y=.6;
   scene.add(m);
-  const name=type[0].toUpperCase()+type.slice(1);
-  push({id:uid(), name, type:'prim', mesh:m, url:'', data:{color,primType:type}});
-  notify(`${name} added!`,'ok');
+  pushSnapshot();
+  push({id:uid(),name:type[0].toUpperCase()+type.slice(1),type:'prim',mesh:m,url:'',b64:'',data:{color,primType:type}});
+  notify(type[0].toUpperCase()+type.slice(1)+' added!','ok');
 };
 
 function scatter(m){ m.position.set((Math.random()-.5)*7,.5,(Math.random()-.5)*7); }
-function push(obj){ objects.push(obj); refreshList(); select(obj.id); }
+function push(obj){ objects.push(obj); refreshList(); select(obj.id); bcBroadcast({type:'ADD',obj:serialiseObj(obj)}); }
 
-/* ──────────────────────────────────────────── SELECTION */
+/* ═══════════════════════════════════════════════════════════
+   SELECTION
+═══════════════════════════════════════════════════════════ */
 function onCanvasClick(e){
   if(mode!=='edit') return;
   const rect=canvas.getBoundingClientRect();
   mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
   mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
-  raycaster.setFromCamera(mouse, camera);
-  const hits=raycaster.intersectObjects(objects.map(o=>o.mesh), true);
+  raycaster.setFromCamera(mouse,camera);
+  const hits=raycaster.intersectObjects(objects.map(o=>o.mesh),true);
   if(hits.length){
     let node=hits[0].object, found=null;
-    while(node && !found){ found=objects.find(o=>isDesc(o.mesh,node)); node=node.parent; }
+    while(node&&!found){ found=objects.find(o=>isDesc(o.mesh,node)); node=node.parent; }
     if(found) select(found.id);
   } else { deselect(); }
 }
@@ -617,9 +727,11 @@ window.select = function(id){
   selObj=objects.find(o=>o.id===id)||null;
   document.querySelectorAll('.oitem').forEach(el=>el.classList.toggle('sel',el.dataset.id===id));
   if(selObj){
-    xform.attach(selObj.mesh); xform.setMode('translate');
+    if(!selObj.locked){ xform.attach(selObj.mesh); xform.setMode('translate'); }
+    else { xform.detach(); }
     document.getElementById('gizmohint').style.display='block';
     document.getElementById('goname').textContent=selObj.name;
+    document.getElementById('golock').style.display=selObj.locked?'inline':'none';
     refreshProps(selObj);
   } else { deselect(); }
 };
@@ -628,116 +740,167 @@ function deselect(){
   selObj=null; xform.detach();
   document.querySelectorAll('.oitem').forEach(el=>el.classList.remove('sel'));
   document.getElementById('gizmohint').style.display='none';
-  document.getElementById('propscont').innerHTML='<div style="text-align:center;color:var(--dim);font-size:11px;margin-top:30px">Select an object.</div>';
+  document.getElementById('propscont').innerHTML='<div style="text-align:center;color:var(--dim);font-size:11px;margin-top:28px">Select an object.</div>';
 }
 
-/* ──────────────────────────────────────────── PROPS */
+/* ═══════════════════════════════════════════════════════════
+   LOCK / UNLOCK
+═══════════════════════════════════════════════════════════ */
+window.toggleLock = function(id){
+  const obj=objects.find(o=>o.id===id); if(!obj) return;
+  pushSnapshot();
+  obj.locked=!obj.locked;
+  if(obj.locked){ xform.detach(); }
+  else if(selObj?.id===id){ xform.attach(obj.mesh); }
+  refreshList();
+  if(selObj?.id===id){
+    document.getElementById('golock').style.display=obj.locked?'inline':'none';
+    refreshProps(obj);
+  }
+  notify(obj.locked?`🔒 ${obj.name} locked`:`🔓 ${obj.name} unlocked`,'ok');
+  bcBroadcast({type:'LOCK',id,locked:obj.locked});
+};
+
+/* ═══════════════════════════════════════════════════════════
+   PROPERTIES PANEL
+═══════════════════════════════════════════════════════════ */
 function refreshProps(obj){
   const m=obj.mesh, p=m.position, r=m.rotation, s=m.scale, id=obj.id;
+  const dis=obj.locked?'disabled':'';
   let extra='';
   if(obj.type==='prim'){
-    const c=obj.data.color||'#00d4ff';
     extra=`
     <div class="pgrp"><div class="plbl">Color</div>
-      <input type="color" value="${c}" oninput="setPrimColor('${id}',this.value)"></div>
+      <input type="color" value="${obj.data.color||'#00d4ff'}" ${dis} oninput="setPrimColor('${id}',this.value)"></div>
     <div class="pgrp"><div class="plbl">Roughness</div>
-      <input type="range" min="0" max="1" step=".01" value="${obj.mesh.material?.roughness??0.4}" oninput="setPrimR('${id}',this.value)"></div>
+      <input type="range" min="0" max="1" step=".01" value="${obj.mesh.material?.roughness??0.4}" ${dis} oninput="setPrimR('${id}',this.value)"></div>
     <div class="pgrp"><div class="plbl">Metalness</div>
-      <input type="range" min="0" max="1" step=".01" value="${obj.mesh.material?.metalness??0.3}" oninput="setPrimM('${id}',this.value)"></div>`;
+      <input type="range" min="0" max="1" step=".01" value="${obj.mesh.material?.metalness??0.3}" ${dis} oninput="setPrimM('${id}',this.value)"></div>`;
   }
+  const lockLabel=obj.locked?'🔓 Unlock':'🔒 Lock';
+  const lockCls=obj.locked?'btn ok':'btn';
   document.getElementById('propscont').innerHTML=`
     <div class="pgrp"><div class="plbl">Name</div>
       <input type="text" value="${esc(obj.name)}" oninput="renameO('${id}',this.value)"></div>
     <div class="pgrp"><div class="plbl">Position (X Y Z)</div><div class="v3">
-      <div><label>X</label><input type="number" step=".1" value="${ff(p.x)}" oninput="sp('${id}','px',this.value)"></div>
-      <div><label>Y</label><input type="number" step=".1" value="${ff(p.y)}" oninput="sp('${id}','py',this.value)"></div>
-      <div><label>Z</label><input type="number" step=".1" value="${ff(p.z)}" oninput="sp('${id}','pz',this.value)"></div>
+      <div><label>X</label><input type="number" step=".1" value="${ff(p.x)}" ${dis} oninput="sp('${id}','px',this.value)"></div>
+      <div><label>Y</label><input type="number" step=".1" value="${ff(p.y)}" ${dis} oninput="sp('${id}','py',this.value)"></div>
+      <div><label>Z</label><input type="number" step=".1" value="${ff(p.z)}" ${dis} oninput="sp('${id}','pz',this.value)"></div>
     </div></div>
     <div class="pgrp"><div class="plbl">Rotation (°)</div><div class="v3">
-      <div><label>X</label><input type="number" step="1" value="${ff(THREE.MathUtils.radToDeg(r.x))}" oninput="sp('${id}','rx',this.value)"></div>
-      <div><label>Y</label><input type="number" step="1" value="${ff(THREE.MathUtils.radToDeg(r.y))}" oninput="sp('${id}','ry',this.value)"></div>
-      <div><label>Z</label><input type="number" step="1" value="${ff(THREE.MathUtils.radToDeg(r.z))}" oninput="sp('${id}','rz',this.value)"></div>
+      <div><label>X</label><input type="number" step="1" value="${ff(THREE.MathUtils.radToDeg(r.x))}" ${dis} oninput="sp('${id}','rx',this.value)"></div>
+      <div><label>Y</label><input type="number" step="1" value="${ff(THREE.MathUtils.radToDeg(r.y))}" ${dis} oninput="sp('${id}','ry',this.value)"></div>
+      <div><label>Z</label><input type="number" step="1" value="${ff(THREE.MathUtils.radToDeg(r.z))}" ${dis} oninput="sp('${id}','rz',this.value)"></div>
     </div></div>
     <div class="pgrp"><div class="plbl">Scale</div><div class="v3">
-      <div><label>X</label><input type="number" step=".05" value="${ff(s.x)}" oninput="sp('${id}','sx',this.value)"></div>
-      <div><label>Y</label><input type="number" step=".05" value="${ff(s.y)}" oninput="sp('${id}','sy',this.value)"></div>
-      <div><label>Z</label><input type="number" step=".05" value="${ff(s.z)}" oninput="sp('${id}','sz',this.value)"></div>
+      <div><label>X</label><input type="number" step=".05" value="${ff(s.x)}" ${dis} oninput="sp('${id}','sx',this.value)"></div>
+      <div><label>Y</label><input type="number" step=".05" value="${ff(s.y)}" ${dis} oninput="sp('${id}','sy',this.value)"></div>
+      <div><label>Z</label><input type="number" step=".05" value="${ff(s.z)}" ${dis} oninput="sp('${id}','sz',this.value)"></div>
     </div></div>
     <div class="pgrp"><div class="plbl">Uniform Scale</div>
-      <input type="range" min=".01" max="10" step=".01" value="${ff(s.x)}" oninput="sUniform('${id}',this.value)"></div>
+      <input type="range" min=".01" max="10" step=".01" value="${ff(s.x)}" ${dis} oninput="sUniform('${id}',this.value)"></div>
     <div class="pgrp"><div class="plbl">Transform Mode</div>
       <div style="display:flex;gap:4px">
-        <button class="btn" onclick="xform.setMode('translate')">↔ Move</button>
-        <button class="btn" onclick="xform.setMode('rotate')">↻ Rotate</button>
-        <button class="btn" onclick="xform.setMode('scale')">⤡ Scale</button>
+        <button class="btn" ${dis} onclick="if(!selObj?.locked)xform.setMode('translate')">↔ Move</button>
+        <button class="btn" ${dis} onclick="if(!selObj?.locked)xform.setMode('rotate')">↻ Rotate</button>
+        <button class="btn" ${dis} onclick="if(!selObj?.locked)xform.setMode('scale')">⤡ Scale</button>
       </div></div>
     ${extra}
-    <div class="pgrp" style="margin-top:8px">
-      <button class="btn danger" style="width:100%" onclick="removeObj('${id}')">🗑 Delete Object</button>
+    <div class="pgrp" style="display:flex;gap:4px;margin-top:6px">
+      <button class="${lockCls}" style="flex:1" onclick="toggleLock('${id}')">${lockLabel}</button>
+      <button class="btn danger" style="flex:1" ${obj.locked?'disabled':''} onclick="removeObj('${id}')">🗑 Delete</button>
     </div>`;
 }
 
-window.sp = (id,prop,val)=>{
-  const o=objects.find(x=>x.id===id); if(!o) return;
+window.sp=(id,prop,val)=>{
+  const o=objects.find(x=>x.id===id); if(!o||o.locked) return;
   const v=parseFloat(val); if(isNaN(v)) return;
   const m=o.mesh;
-  if     (prop==='px') m.position.x=v;
-  else if(prop==='py') m.position.y=v;
-  else if(prop==='pz') m.position.z=v;
-  else if(prop==='rx') m.rotation.x=THREE.MathUtils.degToRad(v);
-  else if(prop==='ry') m.rotation.y=THREE.MathUtils.degToRad(v);
-  else if(prop==='rz') m.rotation.z=THREE.MathUtils.degToRad(v);
-  else if(prop==='sx') m.scale.x=v;
-  else if(prop==='sy') m.scale.y=v;
-  else if(prop==='sz') m.scale.z=v;
+  if(prop==='px')m.position.x=v; else if(prop==='py')m.position.y=v; else if(prop==='pz')m.position.z=v;
+  else if(prop==='rx')m.rotation.x=THREE.MathUtils.degToRad(v);
+  else if(prop==='ry')m.rotation.y=THREE.MathUtils.degToRad(v);
+  else if(prop==='rz')m.rotation.z=THREE.MathUtils.degToRad(v);
+  else if(prop==='sx')m.scale.x=v; else if(prop==='sy')m.scale.y=v; else if(prop==='sz')m.scale.z=v;
+  bcBroadcast({type:'TRANSFORM',id,p:m.position.toArray(),r:[m.rotation.x,m.rotation.y,m.rotation.z],s:m.scale.toArray()});
 };
-window.sUniform     = (id,v)=>{ const o=objects.find(x=>x.id===id); if(o) o.mesh.scale.setScalar(parseFloat(v)); };
-window.renameO      = (id,n)=>{ const o=objects.find(x=>x.id===id); if(o){ o.name=n; refreshList(); } };
-window.setPrimColor = (id,c)=>{ const o=objects.find(x=>x.id===id); if(o&&o.mesh.material){ o.mesh.material.color.set(c); o.data.color=c; } };
-window.setPrimR     = (id,v)=>{ const o=objects.find(x=>x.id===id); if(o&&o.mesh.material) o.mesh.material.roughness=parseFloat(v); };
-window.setPrimM     = (id,v)=>{ const o=objects.find(x=>x.id===id); if(o&&o.mesh.material) o.mesh.material.metalness=parseFloat(v); };
+window.sUniform=(id,v)=>{ const o=objects.find(x=>x.id===id); if(o&&!o.locked) o.mesh.scale.setScalar(parseFloat(v)); };
+window.renameO=(id,n)=>{ const o=objects.find(x=>x.id===id); if(o){ o.name=n; refreshList(); } };
+window.setPrimColor=(id,c)=>{ const o=objects.find(x=>x.id===id); if(o&&o.mesh.material&&!o.locked){ o.mesh.material.color.set(c); o.data.color=c; } };
+window.setPrimR=(id,v)=>{ const o=objects.find(x=>x.id===id); if(o&&o.mesh.material) o.mesh.material.roughness=parseFloat(v); };
+window.setPrimM=(id,v)=>{ const o=objects.find(x=>x.id===id); if(o&&o.mesh.material) o.mesh.material.metalness=parseFloat(v); };
 
-window.removeObj = function(id){
-  const o=objects.find(x=>x.id===id); if(!o) return;
+window.removeObj=function(id){
+  const o=objects.find(x=>x.id===id); if(!o||o.locked) return;
+  pushSnapshot();
   scene.remove(o.mesh);
-  o.mesh.traverse(c=>{ if(c.geometry) c.geometry.dispose(); if(c.material) [c.material].flat().forEach(m=>m.dispose()); });
+  o.mesh.traverse(c=>{ if(c.geometry)c.geometry.dispose(); if(c.material)[c.material].flat().forEach(m=>m.dispose()); });
   objects=objects.filter(x=>x.id!==id);
   if(selObj?.id===id) deselect();
   refreshList();
+  bcBroadcast({type:'REMOVE',id});
   notify('Object removed.');
 };
 
-/* ──────────────────────────────────────────── OBJECT LIST */
+/* ═══════════════════════════════════════════════════════════
+   OBJECT LIST
+═══════════════════════════════════════════════════════════ */
 function refreshList(){
   const el=document.getElementById('objlist');
-  if(!objects.length){ el.innerHTML='<div style="text-align:center;color:var(--dim);font-size:11px;margin-top:20px">No objects yet.</div>'; return; }
+  if(!objects.length){ el.innerHTML='<div style="text-align:center;color:var(--dim);font-size:11px;margin-top:18px">No objects yet.</div>'; return; }
   el.innerHTML=objects.map(o=>`
-    <div class="oitem${selObj?.id===o.id?' sel':''}" data-id="${o.id}" onclick="select('${o.id}')">
+    <div class="oitem${selObj?.id===o.id?' sel':''}${o.locked?' locked':''}" data-id="${o.id}" onclick="select('${o.id}')">
       <span>${typeIco(o.type)}</span>
       <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(o.name)}</span>
-      <button class="odel" onclick="event.stopPropagation();removeObj('${o.id}')" title="Delete">✕</button>
+      <button class="oibtn${o.locked?' lock-on':''}" onclick="event.stopPropagation();toggleLock('${o.id}')" title="${o.locked?'Unlock':'Lock'}">${o.locked?'🔒':'🔓'}</button>
+      <button class="oibtn" onclick="event.stopPropagation();removeObj('${o.id}')" title="Delete">✕</button>
     </div>`).join('');
 }
 function typeIco(t){ return {glb:'🧊',image:'🖼',text:'📝',link:'🔗',prim:'⬜'}[t]||'●'; }
 
-/* ──────────────────────────────────────────── ENVIRONMENT */
-window.setEnv = function(e,btn){
+/* ═══════════════════════════════════════════════════════════
+   UNDO
+═══════════════════════════════════════════════════════════ */
+function pushSnapshot(){
+  const snap = objects.map(o=>({
+    id:o.id, name:o.name, type:o.type, url:o.url, b64:o.b64, data:{...o.data},
+    locked:!!o.locked,
+    p:[o.mesh.position.x,o.mesh.position.y,o.mesh.position.z],
+    r:[o.mesh.rotation.x,o.mesh.rotation.y,o.mesh.rotation.z],
+    s:[o.mesh.scale.x,   o.mesh.scale.y,   o.mesh.scale.z]
+  }));
+  undoStack.push(snap);
+  if(undoStack.length>MAX_UNDO) undoStack.shift();
+  document.getElementById('btn-undo').disabled=false;
+}
+
+window.undoAction = async function(){
+  if(!undoStack.length){ notify('Nothing to undo','warn'); return; }
+  const snap=undoStack.pop();
+  if(!undoStack.length) document.getElementById('btn-undo').disabled=true;
+  await restoreObjects(snap);
+  notify('Undo ✓','ok');
+};
+
+/* ═══════════════════════════════════════════════════════════
+   ENVIRONMENT
+═══════════════════════════════════════════════════════════ */
+window.setEnv=function(e,btn){
   document.querySelectorAll('.ebtn').forEach(b=>b.classList.remove('on'));
   btn?.classList.add('on'); WD.env=e;
   const stars=scene.getObjectByName('__stars__');
   if(stars) stars.visible=(e==='night'||e==='space');
   if(e==='night'){
     scene.background=new THREE.Color('#0a0e1a');
-    if(scene.fog) scene.fog.color.set('#050810');
+    if(scene.fog)scene.fog.color.set('#050810');
     ambLight.intensity=0.3; dirLight.intensity=0.6; dirLight.color.set('#6080ff');
   } else if(e==='sunset'){
     scene.background=new THREE.Color('#1a0808');
-    if(scene.fog) scene.fog.color.set('#2a0808');
+    if(scene.fog)scene.fog.color.set('#2a0808');
     ambLight.intensity=0.8; dirLight.intensity=1.8; dirLight.color.set('#ff6030');
     dirLight.position.set(-15,5,10);
   } else if(e==='day'){
     scene.background=new THREE.Color('#87ceeb');
-    if(scene.fog) scene.fog.color.set('#87ceeb');
+    if(scene.fog)scene.fog.color.set('#87ceeb');
     ambLight.intensity=1.2; dirLight.intensity=2.0; dirLight.color.set('#fff8e0');
     dirLight.position.set(10,30,10);
   } else if(e==='space'){
@@ -746,114 +909,180 @@ window.setEnv = function(e,btn){
     ambLight.intensity=0.1; dirLight.intensity=3.0; dirLight.color.set('#ffffff');
   }
 };
-window.setGround = c=>{ groundMesh.material.color.set(c); WD.groundColor=c; };
-window.setSky    = c=>{ scene.background=new THREE.Color(c); WD.skyColor=c; };
-window.setAmb    = v=>{ ambLight.intensity=parseFloat(v); WD.ambInt=parseFloat(v); };
-window.setFog    = v=>{ if(scene.fog){ scene.fog.far=parseFloat(v); } WD.fogFar=parseFloat(v); };
+window.setGround=c=>{ groundMesh.material.color.set(c); WD.groundColor=c; };
+window.setSky=c=>{ scene.background=new THREE.Color(c); WD.skyColor=c; };
+window.setAmb=v=>{ ambLight.intensity=parseFloat(v); WD.ambInt=parseFloat(v); };
+window.setFog=v=>{ if(scene.fog)scene.fog.far=parseFloat(v); WD.fogFar=parseFloat(v); };
 
-/* ──────────────────────────────────────────── SAVE / LOAD */
-window.saveProj = function(){
-  const proj={
-    v:1,
-    name: document.getElementById('projname').textContent,
-    wd: {...WD},
-    objects: objects.map(o=>({
-      id:o.id, name:o.name, type:o.type, url:o.url, data:o.data,
-      p:[o.mesh.position.x, o.mesh.position.y, o.mesh.position.z],
-      r:[o.mesh.rotation.x, o.mesh.rotation.y, o.mesh.rotation.z],
-      s:[o.mesh.scale.x,    o.mesh.scale.y,    o.mesh.scale.z]
-    }))
+/* ═══════════════════════════════════════════════════════════
+   SERIALISE / RESTORE
+═══════════════════════════════════════════════════════════ */
+function serialiseObj(o){
+  return {
+    id:o.id, name:o.name, type:o.type, url:o.url, b64:o.b64,
+    data:{...o.data}, locked:!!o.locked,
+    p:[o.mesh.position.x,o.mesh.position.y,o.mesh.position.z],
+    r:[o.mesh.rotation.x,o.mesh.rotation.y,o.mesh.rotation.z],
+    s:[o.mesh.scale.x,   o.mesh.scale.y,   o.mesh.scale.z]
   };
+}
+
+function clearScene(){
+  objects.forEach(o=>{
+    scene.remove(o.mesh);
+    o.mesh.traverse(c=>{
+      if(c.geometry)c.geometry.dispose();
+      if(c.material)[c.material].flat().forEach(m=>m.dispose());
+    });
+  });
+  objects=[]; deselect(); undoStack=[]; document.getElementById('btn-undo').disabled=true;
+}
+
+async function restoreObjects(list){
+  clearScene();
+  for(const s of list){
+    await rehydrateObj(s);
+    const o=objects[objects.length-1];
+    if(o){ o.id=s.id; o.locked=!!s.locked; o.mesh.position.set(...s.p); o.mesh.rotation.set(...s.r); o.mesh.scale.set(...s.s); }
+  }
+  refreshList();
+}
+
+async function rehydrateObj(s){
+  if(s.type==='prim'){
+    await window.addPrim_internal(s.data?.primType||'box', s.data?.color);
+  } else if(s.type==='text'){
+    const m=mkTextMesh(s.data?.text||s.name, s.data?.color||'#00d4ff', s.data?.size||1);
+    scene.add(m);
+    objects.push({id:s.id,name:s.name,type:'text',mesh:m,url:'',b64:'',data:s.data||{},locked:!!s.locked});
+  } else if(s.type==='image'&&s.b64){
+    await new Promise(res=>{
+      new THREE.TextureLoader().load(s.b64, tex=>{
+        const m=new THREE.Mesh(new THREE.PlaneGeometry(3,2),new THREE.MeshStandardMaterial({map:tex,transparent:true,side:THREE.DoubleSide}));
+        scene.add(m);
+        objects.push({id:s.id,name:s.name,type:'image',mesh:m,url:'',b64:s.b64,data:{},locked:!!s.locked});
+        res();
+      },undefined,res);
+    });
+  } else if(s.type==='glb'&&s.b64){
+    await new Promise(res=>{
+      const base64=s.b64.split(',')[1];
+      const bin=atob(base64);
+      const buf=new Uint8Array(bin.length);
+      for(let i=0;i<bin.length;i++) buf[i]=bin.charCodeAt(i);
+      gltfLoader.parse(buf.buffer,'',gltf=>{
+        const root=gltf.scene;
+        root.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
+        const b3=new THREE.Box3().setFromObject(root);
+        root.position.sub(b3.getCenter(new THREE.Vector3()));
+        const sv=b3.getSize(new THREE.Vector3()),md=Math.max(sv.x,sv.y,sv.z);
+        if(md>4)root.scale.setScalar(4/md);
+        const grp=new THREE.Group(); grp.add(root); scene.add(grp);
+        objects.push({id:s.id,name:s.name,type:'glb',mesh:grp,url:'',b64:s.b64,data:{},locked:!!s.locked});
+        res();
+      },undefined,res);
+    });
+  } else if(s.type==='link'){
+    window.addUrl_internal(s.url||s.data?.linkUrl||'', s.name, s.id);
+  }
+}
+
+// internal add helpers (no snapshot, no broadcast)
+window.addPrim_internal = function(type, color){
+  let geo;
+  if(type==='box') geo=new THREE.BoxGeometry(1,1,1);
+  else if(type==='sphere') geo=new THREE.SphereGeometry(.6,32,32);
+  else geo=new THREE.CylinderGeometry(.5,.5,1.5,32);
+  color=color||'#00d4ff';
+  const m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color,roughness:.4,metalness:.3}));
+  m.castShadow=true; m.receiveShadow=true;
+  scene.add(m);
+  objects.push({id:uid(),name:type[0].toUpperCase()+type.slice(1),type:'prim',mesh:m,url:'',b64:'',data:{color,primType:type},locked:false});
+};
+window.addUrl_internal = function(url, name, id){
+  const cv=document.createElement('canvas'); cv.width=800; cv.height=500;
+  const ctx=cv.getContext('2d');
+  ctx.fillStyle='#0a1020'; ctx.fillRect(0,0,800,500);
+  ctx.fillStyle='#1a2a4a'; ctx.fillRect(0,0,800,40);
+  ctx.fillStyle='#00d4ff'; ctx.font='bold 16px monospace';
+  ctx.fillText('🔗 '+(url||'').slice(0,55),10,26);
+  ctx.fillStyle='#5a7aaa'; ctx.font='13px monospace';
+  ctx.fillText('Click to open',340,260);
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(4,3),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),side:THREE.DoubleSide}));
+  m.userData.linkUrl=url; scene.add(m);
+  objects.push({id:id||uid(),name:name||url,type:'link',mesh:m,url,b64:'',data:{linkUrl:url},locked:false});
+};
+
+/* ═══════════════════════════════════════════════════════════
+   SAVE / LOAD PROJECT
+═══════════════════════════════════════════════════════════ */
+window.saveProj=function(){
+  const proj={
+    v:2,
+    name:document.getElementById('projname').textContent,
+    wd:{...WD},
+    objects:objects.map(serialiseObj)
+  };
+  // b64 is already embedded — images & GLBs survive save!
   const a=Object.assign(document.createElement('a'),{
-    href: URL.createObjectURL(new Blob([JSON.stringify(proj,null,2)],{type:'application/json'})),
-    download: (proj.name||'omniverse')+'.omni.json'
+    href:URL.createObjectURL(new Blob([JSON.stringify(proj)],{type:'application/json'})),
+    download:(proj.name||'omniverse')+'.omni.json'
   });
   a.click(); URL.revokeObjectURL(a.href);
   notify('Project saved!','ok');
 };
 
-window.loadProj = function(){
+window.loadProj=function(){
   const inp=document.createElement('input');
   inp.type='file'; inp.accept='.json';
   inp.onchange=async e=>{
     const f=e.target.files[0]; if(!f) return;
-    try{ await restoreProj(JSON.parse(await f.text())); notify('Project loaded!','ok'); }
-    catch(err){ notify('Load error: '+err.message,'err'); }
+    try{
+      const proj=JSON.parse(await f.text());
+      if(proj.name) document.getElementById('projname').textContent=proj.name;
+      if(proj.wd) Object.assign(WD,proj.wd);
+      await restoreObjects(proj.objects||[]);
+      notify('Project loaded!','ok');
+    }catch(err){ notify('Load error: '+err.message,'err'); }
   };
   inp.click();
 };
 
-async function restoreProj(proj){
-  objects.forEach(o=>{
-    scene.remove(o.mesh);
-    o.mesh.traverse(c=>{ if(c.geometry) c.geometry.dispose(); if(c.material) [c.material].flat().forEach(m=>m.dispose()); });
-  });
-  objects=[]; deselect();
-  if(proj.name) document.getElementById('projname').textContent=proj.name;
-  if(proj.wd) Object.assign(WD, proj.wd);
+window.renameProj=()=>{ const n=prompt('Project name:',document.getElementById('projname').textContent); if(n) document.getElementById('projname').textContent=n; };
 
-  for(const s of (proj.objects||[])){
-    if(s.type==='prim'){
-      addPrim(s.data?.primType||'box');
-      const o=objects[objects.length-1];
-      o.id=s.id; o.name=s.name;
-      if(s.data?.color) setPrimColor(s.id,s.data.color);
-    } else if(s.type==='text'){
-      const m=mkTextMesh(s.data?.text||s.name, s.data?.color||'#00d4ff', s.data?.size||1);
-      scene.add(m);
-      objects.push({id:s.id, name:s.name, type:'text', mesh:m, url:'', data:s.data||{}});
-    } else if(s.type==='image'&&s.url){
-      await new Promise(res=>{
-        new THREE.TextureLoader().load(s.url, tex=>{
-          const m=new THREE.Mesh(new THREE.PlaneGeometry(3,2), new THREE.MeshStandardMaterial({map:tex,transparent:true,side:THREE.DoubleSide}));
-          scene.add(m); objects.push({id:s.id,name:s.name,type:'image',mesh:m,url:s.url,data:{}}); res();
-        },undefined,res);
-      });
-    } else if(s.type==='glb'&&s.url){
-      await new Promise(res=>{
-        gltfLoader.load(s.url, gltf=>{
-          const root=gltf.scene; root.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
-          const grp=new THREE.Group(); grp.add(root); scene.add(grp);
-          objects.push({id:s.id,name:s.name,type:'glb',mesh:grp,url:s.url,data:{}}); res();
-        },undefined,res);
-      });
-    }
-    const o=objects.find(x=>x.id===s.id);
-    if(o&&s.p){ o.mesh.position.set(...s.p); o.mesh.rotation.set(...s.r); o.mesh.scale.set(...s.s); }
-  }
-  refreshList();
-}
-window.renameProj = ()=>{ const n=prompt('Project name:',document.getElementById('projname').textContent); if(n) document.getElementById('projname').textContent=n; };
+/* ═══════════════════════════════════════════════════════════
+   EXPORT
+═══════════════════════════════════════════════════════════ */
+window.openExport=()=>{ document.getElementById('extitle').value=document.getElementById('projname').textContent; openM('exportModal'); };
 
-/* ──────────────────────────────────────────── EXPORT */
-window.openExport = ()=>{ document.getElementById('extitle').value=document.getElementById('projname').textContent; openM('exportModal'); };
-
-window.doExport = function(){
+window.doExport=function(){
   const title=document.getElementById('extitle').value||'Omniverse World';
-  const expObjs=objects.map(o=>({
-    id:o.id, name:o.name, type:o.type, url:o.url, data:o.data,
-    p:[o.mesh.position.x, o.mesh.position.y, o.mesh.position.z],
-    r:[o.mesh.rotation.x, o.mesh.rotation.y, o.mesh.rotation.z],
-    s:[o.mesh.scale.x,    o.mesh.scale.y,    o.mesh.scale.z]
-  }));
-  const html=buildExport(title, expObjs, {...WD});
+  const expObjs=objects.map(serialiseObj);
+  const html=buildExport(title,expObjs,{...WD});
   const a=Object.assign(document.createElement('a'),{
-    href: URL.createObjectURL(new Blob([html],{type:'text/html'})),
-    download: title.replace(/[^a-z0-9]/gi,'_')+'.html'
+    href:URL.createObjectURL(new Blob([html],{type:'text/html'})),
+    download:title.replace(/[^a-z0-9]/gi,'_')+'.html'
   });
   a.click(); URL.revokeObjectURL(a.href);
   closeM('exportModal');
   notify('World exported!','ok');
 };
 
-function buildExport(title, objs, wd){
-  const oJ=JSON.stringify(objs);
-  const wJ=JSON.stringify(wd);
+function buildExport(title,objs,wd){
+  const oJ=JSON.stringify(objs), wJ=JSON.stringify(wd);
   return `<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${title} — GmedranoTIC Omniverse</title>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#050810;overflow:hidden;font-family:monospace;color:#c8deff}canvas{display:block}#badge{position:fixed;top:10px;left:10px;background:rgba(0,0,0,.78);border:1px solid rgba(0,212,255,.35);border-radius:7px;padding:5px 13px;font-size:12px;color:#00d4ff;backdrop-filter:blur(10px)}#hud{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.78);border:1px solid rgba(0,212,255,.25);border-radius:18px;padding:6px 18px;font-size:11px;color:#5a7aaa;display:none;gap:14px;backdrop-filter:blur(10px)}.hk{color:#00d4ff}#enter{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(5,8,20,.97);border:1px solid #00d4ff;border-radius:12px;padding:28px 38px;text-align:center;backdrop-filter:blur(18px)}#enter h2{color:#00d4ff;margin-bottom:9px;font-size:21px;font-family:sans-serif}#enter p{font-size:12px;color:#5a7aaa;margin-bottom:16px}.ebtn{background:linear-gradient(135deg,#7b2fff,#00d4ff);border:none;color:#fff;padding:10px 26px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700}#ch{position:fixed;top:50%;left:50%;display:none}#ch div{position:absolute;background:rgba(255,255,255,.8)}#chh{width:12px;height:1px;top:0;left:-6px}#chv{width:1px;height:12px;top:-6px;left:0}</style>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#050810;overflow:hidden;font-family:monospace}canvas{display:block}
+#badge{position:fixed;top:10px;left:10px;background:rgba(0,0,0,.8);border:1px solid rgba(0,212,255,.4);border-radius:7px;padding:5px 13px;font-size:12px;color:#00d4ff;backdrop-filter:blur(10px)}
+#hud{position:fixed;bottom:13px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);border:1px solid rgba(0,212,255,.25);border-radius:16px;padding:5px 16px;font-size:10px;color:#5a7aaa;display:none;gap:12px;backdrop-filter:blur(10px)}.hk{color:#00d4ff}
+#enter{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(5,8,20,.97);border:1px solid #00d4ff;border-radius:12px;padding:26px 36px;text-align:center;backdrop-filter:blur(18px)}
+#enter h2{color:#00d4ff;margin-bottom:8px;font-size:20px;font-family:sans-serif}#enter p{font-size:11px;color:#5a7aaa;margin-bottom:14px}
+.ebtn{background:linear-gradient(135deg,#7b2fff,#00d4ff);border:none;color:#fff;padding:9px 24px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700}
+#ch{position:fixed;top:50%;left:50%;display:none}#ch div{position:absolute;background:rgba(255,255,255,.8)}
+#chh{width:12px;height:1px;top:0;left:-6px}#chv{width:1px;height:12px;top:-6px;left:0}
+</style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/"}}<\/script>
 </head><body>
 <canvas id="c"></canvas>
@@ -864,31 +1093,27 @@ function buildExport(title, objs, wd){
 <script type="module">
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-const OBJS=${oJ}, WD=${wJ};
+const OBJS=${oJ},WD=${wJ};
 const canvas=document.getElementById('c');
-let renderer,scene,camera;
+let renderer,scene,camera,ambL,ldr=new GLTFLoader();
 let pPos=new THREE.Vector3(0,1.7,5),pYaw=0,pPitch=0,pYvel=0,grounded=true;
 let keys={},locked=false;
-const ldr=new GLTFLoader();
+const _pb=new THREE.Box3(),_ob=new THREE.Box3(),_ps=new THREE.Vector3(.4,1.7,.4);
+const physObjs=[];
 function init(){
   renderer=new THREE.WebGLRenderer({canvas,antialias:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  renderer.setSize(innerWidth,innerHeight);
-  renderer.shadowMap.enabled=true;
-  renderer.toneMapping=THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure=0.85;
-  scene=new THREE.Scene();
-  scene.background=new THREE.Color(WD.skyColor||'#0a0e1a');
-  if(WD.fogFar) scene.fog=new THREE.Fog(WD.skyColor||'#050810',10,WD.fogFar);
-  camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,.05,1000);
-  camera.position.copy(pPos);
-  scene.add(new THREE.AmbientLight(0xffffff,WD.ambInt||0.6));
-  const dl=new THREE.DirectionalLight(0xffffff,1.2); dl.position.set(10,20,10); dl.castShadow=true; scene.add(dl);
-  const gm=new THREE.Mesh(new THREE.PlaneGeometry(300,300),new THREE.MeshStandardMaterial({color:WD.groundColor||'#1a1a2e'})); gm.rotation.x=-Math.PI/2; gm.receiveShadow=true; scene.add(gm);
-  const sv=[]; for(let i=0;i<3000;i++) sv.push((Math.random()-.5)*800,Math.random()*300+30,(Math.random()-.5)*800);
-  const sg=new THREE.BufferGeometry(); sg.setAttribute('position',new THREE.Float32BufferAttribute(sv,3));
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
+  renderer.shadowMap.enabled=true;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=0.85;
+  scene=new THREE.Scene();scene.background=new THREE.Color(WD.skyColor||'#0a0e1a');
+  if(WD.fogFar)scene.fog=new THREE.Fog(WD.skyColor||'#050810',10,WD.fogFar);
+  camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,.05,1000);camera.position.copy(pPos);
+  ambL=new THREE.AmbientLight(0xffffff,WD.ambInt||0.6);scene.add(ambL);
+  const dl=new THREE.DirectionalLight(0xffffff,1.2);dl.position.set(10,20,10);dl.castShadow=true;scene.add(dl);
+  const gm=new THREE.Mesh(new THREE.PlaneGeometry(300,300),new THREE.MeshStandardMaterial({color:WD.groundColor||'#1a1a2e'}));gm.rotation.x=-Math.PI/2;gm.receiveShadow=true;scene.add(gm);
+  const sv=[];for(let i=0;i<3000;i++)sv.push((Math.random()-.5)*800,Math.random()*300+30,(Math.random()-.5)*800);
+  const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.Float32BufferAttribute(sv,3));
   scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0xffffff,size:.35,transparent:true,opacity:.8})));
-  for(const o of OBJS) loadO(o);
+  for(const o of OBJS)loadO(o);
   window.addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();});
   window.addEventListener('keydown',e=>{keys[e.code]=true;if(e.code==='Space'&&grounded){pYvel=5.5;grounded=false;}});
   window.addEventListener('keyup',e=>keys[e.code]=false);
@@ -897,56 +1122,192 @@ function init(){
   loop();
 }
 function loadO(o){
-  if(o.type==='glb'&&o.url){ldr.load(o.url,g=>{const r=g.scene;r.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});const w=new THREE.Group();w.add(r);applyT(w,o);scene.add(w);});}
-  else if(o.type==='image'&&o.url){new THREE.TextureLoader().load(o.url,tex=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(3,2),new THREE.MeshStandardMaterial({map:tex,transparent:true,side:THREE.DoubleSide}));applyT(m,o);scene.add(m);});}
-  else if(o.type==='text'){const cv=document.createElement('canvas');cv.width=1024;cv.height=256;const ctx=cv.getContext('2d');ctx.fillStyle=o.data?.color||'#00d4ff';ctx.font=\`bold \${Math.floor(72*(o.data?.size||1))}px sans-serif\`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(o.data?.text||o.name,512,128);const m=new THREE.Mesh(new THREE.PlaneGeometry(4*(o.data?.size||1),(o.data?.size||1)),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),transparent:true,side:THREE.DoubleSide}));applyT(m,o);scene.add(m);}
-  else if(o.type==='prim'){let g;const t=o.data?.primType||'box';if(t==='box')g=new THREE.BoxGeometry(1,1,1);else if(t==='sphere')g=new THREE.SphereGeometry(.6,32,32);else g=new THREE.CylinderGeometry(.5,.5,1.5,32);const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:o.data?.color||'#00d4ff'}));applyT(m,o);scene.add(m);}
-  else if(o.type==='link'){const cv=document.createElement('canvas');cv.width=800;cv.height=500;const ctx=cv.getContext('2d');ctx.fillStyle='#0a1020';ctx.fillRect(0,0,800,500);ctx.fillStyle='#1a2a4a';ctx.fillRect(0,0,800,40);ctx.fillStyle='#00d4ff';ctx.font='bold 16px monospace';ctx.fillText('🔗 '+(o.url||'').slice(0,55),10,26);ctx.fillStyle='#5a7aaa';ctx.font='13px monospace';ctx.fillText('Click to open',350,260);const m=new THREE.Mesh(new THREE.PlaneGeometry(4,3),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),side:THREE.DoubleSide}));m.userData.url=o.url;applyT(m,o);scene.add(m);}
+  const at=(m,o)=>{if(o.p)m.position.set(...o.p);if(o.r)m.rotation.set(...o.r);if(o.s)m.scale.set(...o.s);};
+  if(o.type==='glb'&&o.b64){const b=atob(o.b64.split(',')[1]),buf=new Uint8Array(b.length);for(let i=0;i<b.length;i++)buf[i]=b.charCodeAt(i);ldr.parse(buf.buffer,'',g=>{const r=g.scene;r.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});const w=new THREE.Group();w.add(r);at(w,o);scene.add(w);physObjs.push(w);});}
+  else if(o.type==='image'&&o.b64){new THREE.TextureLoader().load(o.b64,tex=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(3,2),new THREE.MeshStandardMaterial({map:tex,transparent:true,side:THREE.DoubleSide}));at(m,o);scene.add(m);physObjs.push(m);});}
+  else if(o.type==='text'){const cv=document.createElement('canvas');cv.width=1024;cv.height=256;const ctx=cv.getContext('2d');ctx.fillStyle=o.data?.color||'#00d4ff';ctx.font=\`bold \${Math.floor(72*(o.data?.size||1))}px sans-serif\`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(o.data?.text||o.name,512,128);const m=new THREE.Mesh(new THREE.PlaneGeometry(4*(o.data?.size||1),(o.data?.size||1)),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),transparent:true,side:THREE.DoubleSide}));at(m,o);scene.add(m);}
+  else if(o.type==='prim'){let g;const t=o.data?.primType||'box';if(t==='box')g=new THREE.BoxGeometry(1,1,1);else if(t==='sphere')g=new THREE.SphereGeometry(.6,32,32);else g=new THREE.CylinderGeometry(.5,.5,1.5,32);const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:o.data?.color||'#00d4ff'}));at(m,o);scene.add(m);physObjs.push(m);}
+  else if(o.type==='link'){const cv=document.createElement('canvas');cv.width=800;cv.height=500;const ctx=cv.getContext('2d');ctx.fillStyle='#0a1020';ctx.fillRect(0,0,800,500);ctx.fillStyle='#1a2a4a';ctx.fillRect(0,0,800,40);ctx.fillStyle='#00d4ff';ctx.font='bold 16px monospace';ctx.fillText('🔗 '+(o.url||'').slice(0,55),10,26);ctx.fillStyle='#5a7aaa';ctx.font='13px monospace';ctx.fillText('Click to open',340,260);const m=new THREE.Mesh(new THREE.PlaneGeometry(4,3),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),side:THREE.DoubleSide}));at(m,o);scene.add(m);}
 }
-function applyT(m,o){if(o.p)m.position.set(...o.p);if(o.r)m.rotation.set(...o.r);if(o.s)m.scale.set(...o.s);}
-function loop(){requestAnimationFrame(loop);if(locked){const spd=(keys.ShiftLeft||keys.ShiftRight)?WD.walkSpeed*2.2:WD.walkSpeed;const d=new THREE.Vector3();const f=new THREE.Vector3(-Math.sin(pYaw),0,-Math.cos(pYaw));const ri=new THREE.Vector3(Math.cos(pYaw),0,-Math.sin(pYaw));if(keys.KeyW)d.addScaledVector(f,1);if(keys.KeyS)d.addScaledVector(f,-1);if(keys.KeyA)d.addScaledVector(ri,-1);if(keys.KeyD)d.addScaledVector(ri,1);if(d.lengthSq()>0)d.normalize();pPos.addScaledVector(d,spd*.016);pYvel-=WD.gravity*.016;pPos.y+=pYvel*.016;if(pPos.y<1.7){pPos.y=1.7;pYvel=0;grounded=true;}camera.position.copy(pPos);camera.quaternion.setFromEuler(new THREE.Euler(pPitch,pYaw,0,'YXZ'));}renderer.render(scene,camera);}
+function collides(tp){_pb.setFromCenterAndSize(new THREE.Vector3(tp.x,tp.y-_ps.y/2+.1,tp.z),_ps);for(const ob of physObjs){_ob.setFromObject(ob);if(_pb.intersectsBox(_ob))return true;}return false;}
+function loop(){
+  requestAnimationFrame(loop);
+  const dt=.016;
+  if(locked){
+    const spd=(keys.ShiftLeft||keys.ShiftRight)?WD.walkSpeed*2.2:WD.walkSpeed;
+    const d=new THREE.Vector3(),f=new THREE.Vector3(-Math.sin(pYaw),0,-Math.cos(pYaw)),ri=new THREE.Vector3(Math.cos(pYaw),0,-Math.sin(pYaw));
+    if(keys.KeyW)d.addScaledVector(f,1);if(keys.KeyS)d.addScaledVector(f,-1);if(keys.KeyA)d.addScaledVector(ri,-1);if(keys.KeyD)d.addScaledVector(ri,1);
+    if(d.lengthSq()>0)d.normalize();
+    const nx=pPos.clone();nx.x+=d.x*spd*dt;if(!collides(nx))pPos.x=nx.x;
+    const nz=pPos.clone();nz.z+=d.z*spd*dt;if(!collides(nz))pPos.z=nz.z;
+    pYvel-=WD.gravity*dt;const ny=pPos.clone();ny.y+=pYvel*dt;
+    if(ny.y<1.7){pPos.y=1.7;pYvel=0;grounded=true;}else if(!collides(ny)){pPos.y=ny.y;}else{pYvel=0;if(pYvel<0)grounded=true;}
+    camera.position.copy(pPos);camera.quaternion.setFromEuler(new THREE.Euler(pPitch,pYaw,0,'YXZ'));
+  }
+  renderer.render(scene,camera);
+}
 document.getElementById('eb').onclick=()=>{document.getElementById('enter').style.display='none';init();canvas.requestPointerLock();};
 <\/script></body></html>`;
 }
 
-/* ──────────────────────────────────────────── SHARE */
+/* ═══════════════════════════════════════════════════════════
+   COLLABORATION — BroadcastChannel (same origin / tab-to-tab)
+   + URL auto-join when ?room=PEERID present
+═══════════════════════════════════════════════════════════ */
 function shareLink(){ return `${location.origin}${location.pathname}?room=${myPeerId}`; }
-window.copy = text => navigator.clipboard.writeText(text).then(()=>notify('Copied!','ok')).catch(()=>notify('Copy failed','warn'));
+window.copy=text=>navigator.clipboard.writeText(text).then(()=>notify('Copied!','ok')).catch(()=>notify('Copy failed','warn'));
+
+/** Host always listens on channel named after their own peer ID **/
+function setupHostChannel(){
+  hostChannel = new BroadcastChannel(`omniverse_room_${myPeerId}`);
+  hostChannel.onmessage = e => onChannelMessage(e.data, 'host');
+}
+
+/** Check if we arrived via a ?room= link and auto-join **/
+function checkUrlRoom(){
+  const params = new URLSearchParams(location.search);
+  const roomId = params.get('room');
+  if(roomId && roomId !== myPeerId){
+    document.getElementById('joinF').value = roomId;
+    // small delay so init completes first
+    setTimeout(()=> doJoin(roomId), 800);
+  }
+}
+
+function doJoin(hostId){
+  if(WD.roomPw){
+    // host has password; ask guest to confirm
+    pendingJoinId = hostId;
+    openM('pwModal');
+    return;
+  }
+  connectToHost(hostId);
+}
+
+window.submitPw = function(){
+  const entered = document.getElementById('pwInput').value;
+  if(entered !== WD.roomPw){
+    document.getElementById('pwErr').style.display='block'; return;
+  }
+  document.getElementById('pwErr').style.display='none';
+  closeM('pwModal');
+  if(pendingJoinId) connectToHost(pendingJoinId);
+  pendingJoinId=null;
+};
+
+function connectToHost(hostId){
+  // Open a channel to the host
+  guestChannel = new BroadcastChannel(`omniverse_room_${hostId}`);
+  guestChannel.onmessage = e => onChannelMessage(e.data, 'guest');
+
+  // Announce our arrival
+  guestChannel.postMessage({ type:'JOIN', from:myPeerId });
+
+  // Also listen for host replies on our own channel
+  // (host will send WORLD_SYNC to guest's channel)
+  connectedPeers.push(hostId);
+  updateCollabBadge();
+  notify(`Connecting to room ${hostId.slice(0,8)}…`,'ok');
+}
 
 window.joinRoom = function(){
-  const pid=document.getElementById('joinF').value.trim();
-  if(!pid){ notify('Enter a Peer ID','warn'); return; }
-  if(WD.roomPw){
-    const entered=prompt('Enter room password:');
-    if(entered!==WD.roomPw){ notify('Wrong password!','err'); return; }
-  }
-  const ch=new BroadcastChannel(`omniverse_${pid}`);
-  ch.postMessage({type:'USER_JOINED', from:myPeerId});
-  ch.onmessage=e=>{ if(e.data.type==='WORLD_DATA'){ notify('World synced from host!','ok'); } };
-  notify(`Joined room ${pid.slice(0,8)}…`,'ok');
-  document.getElementById('ucnt').textContent='2+';
+  let raw = document.getElementById('joinF').value.trim();
+  if(!raw){ notify('Enter a Peer ID or URL','warn'); return; }
+  // Accept full URL or bare ID
+  try{ const u=new URL(raw); raw=u.searchParams.get('room')||raw; }catch(e){}
+  if(raw===myPeerId){ notify("That's your own room ID",'warn'); return; }
+  doJoin(raw);
   closeM('shareModal');
 };
 
-function setupBC(){
-  const ch=new BroadcastChannel(`omniverse_${myPeerId}`);
-  ch.onmessage=e=>{
-    const d=e.data; if(d.from===myPeerId) return;
-    if(d.type==='USER_JOINED'){
-      notify(`User ${d.from.slice(0,6)} joined!`,'ok');
-      const cnt=parseInt(document.getElementById('ucnt').textContent)||1;
-      document.getElementById('ucnt').textContent=cnt+1;
-    }
-  };
+/** Dispatch incoming messages **/
+function onChannelMessage(data, role){
+  if(!data||data.from===myPeerId) return;
+
+  if(data.type==='JOIN'){
+    // Someone joined our room — send them the world
+    notify(`User ${data.from.slice(0,6)} joined!`,'ok');
+    if(!connectedPeers.includes(data.from)) connectedPeers.push(data.from);
+    updateCollabBadge();
+    // Send world to guest's channel
+    const gCh = new BroadcastChannel(`omniverse_room_${data.from}`);
+    gCh.postMessage({
+      type:'WORLD_SYNC',
+      from:myPeerId,
+      wd:{...WD},
+      objects:objects.map(serialiseObj)
+    });
+    gCh.close();
+  }
+
+  if(data.type==='WORLD_SYNC'){
+    // We are the guest — restore the host's world
+    notify('World synced from host!','ok');
+    Object.assign(WD, data.wd||{});
+    restoreObjects(data.objects||[]);
+    if(!connectedPeers.includes(data.from)) connectedPeers.push(data.from);
+    updateCollabBadge();
+  }
+
+  if(data.type==='ADD'){
+    if(objects.find(o=>o.id===data.obj?.id)) return; // already have it
+    rehydrateObj(data.obj).then(()=>{
+      const o=objects[objects.length-1];
+      if(o&&data.obj){ o.id=data.obj.id; o.mesh.position.set(...data.obj.p); o.mesh.rotation.set(...data.obj.r); o.mesh.scale.set(...data.obj.s); }
+      refreshList();
+    });
+  }
+
+  if(data.type==='REMOVE'){
+    const o=objects.find(x=>x.id===data.id);
+    if(o){ scene.remove(o.mesh); objects=objects.filter(x=>x.id!==data.id); refreshList(); }
+  }
+
+  if(data.type==='TRANSFORM'){
+    const o=objects.find(x=>x.id===data.id);
+    if(o){ o.mesh.position.set(...data.p); o.mesh.rotation.set(...data.r); o.mesh.scale.set(...data.s); }
+  }
+
+  if(data.type==='LOCK'){
+    const o=objects.find(x=>x.id===data.id);
+    if(o){ o.locked=data.locked; refreshList(); }
+  }
+}
+
+/** Broadcast to all connected peers **/
+function bcBroadcast(data){
+  data.from = myPeerId;
+  // broadcast to everyone who joined us (they listen on guestChannel pointing at our room)
+  // host channel delivers to all guests
+  if(hostChannel) hostChannel.postMessage(data);
+  // also send back to the host if we are a guest
+  if(guestChannel) guestChannel.postMessage(data);
+}
+
+function updateCollabBadge(){
+  const n=connectedPeers.length;
+  document.getElementById('ucnt').textContent = n+1;
+  const badge=document.getElementById('collab-badge');
+  if(n>0){
+    badge.classList.add('on');
+    document.getElementById('collab-info').textContent=`${n} peer${n>1?'s':''} connected`;
+  } else {
+    badge.classList.remove('on');
+  }
+  updateUserPanel();
 }
 
 function updateUserPanel(){
-  document.getElementById('usrlist').innerHTML=`<div class="vuser"><div class="vav" style="background:var(--a);font-size:8px">ME</div><span>You (${myPeerId.slice(0,8)})</span><div class="sdot" style="margin-left:auto"></div></div>`;
+  const me=`<div class="vuser"><div class="vav" style="background:var(--a);font-size:8px">ME</div><span>You (${myPeerId.slice(0,8)})</span><div class="sdot" style="margin-left:auto"></div></div>`;
+  const peers=connectedPeers.map(id=>`<div class="vuser"><div class="vav" style="background:var(--a2);font-size:8px">${id.slice(0,2).toUpperCase()}</div><span>${id.slice(0,8)}…</span><div class="sdot" style="margin-left:auto;background:var(--ok)"></div></div>`).join('');
+  document.getElementById('usrlist').innerHTML=me+peers;
 }
 window.toggleUsers=()=>{ document.getElementById('userspanel').classList.toggle('on'); updateUserPanel(); };
 
-/* ──────────────────────────────────────────── VOICE */
-window.toggleVoice = async function(){
+/* ═══════════════════════════════════════════════════════════
+   VOICE CHAT
+═══════════════════════════════════════════════════════════ */
+window.toggleVoice=async function(){
   if(!voiceActive){
     try{
       myStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
@@ -955,12 +1316,12 @@ window.toggleVoice = async function(){
       document.getElementById('bvoice').classList.add('on');
       document.getElementById('bvoice').textContent='🎙 ON';
       notify('Voice chat active!','ok');
-      const actx=new AudioContext(), an=actx.createAnalyser();
+      const actx=new AudioContext(),an=actx.createAnalyser();
       actx.createMediaStreamSource(myStream).connect(an);
       an.fftSize=256;
       const buf=new Uint8Array(an.frequencyBinCount);
       document.getElementById('vulist').innerHTML='<div class="vuser"><div class="vav" style="background:var(--a)">Me</div><div class="vbar"><div class="vfill" id="vfme"></div></div></div>';
-      (function meter(){ if(!voiceActive) return; an.getByteFrequencyData(buf); const avg=buf.reduce((a,b)=>a+b,0)/buf.length; const el=document.getElementById('vfme'); if(el) el.style.width=Math.min(100,avg*2)+'%'; requestAnimationFrame(meter); })();
+      (function meter(){ if(!voiceActive)return; an.getByteFrequencyData(buf); const avg=buf.reduce((a,b)=>a+b,0)/buf.length; const el=document.getElementById('vfme'); if(el)el.style.width=Math.min(100,avg*2)+'%'; requestAnimationFrame(meter); })();
     }catch(e){ notify('Mic access denied','err'); }
   } else {
     myStream?.getTracks().forEach(t=>t.stop()); myStream=null;
@@ -972,39 +1333,43 @@ window.toggleVoice = async function(){
   }
 };
 window.toggleMute=function(){
-  if(!myStream) return;
+  if(!myStream)return;
   muted=!muted;
   myStream.getAudioTracks().forEach(t=>t.enabled=!muted);
   document.getElementById('mutebtn').textContent=muted?'🔇 Unmute':'🎙 Mute';
 };
 
-/* ──────────────────────────────────────────── MODALS */
-window.openM  = id => document.getElementById(id).classList.add('on');
-window.closeM = id => document.getElementById(id).classList.remove('on');
-document.querySelectorAll('.mover').forEach(el=>el.addEventListener('click',e=>{ if(e.target===el) el.classList.remove('on'); }));
+/* ═══════════════════════════════════════════════════════════
+   MODALS
+═══════════════════════════════════════════════════════════ */
+window.openM =id=>document.getElementById(id).classList.add('on');
+window.closeM=id=>document.getElementById(id).classList.remove('on');
+document.querySelectorAll('.mover').forEach(el=>el.addEventListener('click',e=>{ if(e.target===el)el.classList.remove('on'); }));
 
-/* ──────────────────────────────────────────── UTILS */
+/* ═══════════════════════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════════════════════ */
 function onResize(){
-  if(!renderer) return;
-  const w=wrap.clientWidth, h=wrap.clientHeight;
+  if(!renderer)return;
+  const w=wrap.clientWidth,h=wrap.clientHeight;
   renderer.setSize(w,h);
-  if(camera){ camera.aspect=w/h; camera.updateProjectionMatrix(); }
+  if(camera){camera.aspect=w/h;camera.updateProjectionMatrix();}
 }
 function ar(){ return wrap.clientWidth/wrap.clientHeight; }
 function uid(){ return Math.random().toString(36).slice(2,9)+Date.now().toString(36); }
 function ff(v){ return isNaN(v)?'0':parseFloat(v).toFixed(2); }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
-window.notify = function(msg, type=''){
+window.notify=function(msg,type=''){
   const el=document.createElement('div');
   el.className='notif '+(type==='ok'?'ok':type==='warn'?'warn':type==='err'?'err':'');
   el.textContent=msg;
   document.getElementById('notifs').prepend(el);
-  setTimeout(()=>el.remove(), 4000);
+  setTimeout(()=>el.remove(),4000);
 };
 
-/* ──────────────────────────────────────────── BOOT */
-window.addEventListener('load', ()=>setTimeout(init, 200));
+/* ─── BOOT ─── */
+window.addEventListener('load',()=>setTimeout(init,200));
 </script>
 </body>
 </html>
