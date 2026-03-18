@@ -988,89 +988,97 @@ window.doExport=function(){
 };
 
 function buildExport(title,objs,wd){
-  // Escape b64 data that might contain </script> sequences
-  const safeJSON=JSON.stringify({objs,wd}).replace(/<\/script>/gi,'<\\/script>');
-  return `<!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${title} — GmedranoTIC Omniverse</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}body{background:#050810;overflow:hidden;font-family:monospace}
-canvas{display:block;width:100vw;height:100vh}
-#badge{position:fixed;top:10px;left:10px;background:rgba(0,0,0,.8);border:1px solid rgba(0,212,255,.4);border-radius:7px;padding:5px 13px;font-size:12px;color:#00d4ff;backdrop-filter:blur(10px);z-index:10}
-#hud{position:fixed;bottom:13px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);border:1px solid rgba(0,212,255,.25);border-radius:16px;padding:5px 16px;font-size:10px;color:#5a7aaa;display:none;gap:12px;backdrop-filter:blur(10px);z-index:10}.hk{color:#00d4ff}
-#enter{position:fixed;inset:0;background:rgba(5,8,20,.97);display:flex;align-items:center;justify-content:center;z-index:20}
-.ebox{border:1px solid #00d4ff;border-radius:12px;padding:28px 38px;text-align:center;backdrop-filter:blur(18px)}
-.ebox h2{color:#00d4ff;margin-bottom:8px;font-size:20px;font-family:sans-serif}.ebox p{font-size:11px;color:#5a7aaa;margin-bottom:16px}
-.ebtn{background:linear-gradient(135deg,#7b2fff,#00d4ff);border:none;color:#fff;padding:10px 26px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700}
-#ch{position:fixed;top:50%;left:50%;display:none;z-index:10}
-#ch div{position:absolute;background:rgba(255,255,255,.8)}#chh{width:12px;height:1px;top:0;left:-6px}#chv{width:1px;height:12px;top:-6px;left:0}
-</style>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/"}}<\/script>
-</head><body>
-<canvas id="c"></canvas>
-<div id="badge">⬡ GmedranoTIC's OMNIVERSE — ${title}</div>
-<div id="hud"><span><span class="hk">WASD</span> Move</span><span><span class="hk">Mouse</span> Look</span><span><span class="hk">Space</span> Jump</span><span><span class="hk">Shift</span> Run</span></div>
-<div id="ch"><div id="chh"></div><div id="chv"></div></div>
-<div id="enter"><div class="ebox"><h2>⬡ ${title}</h2><p>Built with GmedranoTIC's Omniverse Builder<br>Click to enter the 3D world</p><button class="ebtn" id="eb">Enter World</button></div></div>
-<script type="module">
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-const _D=JSON.parse('${safeJSON.replace(/'/g,"\\u0027")}');
-const OBJS=_D.objs,WD=_D.wd;
-const canvas=document.getElementById('c');
-let renderer,scene,camera,ldr=new GLTFLoader();
-let pPos=new THREE.Vector3(0,1.7,5),pYaw=0,pPitch=0,pYvel=0,grounded=true,keys={},locked=false;
-const physObjs=[],_pb=new THREE.Box3(),_ob=new THREE.Box3(),_ps=new THREE.Vector3(.4,1.7,.4);
-function b64gl(b64,ok,err){const base64=b64.split(',')[1],bin=atob(base64),buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);ldr.parse(buf.buffer,'',ok,err);}
-function applyT(m,o){if(o.p)m.position.set(...o.p);if(o.r)m.rotation.set(...o.r);if(o.s)m.scale.set(...o.s);}
-function init(){
-  renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
-  renderer.shadowMap.enabled=true;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=0.85;
-  scene=new THREE.Scene();scene.background=new THREE.Color(WD.skyColor||'#0a0e1a');
-  if(WD.fogFar)scene.fog=new THREE.Fog(WD.skyColor||'#050810',10,WD.fogFar);
-  camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,.05,1000);camera.position.copy(pPos);
-  scene.add(new THREE.AmbientLight(0xffffff,WD.ambInt||0.6));
-  const dl=new THREE.DirectionalLight(0xffffff,1.2);dl.position.set(10,20,10);dl.castShadow=true;scene.add(dl);
-  const gm=new THREE.Mesh(new THREE.PlaneGeometry(300,300),new THREE.MeshStandardMaterial({color:WD.groundColor||'#1a1a2e'}));gm.rotation.x=-Math.PI/2;gm.receiveShadow=true;scene.add(gm);
-  const sv=[];for(let i=0;i<3000;i++)sv.push((Math.random()-.5)*800,Math.random()*300+30,(Math.random()-.5)*800);
-  const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.Float32BufferAttribute(sv,3));
-  scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0xffffff,size:.35,transparent:true,opacity:.8})));
-  const loads=OBJS.map(o=>loadO(o));
-  Promise.allSettled(loads).then(()=>{ physObjs.length&&console.log(physObjs.length,'phys objects'); });
-  window.addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();});
-  window.addEventListener('keydown',e=>{keys[e.code]=true;if(e.code==='Space'&&grounded){pYvel=5.5;grounded=false;}});
-  window.addEventListener('keyup',e=>keys[e.code]=false);
-  document.addEventListener('mousemove',e=>{if(locked){pYaw-=e.movementX*.002;pPitch-=e.movementY*.002;pPitch=Math.max(-1.47,Math.min(1.47,pPitch));}});
-  document.addEventListener('pointerlockchange',()=>{locked=document.pointerLockElement===canvas;document.getElementById('ch').style.display=locked?'block':'none';document.getElementById('hud').style.display=locked?'flex':'none';});
-  loop();
-}
-function loadO(o){return new Promise(res=>{
-  if(o.type==='glb'&&o.b64){b64gl(o.b64,g=>{const r=g.scene;r.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});const w=new THREE.Group();w.add(r);applyT(w,o);scene.add(w);physObjs.push(w);res();},res);}
-  else if(o.type==='image'&&o.b64){new THREE.TextureLoader().load(o.b64,tex=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(3,2),new THREE.MeshStandardMaterial({map:tex,transparent:true,side:THREE.DoubleSide}));applyT(m,o);scene.add(m);physObjs.push(m);res();},undefined,res);}
-  else if(o.type==='text'){const cv=document.createElement('canvas');cv.width=1024;cv.height=256;const ctx=cv.getContext('2d');ctx.fillStyle=o.data?.color||'#00d4ff';ctx.font=\`bold \${Math.floor(72*(o.data?.size||1))}px sans-serif\`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(o.data?.text||o.name,512,128);const m=new THREE.Mesh(new THREE.PlaneGeometry(4*(o.data?.size||1),(o.data?.size||1)),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),transparent:true,side:THREE.DoubleSide}));applyT(m,o);scene.add(m);res();}
-  else if(o.type==='prim'){let g;const t=o.data?.primType||'box';if(t==='box')g=new THREE.BoxGeometry(1,1,1);else if(t==='sphere')g=new THREE.SphereGeometry(.6,32,32);else g=new THREE.CylinderGeometry(.5,.5,1.5,32);const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:o.data?.color||'#00d4ff'}));applyT(m,o);scene.add(m);physObjs.push(m);res();}
-  else if(o.type==='link'){const cv=document.createElement('canvas');cv.width=800;cv.height=500;const ctx=cv.getContext('2d');ctx.fillStyle='#0a1020';ctx.fillRect(0,0,800,500);ctx.fillStyle='#1a2a4a';ctx.fillRect(0,0,800,40);ctx.fillStyle='#00d4ff';ctx.font='bold 16px monospace';ctx.fillText('🔗 '+(o.url||'').slice(0,55),10,26);ctx.fillStyle='#5a7aaa';ctx.font='13px monospace';ctx.fillText('Click to open',340,260);const m=new THREE.Mesh(new THREE.PlaneGeometry(4,3),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),side:THREE.DoubleSide}));applyT(m,o);scene.add(m);res();}
-  else res();
-});}
-function collides(tp){_pb.setFromCenterAndSize(new THREE.Vector3(tp.x,tp.y-_ps.y/2+.1,tp.z),_ps);for(const ob of physObjs){_ob.setFromObject(ob);if(_pb.intersectsBox(_ob))return true;}return false;}
-function loop(){
-  requestAnimationFrame(loop);const dt=.016;
-  if(locked){
-    const spd=(keys.ShiftLeft||keys.ShiftRight)?WD.walkSpeed*2.2:WD.walkSpeed;
-    const d=new THREE.Vector3(),f=new THREE.Vector3(-Math.sin(pYaw),0,-Math.cos(pYaw)),ri=new THREE.Vector3(Math.cos(pYaw),0,-Math.sin(pYaw));
-    if(keys.KeyW)d.addScaledVector(f,1);if(keys.KeyS)d.addScaledVector(f,-1);if(keys.KeyA)d.addScaledVector(ri,-1);if(keys.KeyD)d.addScaledVector(ri,1);
-    if(d.lengthSq()>0)d.normalize();
-    const nx=pPos.clone();nx.x+=d.x*spd*dt;if(!collides(nx))pPos.x=nx.x;
-    const nz=pPos.clone();nz.z+=d.z*spd*dt;if(!collides(nz))pPos.z=nz.z;
-    pYvel-=WD.gravity*dt;const ny=pPos.clone();ny.y+=pYvel*dt;
-    if(ny.y<1.7){pPos.y=1.7;pYvel=0;grounded=true;}else if(!collides(ny))pPos.y=ny.y;else{pYvel=0;grounded=true;}
-    camera.position.copy(pPos);camera.quaternion.setFromEuler(new THREE.Euler(pPitch,pYaw,0,'YXZ'));
-  }
-  renderer.render(scene,camera);
-}
-document.getElementById('eb').onclick=()=>{document.getElementById('enter').style.display='none';init();canvas.requestPointerLock();};
-<\/script></body></html>`;
+  // JSON is stored in a <script type="application/json"> tag — immune to
+  // backtick / template-literal / quote escaping issues inside the player script.
+  const jsonData = JSON.stringify({objs,wd});
+
+  // The player script is a plain string (no backticks), so no escaping needed.
+  const playerScript = [
+    'import * as THREE from "three";',
+    'import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";',
+    'const _D=JSON.parse(document.getElementById("_worlddata").textContent);',
+    'const OBJS=_D.objs,WD=_D.wd;',
+    'const canvas=document.getElementById("c");',
+    'let renderer,scene,camera,ldr=new GLTFLoader();',
+    'let pPos=new THREE.Vector3(0,1.7,5),pYaw=0,pPitch=0,pYvel=0,grounded=true,keys={},locked=false;',
+    'const physObjs=[],_pb=new THREE.Box3(),_ob=new THREE.Box3(),_ps=new THREE.Vector3(.4,1.7,.4);',
+    'function b64gl(b64,ok,err){const base64=b64.split(",")[1],bin=atob(base64),buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);ldr.parse(buf.buffer,"",ok,err);}',
+    'function applyT(m,o){if(o.p)m.position.set(...o.p);if(o.r)m.rotation.set(...o.r);if(o.s)m.scale.set(...o.s);}',
+    'function init(){',
+    '  renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);',
+    '  renderer.shadowMap.enabled=true;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=0.85;',
+    '  scene=new THREE.Scene();scene.background=new THREE.Color(WD.skyColor||"#0a0e1a");',
+    '  if(WD.fogFar)scene.fog=new THREE.Fog(WD.skyColor||"#050810",10,WD.fogFar);',
+    '  camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,.05,1000);camera.position.copy(pPos);',
+    '  scene.add(new THREE.AmbientLight(0xffffff,WD.ambInt||0.6));',
+    '  const dl=new THREE.DirectionalLight(0xffffff,1.2);dl.position.set(10,20,10);dl.castShadow=true;scene.add(dl);',
+    '  const gm=new THREE.Mesh(new THREE.PlaneGeometry(300,300),new THREE.MeshStandardMaterial({color:WD.groundColor||"#1a1a2e"}));gm.rotation.x=-Math.PI/2;gm.receiveShadow=true;scene.add(gm);',
+    '  const sv=[];for(let i=0;i<3000;i++)sv.push((Math.random()-.5)*800,Math.random()*300+30,(Math.random()-.5)*800);',
+    '  const sg=new THREE.BufferGeometry();sg.setAttribute("position",new THREE.Float32BufferAttribute(sv,3));',
+    '  scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0xffffff,size:.35,transparent:true,opacity:.8})));',
+    '  Promise.allSettled(OBJS.map(o=>loadO(o)));',
+    '  window.addEventListener("resize",()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();});',
+    '  window.addEventListener("keydown",e=>{keys[e.code]=true;if(e.code==="Space"&&grounded){pYvel=5.5;grounded=false;}});',
+    '  window.addEventListener("keyup",e=>keys[e.code]=false);',
+    '  document.addEventListener("mousemove",e=>{if(locked){pYaw-=e.movementX*.002;pPitch-=e.movementY*.002;pPitch=Math.max(-1.47,Math.min(1.47,pPitch));}});',
+    '  document.addEventListener("pointerlockchange",()=>{locked=document.pointerLockElement===canvas;document.getElementById("ch").style.display=locked?"block":"none";document.getElementById("hud").style.display=locked?"flex":"none";});',
+    '  loop();',
+    '}',
+    'function loadO(o){return new Promise(res=>{',
+    '  if(o.type==="glb"&&o.b64){b64gl(o.b64,g=>{const r=g.scene;r.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});const w=new THREE.Group();w.add(r);applyT(w,o);scene.add(w);physObjs.push(w);res();},res);}',
+    '  else if(o.type==="image"&&o.b64){new THREE.TextureLoader().load(o.b64,tex=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(3,2),new THREE.MeshStandardMaterial({map:tex,transparent:true,side:THREE.DoubleSide}));applyT(m,o);scene.add(m);physObjs.push(m);res();},undefined,res);}',
+    '  else if(o.type==="text"){const cv=document.createElement("canvas");cv.width=1024;cv.height=256;const ctx=cv.getContext("2d");ctx.fillStyle=o.data&&o.data.color||"#00d4ff";const fs=Math.floor(72*(o.data&&o.data.size||1));ctx.font="bold "+fs+"px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(o.data&&o.data.text||o.name,512,128);const sz=o.data&&o.data.size||1;const m=new THREE.Mesh(new THREE.PlaneGeometry(4*sz,sz),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),transparent:true,side:THREE.DoubleSide}));applyT(m,o);scene.add(m);res();}',
+    '  else if(o.type==="prim"){let g;const t=o.data&&o.data.primType||"box";if(t==="box")g=new THREE.BoxGeometry(1,1,1);else if(t==="sphere")g=new THREE.SphereGeometry(.6,32,32);else g=new THREE.CylinderGeometry(.5,.5,1.5,32);const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:o.data&&o.data.color||"#00d4ff"}));applyT(m,o);scene.add(m);physObjs.push(m);res();}',
+    '  else if(o.type==="link"){const cv=document.createElement("canvas");cv.width=800;cv.height=500;const ctx=cv.getContext("2d");ctx.fillStyle="#0a1020";ctx.fillRect(0,0,800,500);ctx.fillStyle="#1a2a4a";ctx.fillRect(0,0,800,40);ctx.fillStyle="#00d4ff";ctx.font="bold 16px monospace";ctx.fillText("Link: "+(o.url||"").slice(0,55),10,26);ctx.fillStyle="#5a7aaa";ctx.font="13px monospace";ctx.fillText("Click to open",340,260);const m=new THREE.Mesh(new THREE.PlaneGeometry(4,3),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(cv),side:THREE.DoubleSide}));applyT(m,o);scene.add(m);res();}',
+    '  else res();',
+    '});}',
+    'function collides(tp){_pb.setFromCenterAndSize(new THREE.Vector3(tp.x,tp.y-_ps.y/2+.1,tp.z),_ps);for(const ob of physObjs){_ob.setFromObject(ob);if(_pb.intersectsBox(_ob))return true;}return false;}',
+    'function loop(){',
+    '  requestAnimationFrame(loop);const dt=.016;',
+    '  if(locked){',
+    '    const spd=(keys.ShiftLeft||keys.ShiftRight)?WD.walkSpeed*2.2:WD.walkSpeed;',
+    '    const d=new THREE.Vector3(),f=new THREE.Vector3(-Math.sin(pYaw),0,-Math.cos(pYaw)),ri=new THREE.Vector3(Math.cos(pYaw),0,-Math.sin(pYaw));',
+    '    if(keys.KeyW)d.addScaledVector(f,1);if(keys.KeyS)d.addScaledVector(f,-1);if(keys.KeyA)d.addScaledVector(ri,-1);if(keys.KeyD)d.addScaledVector(ri,1);',
+    '    if(d.lengthSq()>0)d.normalize();',
+    '    const nx=pPos.clone();nx.x+=d.x*spd*dt;if(!collides(nx))pPos.x=nx.x;',
+    '    const nz=pPos.clone();nz.z+=d.z*spd*dt;if(!collides(nz))pPos.z=nz.z;',
+    '    pYvel-=WD.gravity*dt;const ny=pPos.clone();ny.y+=pYvel*dt;',
+    '    if(ny.y<1.7){pPos.y=1.7;pYvel=0;grounded=true;}else if(!collides(ny))pPos.y=ny.y;else{pYvel=0;grounded=true;}',
+    '    camera.position.copy(pPos);camera.quaternion.setFromEuler(new THREE.Euler(pPitch,pYaw,0,"YXZ"));',
+    '  }',
+    '  renderer.render(scene,camera);',
+    '}',
+    'document.getElementById("eb").onclick=function(){document.getElementById("enter").style.display="none";init();canvas.requestPointerLock();};'
+  ].join('\n');
+
+  const parts = [
+    '<!DOCTYPE html>\n<html lang="en"><head>\n',
+    '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">\n',
+    '<title>', title, ' \u2014 GmedranoTIC Omniverse</title>\n',
+    '<style>\n',
+    '*{margin:0;padding:0;box-sizing:border-box}body{background:#050810;overflow:hidden;font-family:monospace}\n',
+    'canvas{display:block;width:100vw;height:100vh}\n',
+    '#badge{position:fixed;top:10px;left:10px;background:rgba(0,0,0,.8);border:1px solid rgba(0,212,255,.4);border-radius:7px;padding:5px 13px;font-size:12px;color:#00d4ff;backdrop-filter:blur(10px);z-index:10}\n',
+    '#hud{position:fixed;bottom:13px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);border:1px solid rgba(0,212,255,.25);border-radius:16px;padding:5px 16px;font-size:10px;color:#5a7aaa;display:none;gap:12px;backdrop-filter:blur(10px);z-index:10}.hk{color:#00d4ff}\n',
+    '#enter{position:fixed;inset:0;background:rgba(5,8,20,.97);display:flex;align-items:center;justify-content:center;z-index:20}\n',
+    '.ebox{border:1px solid #00d4ff;border-radius:12px;padding:28px 38px;text-align:center}\n',
+    '.ebox h2{color:#00d4ff;margin-bottom:8px;font-size:20px;font-family:sans-serif}.ebox p{font-size:11px;color:#5a7aaa;margin-bottom:16px}\n',
+    '.ebtn{background:linear-gradient(135deg,#7b2fff,#00d4ff);border:none;color:#fff;padding:10px 26px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700}\n',
+    '#ch{position:fixed;top:50%;left:50%;display:none;z-index:10}\n',
+    '#ch div{position:absolute;background:rgba(255,255,255,.8)}#chh{width:12px;height:1px;top:0;left:-6px}#chv{width:1px;height:12px;top:-6px;left:0}\n',
+    '</style>\n',
+    '<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/"}}</s'+'cript>\n',
+    '</head><body>\n',
+    '<canvas id="c"></canvas>\n',
+    '<script type="application/json" id="_worlddata">', jsonData, '</s'+'cript>\n',
+    '<div id="badge">\u29E1 GmedranoTIC\'s OMNIVERSE \u2014 ', title, '</div>\n',
+    '<div id="hud"><span><span class="hk">WASD</span> Move</span><span><span class="hk">Mouse</span> Look</span><span><span class="hk">Space</span> Jump</span><span><span class="hk">Shift</span> Run</span></div>\n',
+    '<div id="ch"><div id="chh"></div><div id="chv"></div></div>\n',
+    '<div id="enter"><div class="ebox"><h2>\u29E1 ', title, '</h2><p>Built with GmedranoTIC\'s Omniverse Builder<br>Click to enter the 3D world</p><button class="ebtn" id="eb">Enter World</button></div></div>\n',
+    '<script type="module">\n', playerScript, '\n</s'+'cript>\n',
+    '</body></html>'
+  ];
+  return parts.join('');
 }
 
 /* ═══════════════════════════════ VOICE */
