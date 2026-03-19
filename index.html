@@ -277,12 +277,12 @@ select option{background:#0a1020}textarea{resize:vertical;min-height:55px}
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script type="importmap">
 {
   "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/",
-    "peerjs": "https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.esm.min.js"
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/"
   }
 }
 </script>
@@ -292,7 +292,6 @@ import * as THREE from 'three';
 import { GLTFLoader }        from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls }     from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
-import Peer                  from 'peerjs';
 
 /* ═══════════════════════════════ GLOBALS */
 window.WD = { env:'night', groundColor:'#1a1a2e', skyColor:'#0a0e1a', gravity:9.8, walkSpeed:5, ambInt:0.6, fogFar:120 };
@@ -321,8 +320,7 @@ let connections={};   // peerId → DataConnection
 let pendingHostId=null;
 
 function initPeer(){
-  var PeerCls = (typeof Peer !== "undefined") ? Peer : window.Peer;
-  peer = new PeerCls();
+  peer = new window.Peer();
   peer.on('open', id=>{
     myPeerId=id;
     document.getElementById('peerid').textContent=`ID:${id.slice(0,7)}`;
@@ -478,13 +476,13 @@ function init(){
   renderer.shadowMap.autoUpdate=true;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure=0.85;
-  onResize();
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
   scene=new THREE.Scene();
   scene.background=new THREE.Color('#0a0e1a');
   scene.fog=new THREE.Fog('#050810',10,120);
 
-  camera=new THREE.PerspectiveCamera(72,ar(),0.05,1000);
+  camera = new THREE.PerspectiveCamera(72, window.innerWidth/window.innerHeight,0.05,1000);
   camera.position.set(0,5,12);
 
   ambLight=new THREE.AmbientLight(0xffffff,0.6); scene.add(ambLight);
@@ -520,9 +518,9 @@ function init(){
 
   document.getElementById('mbadge').style.display='flex';
   updateUserPanel();
-  initPeer();
+  try{ initPeer(); }catch(e){ console.warn('PeerJS init failed:',e); }
   animate();
-  setTimeout(()=>{ document.getElementById('loading').style.display='none'; }, 1200);
+  setTimeout(function(){ var el=document.getElementById('loading'); if(el) el.style.display='none'; }, 800);
 }
 
 function mkStars(){
@@ -1175,8 +1173,8 @@ document.querySelectorAll('.mover').forEach(el=>el.addEventListener('click',e=>{
 window.toggleUsers=()=>{document.getElementById('userspanel').classList.toggle('on');updateUserPanel();};
 
 /* ═══════════════════════════════ UTILS */
-function onResize(){ if(!renderer)return; const w=wrap.clientWidth,h=wrap.clientHeight; renderer.setSize(w,h); if(camera){camera.aspect=w/h;camera.updateProjectionMatrix();} }
-function ar(){ return wrap.clientWidth/wrap.clientHeight; }
+function onResize(){ if(!renderer)return; const w=wrap.clientWidth||window.innerWidth,h=wrap.clientHeight||window.innerHeight; if(!w||!h)return; renderer.setSize(w,h); if(camera){camera.aspect=w/h;camera.updateProjectionMatrix();} }
+function ar(){ return (wrap.clientWidth||window.innerWidth)/(wrap.clientHeight||window.innerHeight); }
 function uid(){ return Math.random().toString(36).slice(2,9)+Date.now().toString(36); }
 function ff(v){ return isNaN(v)?'0':parseFloat(v).toFixed(2); }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
@@ -1185,7 +1183,13 @@ window.notify=function(msg,type=''){
   document.getElementById('notifs').prepend(el);setTimeout(()=>el.remove(),4000);
 };
 
-window.addEventListener('load',()=>setTimeout(init,200));
+window.addEventListener('load', function(){
+  // Hide loading screen after timeout regardless of errors
+  var hideLoading = function(){ document.getElementById('loading').style.display='none'; };
+  setTimeout(function(){
+    try { init(); } catch(e) { console.error('Init error:',e); hideLoading(); }
+  }, 500);
+});
 </script>
 </body>
 </html>
