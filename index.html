@@ -111,6 +111,23 @@ select option{background:#0a1020}textarea{resize:vertical;min-height:55px}
 #collab-badge{position:fixed;top:calc(var(--hh)+8px);right:calc(var(--pw)+8px);background:rgba(123,47,255,.18);border:1px solid var(--a2);border-radius:6px;padding:3px 10px;font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--a2);z-index:200;display:none;align-items:center;gap:5px}
 #collab-badge.on{display:flex}
 #peer-status{position:fixed;top:calc(var(--hh)+8px);left:calc(var(--pw)+8px);background:rgba(5,8,16,.87);border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:10px;font-family:'Share Tech Mono',monospace;z-index:200;pointer-events:none;display:flex;align-items:center;gap:5px}
+
+/* ── AVATAR MODAL ── */
+#avatarModal .color-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-top:6px}
+.color-swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.color-swatch:hover,.color-swatch.sel{border-color:#fff;transform:scale(1.15)}
+#avatar-preview{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;border:3px solid rgba(255,255,255,.2);transition:background .2s}
+/* ── REMOTE AVATARS (3D nameplate overlay) ── */
+.remote-label{position:fixed;pointer-events:none;z-index:300;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;gap:3px}
+.remote-label .rav{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;border:2px solid rgba(255,255,255,.4);box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.remote-label .rname{background:rgba(0,0,0,.75);color:#fff;font-size:10px;font-family:'Share Tech Mono',monospace;padding:2px 6px;border-radius:4px;white-space:nowrap;backdrop-filter:blur(6px)}
+/* ── USERS PANEL expanded ── */
+.vuser-full{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(0,212,255,.07)}
+.vuser-full:last-child{border-bottom:none}
+.vav-lg{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0;border:2px solid rgba(255,255,255,.15)}
+.vuser-info{flex:1;min-width:0}
+.vuser-name{font-size:11px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vuser-status{font-size:9px;color:var(--dim);font-family:'Share Tech Mono',monospace}
 </style>
 </head>
 <body>
@@ -142,6 +159,7 @@ select option{background:#0a1020}textarea{resize:vertical;min-height:55px}
   <button class="btn pri" onclick="openExport()">⬇ Export HTML</button>
   <button class="btn" onclick="toggleUsers()">👥 <span id="ucnt">1</span></button>
   <button class="btn" id="bvoice" onclick="toggleVoice()">🎙 Voice</button>
+  <button class="btn" onclick="openM('avatarModal')" id="btn-avatar" title="Edit Avatar">🧑 Avatar</button>
 </div>
 
 <div id="lp">
@@ -206,6 +224,68 @@ select option{background:#0a1020}textarea{resize:vertical;min-height:55px}
   <button class="btn danger" style="margin-top:6px;width:100%" id="mutebtn" onclick="toggleMute()">🎙 Mute</button>
 </div>
 <div id="notifs"></div>
+
+<!-- AVATAR MODAL -->
+<div class="mover" id="avatarModal">
+  <div class="modal" style="max-width:360px;user-select:none">
+    <div class="mtitle">🧑 My Avatar</div>
+    <button class="mclose" onclick="closeM('avatarModal')">✕</button>
+    <div id="avatar-preview" style="background:#7b2fff">😎</div>
+    <div class="fg">
+      <div class="fl">Display Name</div>
+      <input type="text" id="av-name" placeholder="Your name…" maxlength="20" style="user-select:text" oninput="previewAvatar()">
+    </div>
+    <div class="fg">
+      <div class="fl">Emoji / Icon</div>
+      <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin-top:4px">
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">😎</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🤖</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">👽</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🦊</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🐱</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🐸</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🦁</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🐺</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🦅</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🌟</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🔥</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">💎</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🚀</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🎮</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🎭</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">⚡</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🌈</span>
+        <span class="color-swatch" style="font-size:20px;background:transparent;border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center" onclick="setAvEmoji(this)">🧊</span>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fl">Avatar Color</div>
+      <div class="color-grid">
+        <div class="color-swatch sel" style="background:#7b2fff" onclick="setAvColor(this,'#7b2fff')"></div>
+        <div class="color-swatch" style="background:#00d4ff" onclick="setAvColor(this,'#00d4ff')"></div>
+        <div class="color-swatch" style="background:#ff3b6b" onclick="setAvColor(this,'#ff3b6b')"></div>
+        <div class="color-swatch" style="background:#00ff88" onclick="setAvColor(this,'#00ff88')"></div>
+        <div class="color-swatch" style="background:#ffd700" onclick="setAvColor(this,'#ffd700')"></div>
+        <div class="color-swatch" style="background:#ff6600" onclick="setAvColor(this,'#ff6600')"></div>
+        <div class="color-swatch" style="background:#00ccff" onclick="setAvColor(this,'#00ccff')"></div>
+        <div class="color-swatch" style="background:#cc44ff" onclick="setAvColor(this,'#cc44ff')"></div>
+        <div class="color-swatch" style="background:#ff4499" onclick="setAvColor(this,'#ff4499')"></div>
+        <div class="color-swatch" style="background:#44ffcc" onclick="setAvColor(this,'#44ffcc')"></div>
+        <div class="color-swatch" style="background:#ff9900" onclick="setAvColor(this,'#ff9900')"></div>
+        <div class="color-swatch" style="background:#3399ff" onclick="setAvColor(this,'#3399ff')"></div>
+        <div class="color-swatch" style="background:#99ff33" onclick="setAvColor(this,'#99ff33')"></div>
+        <div class="color-swatch" style="background:#ff3333" onclick="setAvColor(this,'#ff3333')"></div>
+        <div class="color-swatch" style="background:#ffffff" onclick="setAvColor(this,'#ffffff')"></div>
+        <div class="color-swatch" style="background:#888888" onclick="setAvColor(this,'#888888')"></div>
+      </div>
+    </div>
+    <div class="mact">
+      <button class="btn" onclick="closeM('avatarModal')">Cancel</button>
+      <button class="btn pri" onclick="saveAvatar()">Save Avatar</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- MODALS -->
 <div class="mover" id="shareModal">
@@ -313,6 +393,157 @@ const _pSize=new THREE.Vector3(0.4,1.7,0.4);
 let keys={}, plocked=false;
 let pPos=new THREE.Vector3(0,1.7,5), pYaw=0, pPitch=0, pYvel=0, grounded=true;
 let voiceActive=false, muted=false, myStream=null;
+/* ═══════════════════════════════ AVATAR SYSTEM */
+let myAvatar = { name:'Player', emoji:'😎', color:'#7b2fff' };
+// Load saved avatar
+try{ const sv=localStorage.getItem('omni_avatar'); if(sv){ Object.assign(myAvatar,JSON.parse(sv)); } }catch(e){}
+
+// remotePeers: peerId → { avatar:{name,emoji,color}, mesh:THREE.Group, labelEl:HTMLElement, pos:[x,y,z], yaw:number }
+const remotePeers = {};
+
+// position broadcast throttle
+let _lastPosBroadcast = 0;
+
+
+
+/* ═══════════════════════════════ AVATAR FUNCTIONS */
+// Make a simple humanoid avatar mesh (capsule body + sphere head)
+function mkAvatarMesh(color, emoji){
+  const grp = new THREE.Group();
+  // Body
+  const body = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.25, 0.28, 1.1, 12),
+    new THREE.MeshStandardMaterial({color, roughness:0.6, metalness:0.1})
+  );
+  body.position.y = 0.55; body.castShadow=true;
+  grp.add(body);
+  // Head
+  const head = new THREE.Mesh(
+    new THREE.SphereGeometry(0.3, 16, 16),
+    new THREE.MeshStandardMaterial({color, roughness:0.5, metalness:0.05})
+  );
+  head.position.y = 1.4; head.castShadow=true;
+  grp.add(head);
+  // Emoji canvas on head face
+  const cv = document.createElement('canvas'); cv.width=128; cv.height=128;
+  const ctx = cv.getContext('2d');
+  ctx.font = '72px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(emoji, 64, 68);
+  const faceTex = new THREE.CanvasTexture(cv);
+  const face = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.38, 0.38),
+    new THREE.MeshBasicMaterial({map:faceTex, transparent:true, depthTest:false})
+  );
+  face.position.set(0, 1.42, 0.28);
+  grp.add(face);
+  return grp;
+}
+
+// Create or update a remote peer's avatar in the scene
+function upsertRemoteAvatar(peerId, avatarData, pos, yaw){
+  let rp = remotePeers[peerId];
+  if(!rp){
+    rp = { avatar:avatarData, mesh:null, labelEl:null, pos:[0,1.7,0], yaw:0 };
+    remotePeers[peerId] = rp;
+  }
+  // Update avatar data
+  if(avatarData) Object.assign(rp.avatar, avatarData);
+  // Create/recreate mesh if needed
+  if(!rp.mesh || avatarData){
+    if(rp.mesh){ scene.remove(rp.mesh); }
+    rp.mesh = mkAvatarMesh(rp.avatar.color||'#7b2fff', rp.avatar.emoji||'😎');
+    scene.add(rp.mesh);
+  }
+  // Create label overlay
+  if(!rp.labelEl){
+    rp.labelEl = document.createElement('div');
+    rp.labelEl.className = 'remote-label';
+    rp.labelEl.innerHTML =
+      '<div class="rav" style="background:'+rp.avatar.color+'">'+rp.avatar.emoji+'</div>'+
+      '<div class="rname">'+escapeHtml(rp.avatar.name||peerId.slice(0,6))+'</div>';
+    document.body.appendChild(rp.labelEl);
+  } else if(avatarData){
+    // Refresh label
+    rp.labelEl.innerHTML =
+      '<div class="rav" style="background:'+rp.avatar.color+'">'+rp.avatar.emoji+'</div>'+
+      '<div class="rname">'+escapeHtml(rp.avatar.name||peerId.slice(0,6))+'</div>';
+  }
+  // Update position/rotation
+  if(pos){ rp.pos=pos; rp.mesh.position.set(pos[0], pos[1]-1.7, pos[2]); }
+  if(yaw!==undefined){ rp.yaw=yaw; rp.mesh.rotation.y = yaw + Math.PI; }
+}
+
+function removeRemoteAvatar(peerId){
+  const rp = remotePeers[peerId];
+  if(!rp) return;
+  if(rp.mesh){ scene.remove(rp.mesh); rp.mesh.traverse(c=>{ if(c.geometry)c.geometry.dispose(); if(c.material)[c.material].flat().forEach(m=>m.dispose()); }); }
+  if(rp.labelEl){ rp.labelEl.remove(); }
+  delete remotePeers[peerId];
+}
+
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Update all remote avatar label positions every frame (project 3D→2D)
+function updateAvatarLabels(){
+  const W = wrap.clientWidth, H = wrap.clientHeight;
+  const rect = wrap.getBoundingClientRect();
+  for(const [pid, rp] of Object.entries(remotePeers)){
+    if(!rp.mesh || !rp.labelEl) continue;
+    const headPos = new THREE.Vector3(rp.pos[0], rp.pos[1]+0.4, rp.pos[2]);
+    headPos.project(camera);
+    // Check if behind camera
+    if(headPos.z > 1){ rp.labelEl.style.display='none'; continue; }
+    const x = (headPos.x * 0.5 + 0.5) * W + rect.left;
+    const y = (-headPos.y * 0.5 + 0.5) * H + rect.top;
+    rp.labelEl.style.display = 'flex';
+    rp.labelEl.style.left = x + 'px';
+    rp.labelEl.style.top  = y + 'px';
+  }
+}
+
+// Avatar modal UI
+window.previewAvatar = function(){
+  const preview = document.getElementById('avatar-preview');
+  if(preview){ preview.textContent = myAvatar.emoji; }
+};
+window.setAvColor = function(el, color){
+  document.querySelectorAll('#avatarModal .color-swatch').forEach(s=>s.classList.remove('sel'));
+  el.classList.add('sel');
+  myAvatar.color = color;
+  const preview = document.getElementById('avatar-preview');
+  if(preview){ preview.style.background = color; }
+};
+window.setAvEmoji = function(el){
+  myAvatar.emoji = el.textContent;
+  const preview = document.getElementById('avatar-preview');
+  if(preview){ preview.textContent = el.textContent; }
+};
+window.saveAvatar = function(){
+  const nameEl = document.getElementById('av-name');
+  if(nameEl && nameEl.value.trim()) myAvatar.name = nameEl.value.trim();
+  localStorage.setItem('omni_avatar', JSON.stringify(myAvatar));
+  closeM('avatarModal');
+  // Broadcast updated avatar to all peers
+  broadcast({ type:'AVATAR_UPDATE', avatar:{...myAvatar} });
+  notify('Avatar saved!','ok');
+  updateUserPanel();
+};
+
+// Open avatar modal and pre-fill
+const _origOpenM = window.openM;
+window.openM = function(id){
+  if(id==='avatarModal'){
+    const nameEl = document.getElementById('av-name');
+    if(nameEl) nameEl.value = myAvatar.name || '';
+    const preview = document.getElementById('avatar-preview');
+    if(preview){ preview.textContent=myAvatar.emoji; preview.style.background=myAvatar.color; }
+    // Mark active color swatch
+    document.querySelectorAll('#avatarModal .color-swatch[onclick*="setAvColor"]').forEach(s=>{
+      s.classList.toggle('sel', s.style.background === myAvatar.color || s.getAttribute('onclick').includes(myAvatar.color));
+    });
+  }
+  _origOpenM(id);
+};
 
 /* ═══════════════════════════════ PEERJS COLLAB */
 let peer=null, myPeerId='';
@@ -344,8 +575,10 @@ function setupConn(conn, weAreGuest){
       // We are host — send full world to new guest
       sendTo(conn.peer, {type:'WORLD_SYNC', wd:{...WD}, objects:objects.map(serialiseObj)});
     }
+    // Send our avatar info to the new peer
+    sendTo(conn.peer, {type:'AVATAR_UPDATE', avatar:{...myAvatar}});
     conn.on('data', data=>onPeerData(data, conn.peer));
-    conn.on('close',()=>{ delete connections[conn.peer]; updateCollabBadge(); notify(`Peer left: ${conn.peer.slice(0,8)}`); });
+    conn.on('close',()=>{ removeRemoteAvatar(conn.peer); delete connections[conn.peer]; updateCollabBadge(); notify(`Peer left: ${conn.peer.slice(0,8)}`); });
     conn.on('error', e=>{ delete connections[conn.peer]; updateCollabBadge(); });
   });
 }
@@ -367,6 +600,8 @@ function onPeerData(data, fromId){
     // Received world from host — replace our scene
     Object.assign(WD, data.wd||{});
     restoreObjects(data.objects||[]).then(()=>{ notify('World synced!','ok'); });
+    // Reply with our avatar
+    sendTo(fromId, {type:'AVATAR_UPDATE', avatar:{...myAvatar}});
     return;
   }
   if(data.type==='ADD'){
@@ -398,6 +633,21 @@ function onPeerData(data, fromId){
     applyEnvFromWD();
     broadcast(data, fromId);
   }
+  if(data.type==='AVATAR_UPDATE'){
+    upsertRemoteAvatar(fromId, data.avatar, null, null);
+    updateUserPanel();
+    broadcast(data, fromId);
+  }
+  if(data.type==='PEER_MOVE'){
+    upsertRemoteAvatar(fromId, null, data.pos, data.yaw);
+    // Update avatar visibility based on mode
+    const rp = remotePeers[fromId];
+    if(rp && rp.mesh){
+      // Show mesh in both edit and play modes
+      rp.mesh.visible = true;
+    }
+    broadcast(data, fromId);
+  }
 }
 
 function setPeerStatus(s){
@@ -419,9 +669,26 @@ function updateCollabBadge(){
 
 function updateUserPanel(){
   const peers=Object.keys(connections);
-  const me=`<div class="vuser"><div class="vav" style="background:var(--a);font-size:8px">ME</div><span>${myPeerId.slice(0,8)}…</span><div class="sdot" style="margin-left:auto"></div></div>`;
-  const others=peers.map(id=>`<div class="vuser"><div class="vav" style="background:var(--a2);font-size:8px">${id.slice(0,2).toUpperCase()}</div><span>${id.slice(0,8)}…</span><div class="sdot" style="margin-left:auto;background:var(--ok)"></div></div>`).join('');
-  document.getElementById('usrlist').innerHTML=me+others;
+  const meCard = `<div class="vuser-full">
+    <div class="vav-lg" style="background:${myAvatar.color}">${myAvatar.emoji}</div>
+    <div class="vuser-info">
+      <div class="vuser-name" style="color:var(--a)">${escapeHtml(myAvatar.name||'Me')}</div>
+      <div class="vuser-status">You · ${myPeerId.slice(0,8)}… <span style="color:var(--ok)">●</span></div>
+    </div>
+    <button class="btn" style="padding:3px 7px;font-size:10px" onclick="openM('avatarModal')">✏️</button>
+  </div>`;
+  const otherCards = peers.map(id => {
+    const rp = remotePeers[id];
+    const av = rp?.avatar || {name:id.slice(0,6), emoji:'👤', color:'#5a7aaa'};
+    return `<div class="vuser-full">
+      <div class="vav-lg" style="background:${av.color}">${av.emoji}</div>
+      <div class="vuser-info">
+        <div class="vuser-name">${escapeHtml(av.name||id.slice(0,6))}</div>
+        <div class="vuser-status">${id.slice(0,8)}… <span style="color:var(--ok)">●</span></div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('usrlist').innerHTML = meCard + otherCards;
 }
 
 function checkUrlRoom(){
@@ -538,6 +805,13 @@ function animate(){
   const dt=Math.min((performance.now()-_clock.last)/1000,0.05);
   _clock.last=performance.now();
   if(mode==='play'&&plocked) updatePlayer(dt); else orbit.update();
+  updateAvatarLabels();
+  // Broadcast our position ~10 fps
+  const _now = performance.now();
+  if(Object.keys(connections).length > 0 && _now - _lastPosBroadcast > 100){
+    _lastPosBroadcast = _now;
+    broadcast({ type:'PEER_MOVE', pos:[pPos.x,pPos.y,pPos.z], yaw:pYaw, mode });
+  }
   renderer.render(scene,camera);
 }
 
